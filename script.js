@@ -1,75 +1,41 @@
 // Coordonnées du lycée (centre du plan)
 const lyceeCoords = [45.9368, 6.1322];
-const proximityThreshold = 50; // Distance en kilomètres
+const proximityThreshold = 10; // Distance en kilomètres (50m)
+
+// Initialisation de la carte
+let map = L.map('map').setView(lyceeCoords, 18);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
+// Ajout des fonds de cartes spécifiques au lycée
+const fondsCartes = {
+    "Étage 0": L.tileLayer('http://89.168.57.91:8080/LyceeLachenaletage1/{z}/{x}/{y}.png', {
+        minZoom: 17,
+        maxZoom: 22
+    }),
+    "Étage 1": L.tileLayer('http://89.168.57.91:8080/LyceeLachenaletage0/{z}/{x}/{y}.png', {
+        minZoom: 17,
+        maxZoom: 22
+    })
+};
 
 // Fonction pour calculer la distance entre deux coordonnées
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const toRad = x => (x * Math.PI) / 180;
     const R = 6371; // Rayon de la Terre en kilomètres
-
     const dLat = toRad(lat2 - lat1);
     const dLon = toRad(lon2 - lon1);
-    const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
+    const a = Math.sin(dLat / 2) ** 2 +
+              Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c; // Distance en kilomètres
 }
 
-// Vérifier la localisation de l'utilisateur
-function checkLocationPermission() {
-    if (!navigator.geolocation) {
-        alert("La géolocalisation n'est pas prise en charge par votre navigateur.");
-        return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-        position => {
-            const userCoords = [position.coords.latitude, position.coords.longitude];
-            const distance = calculateDistance(
-                userCoords[0],
-                userCoords[1],
-                lyceeCoords[0],
-                lyceeCoords[1]
-            );
-
-            if (distance <= proximityThreshold) {
-                // Afficher la carte si l'utilisateur est proche
-                initializeMap();
-            } else {
-                alert("Vous devez être à proximité du lycée pour afficher le plan.");
-            }
-        },
-        error => {
-            console.error("Erreur de géolocalisation :", error);
-            alert("Impossible d'obtenir votre localisation. Veuillez autoriser la géolocalisation.");
-        }
-    );
-}
-
-// Initialiser la carte uniquement après vérification de la localisation
-function initializeMap() {
-    // Initialiser la carte
-    var map = L.map('map', { zoomControl: true }).setView(lyceeCoords, 18);
-
-    // Fonds de carte spécifiques à chaque étage
-    var fondsCartes = {
-        "Étage 0": L.tileLayer('http://89.168.57.91:8080/LyceeLachenaletage1/{z}/{x}/{y}.png', {
-            minZoom: 17,
-            maxZoom: 22,
-        }),
-        "Étage 1": L.tileLayer('http://89.168.57.91:8080/LyceeLachenaletage0/{z}/{x}/{y}.png', {
-            minZoom: 17,
-            maxZoom: 22,
-        })
-    };
-
-    // Ajouter le fond de carte de l'étage 1 par défaut
-    fondsCartes["Étage 1"].addTo(map);
-
-    // (Reste de votre code de carte ici, inchangé)
-    // Fonction de style par défaut
+// Ajouter les calques supplémentaires
+function initializeSchoolMapFeatures() {
+      // Fonction de style par défaut
 function getDefaultStyle() {
     return {
         color: "#FFDE26",
@@ -255,79 +221,6 @@ map.on('layeradd', function(e) {
     }
 });
 
-// Barre de recherche
-var searchControl = new L.Control.Search({
-    layer: L.layerGroup([layerEtage1, layerEtage2]), // Groupement des calques
-    propertyName: 'salle',
-    initial: false,
-    collapsed: false,
-    position: 'topright',
-    zoom: 21,
-    marker: false,
-    autocomplete: true,
-    moveToLocation: function(latlng, title, map) {
-        var foundLayers = [];
-        var bounds = L.latLngBounds();
-
-        // Étape 1 : Recherche uniquement sur le calque actif
-        activeLayer.eachLayer(function(subLayer) {
-            if (subLayer.feature && subLayer.feature.properties.salle === title) {
-                foundLayers.push(subLayer);
-                bounds.extend(subLayer.getBounds());
-            }
-        });
-
-        // Si des résultats sont trouvés sur le calque actif
-        if (foundLayers.length > 0) {
-            highlightResults(foundLayers, bounds);
-
-            if (bounds.isValid()) {
-                map.fitBounds(bounds, { padding: [20, 20] });
-            }
-            return;
-        }
-
-        // Étape 2 : Recherche globale uniquement si aucun résultat n'a été trouvé sur le calque actif
-        var globalFoundLayers = [];
-        var globalBounds = L.latLngBounds();
-        var targetLayer = null;
-
-        [layerEtage1, layerEtage2].forEach(function(layer) {
-            if (layer !== activeLayer) { // Ne pas re-rechercher dans le calque actif
-                layer.eachLayer(function(subLayer) {
-                    if (subLayer.feature && subLayer.feature.properties.salle === title) {
-                        globalFoundLayers.push(subLayer);
-                        globalBounds.extend(subLayer.getBounds());
-                        targetLayer = layer;
-                    }
-                });
-            }
-        });
-
-        if (globalFoundLayers.length > 0) {
-            // Changer de calque uniquement si le résultat est trouvé dans un autre calque
-            if (targetLayer && targetLayer !== activeLayer) {
-                map.eachLayer(function(layer) {
-                    if (layer instanceof L.GeoJSON) {
-                        layer.remove();
-                    }
-                });
-                targetLayer.addTo(map);
-                activeLayer = targetLayer;
-            }
-
-            // Surligner les résultats et ajuster la vue
-            highlightResults(globalFoundLayers, globalBounds);
-
-            if (globalBounds.isValid()) {
-                map.fitBounds(globalBounds, { padding: [20, 20] });
-            }
-        }
-    }
-});
-
-map.addControl(searchControl);
-document.querySelector('.leaflet-control-search input').placeholder = "Rechercher...";
 
 // Mettre à jour les labels au chargement
 updateLabels();
@@ -337,4 +230,41 @@ updateLabels();
 // Vérifier la localisation au chargement de la page
 document.addEventListener("DOMContentLoaded", checkLocationPermission);
 
+// Gérer la géolocalisation de l'utilisateur
+function handleGeolocation(position) {
+    const userCoords = [position.coords.latitude, position.coords.longitude];
+    const distance = calculateDistance(userCoords[0], userCoords[1], lyceeCoords[0], lyceeCoords[1]);
 
+    // Ajouter le marqueur de l'utilisateur
+    L.marker(userCoords).addTo(map).bindPopup('Votre position actuelle').openPopup();
+
+    if (distance <= proximityThreshold) {
+        alert("Vous êtes dans la zone. Affichage des fonctionnalités supplémentaires.");
+        initializeSchoolMapFeatures();
+    } else {
+        // Ajouter un cercle indiquant la zone requise
+        L.circle(lyceeCoords, { radius: proximityThreshold * 1000, color: 'red', fillOpacity: 0.2 }).addTo(map)
+          .bindPopup("Zone requise pour afficher le plan du lycée.");
+        alert("Vous êtes hors de la zone.");
+    }
+}
+
+// Gestion des erreurs de géolocalisation
+function handleGeolocationError(error) {
+    console.error("Erreur de géolocalisation :", error);
+    alert("Impossible d'obtenir votre localisation. Le fond de carte OSM est affiché par défaut.");
+}
+
+// Vérifier la localisation de l'utilisateur
+function checkLocationPermission() {
+    if (!navigator.geolocation) {
+        alert("La géolocalisation n'est pas prise en charge par votre navigateur.");
+        return;
+    }
+    navigator.geolocation.getCurrentPosition(handleGeolocation, handleGeolocationError);
+}
+
+// Vérifier la localisation au chargement de la page
+document.addEventListener("DOMContentLoaded", () => {
+    checkLocationPermission();
+});

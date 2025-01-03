@@ -64,7 +64,7 @@ body {
 
 /* Style pour les éléments de la couche lorsqu'ils sont survolés */
 .leaflet-interactive:hover {
-    fill-opacity: 1;
+    fill-opacity: 0.5;
     cursor: pointer;
 }
 
