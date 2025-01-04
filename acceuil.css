@@ -5,22 +5,37 @@ body {
     flex-direction: column;
     height: 100vh;
 }
-.banner {
-    background-color: #4CAF50;
-    color: white;
-    text-align: center;
-    padding: 1rem;
-}
+
 .container {
     display: flex;
     flex: 1;
 }
+
+.sidebar {
+    background: linear-gradient(
+        135deg, /* Angle du dégradé */
+        #70C3FF 0%,  /* Couleur de départ (tomato) à 0% */
+        #ffffff 100% /* Couleur d'arrivée (steelblue) à 100% */
+    );
+    color: #ffffff; /* Couleur du texte pour un bon contraste */
+    padding: 20px; /* Espacement interne pour un bon affichage */
+    z-index: 1;
+}
+
+.banner {
+    background: linear-gradient(
+        135deg, /* Angle du dégradé */
+        #70C3FF 0%,  /* Couleur de départ (tomato) à 0% */
+        #ffffff 100% /* Couleur d'arrivée (steelblue) à 100% */
+    );
+    text-align: center;
+    padding: 1rem;
+}
+
 .sidebar {
     width: 20%;
-    background-color: #f4f4f4;
     padding: 1rem;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-}
+} 
 .map-container {
     flex: 1;
     position: relative;
@@ -42,11 +57,17 @@ body {
     box-sizing: border-box; /* Inclure padding et bordures dans la largeur totale */
     z-index: 1010; /* Barre de recherche au premier plan */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Ombre portée */
-    background-color: #ffffff; /* Couleur de fond */
-    border: 2px solid #d9d9d9; /* Bordure */
-    border-radius: 30px; /* Coins arrondis */
+    background-color: #ffffff6e !important; /* Couleur de fond */
+    border: 2px solid #d9d9d900 !important; /* Bordure */
+    border-radius: 15px; /* Coins arrondis */
     font-family: 'Arial', sans-serif; /* Police */
     color: #000000; /* Couleur du texte */
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0); /* Ombre */
+}
+
+.leaflet-control-search .search-tip {
+    background-color : #ee080800;
+    padding: 5px;
 }
 
 /* Bouton pour effacer la recherche (croix) */
@@ -68,15 +89,15 @@ body {
 /* Tooltip de recherche */
 .leaflet-control-search .search-tooltip {
     box-sizing: border-box;
-    padding: 10px;
+    padding: 0px;
     border-radius: 15px;
-    background-color: #ffffff;
-    border: 2px solid #d9d9d9; /* Contour en couleur rouge */
-    color: #000000;
-    font-size: 14px;
+    background-color: #c41c1c00 !important; /* Couleur de fond */
+    color: #00000000 !important;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0); /* Ombre */;
+    font-size: 20px;
     position: absolute;
     top: 120%;
-    left: 0;
+    left: 0px;
     right: 0;
     margin: 0;
     z-index: 1010; /* Tooltip de recherche au premier plan */
@@ -101,10 +122,11 @@ body {
     cursor: pointer; /* Curseur pointeur */
 }
 
+
 .leaflet-control-search .search-tooltip li:hover {
     background-color: #d9d9d9; /* Couleur de fond au survol */
     color: #495057; /* Couleur du texte */
-    border-radius: 100px;
+    border-radius: 1px;
 }
 
 /* Texte des résultats */
@@ -114,7 +136,7 @@ body {
 
 .leaflet-control-search .search-tooltip {
     list-style-type: none; /* Supprime les puces de la liste */
-    padding-left: 20px; /* Supprime le padding gauche */
+    padding-left: 0px; /* Supprime le padding gauche */
 }
 
 .leaflet-control-search .search-button:hover {
@@ -143,11 +165,12 @@ button:hover {
 .leaflet-control-search input {
     width: calc(100% - 60px); /* Réduire la largeur pour tenir compte de l'icône */
     padding: 10px; /* Ajouter un peu de padding */
-    font-size: 14px; /* Taille du texte */
+    font-size: 24px; /* Taille du texte */
     box-sizing: border-box; /* Inclure le padding et la bordure dans la largeur totale */
     border-radius: 300px; /* Coins arrondis */
     outline: none !important;
     border: none !important; /* Facultatif : enlève également les bordures si présentes */
+    background-color: #00000000 !important;
 }
 
 /* Style du bouton de recherche (loupe) */
