@@ -37,7 +37,12 @@ body {
     width: 100%; /* Largeur de 300px */
     display: flex; /* Utilisation de flexbox pour aligner le champ et l'icône */
     align-items: center; /* Aligner verticalement l'élément */
-    justify-content: space-bet70FF79ff; /* Couleur de fond */
+    justify-content: space-between; /* Espacement entre le champ de texte et l'icône */
+    padding: 10px; /* Ajouter un peu de padding */
+    box-sizing: border-box; /* Inclure padding et bordures dans la largeur totale */
+    z-index: 1010; /* Barre de recherche au premier plan */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Ombre portée */
+    background-color: #ffffff; /* Couleur de fond */
     border: 2px solid #d9d9d9; /* Bordure */
     border-radius: 30px; /* Coins arrondis */
     font-family: 'Arial', sans-serif; /* Police */
@@ -116,7 +121,6 @@ body {
     background-color: #D9D9D9; /* Changer la couleur au survol */
 }
 button {
-    position: relative;
     width: 100%;
     background-color: #197cb6;
     color: white;
@@ -131,7 +135,7 @@ button {
     border-radius: 4px;
 }
 button:hover {
-    background-color: #125a83;
+    background-color: #12557c;
 }
 
 
