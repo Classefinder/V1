@@ -1,6 +1,6 @@
 // Coordonnées du lycée (centre du plan)
 const lyceeCoords = [45.9368, 6.1322];
-const proximityThreshold = 10; // Distance en kilomètres (50m)
+const proximityThreshold = 200; // Distance en kilomètres (50m)
 
 // Fonction pour calculer la distance entre deux coordonnées
 function calculateDistance(lat1, lon1, lat2, lon2) {

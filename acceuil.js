@@ -10,7 +10,10 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 const markers = [
     { lat: 48.8566, lng: 2.3522, title: 'Parissssssssssssssssssssssssssssss', url: 'https://en.wikipedia.org/wiki/Paris' },
     { lat: 48.8584, lng: 2.2945, title: 'Eiffel Tower', url: 'https://en.wikipedia.org/wiki/Eiffel_Tower' },
-    { lat: 48.8738, lng: 2.2950, title: 'Arc de Triomphe', url: 'lyceelachenal.html' }
+    { lat: 48.8738, lng: 2.2950, title: 'Arc de Triomphe', url: 'lyceelachenal.html' },
+    { lat: 48.606, lng: 2.3522, title: 'test', url: 'https://en.wikipedia.org/wiki/Paris' },
+    { lat: 48.854, lng: 2.2945, title: '25', url: 'https://en.wikipedia.org/wiki/Eiffel_Tower' },
+    { lat: 47.8738, lng: 2.2950, title: 'Eiffel Tower', url: 'lyceelachenal.html' }
 ];
 
 const markerGroup = L.featureGroup();

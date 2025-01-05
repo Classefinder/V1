@@ -100,8 +100,12 @@ body {
     left: 0px;
     right: 0;
     margin: 0;
-    z-index: 1010; /* Tooltip de recherche au premier plan */
+    z-index: 1010; /* Tooltip de recherche au premier plan */   
+    height: 80vh !important; /* Ajuste dynamiquement la hauteur */
+    overflow-y: auto; /* Ajout de défilement si nécessaire */
+    display: block;
 }
+
 
 /* Bouton croix survolé */
 .leaflet-control-search .search-cancel:hover {
@@ -118,13 +122,13 @@ body {
 
 /* Résultat survolé */
 .leaflet-control-search .search-tooltip li {
-    padding: 0px; /* Espacement des items */
+    padding: 10px; /* Espacement des items */
     cursor: pointer; /* Curseur pointeur */
 }
 
 
 .leaflet-control-search .search-tooltip li:hover {
-    background-color: #d9d9d9; /* Couleur de fond au survol */
+    background-color: #ffffff83; /* Couleur de fond au survol */
     color: #495057; /* Couleur du texte */
     border-radius: 1px;
 }
