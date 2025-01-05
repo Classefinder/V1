@@ -6,6 +6,18 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+var blueIcon = L.icon({
+    iconUrl: './images/icon.png',
+    shadowUrl: './images/ombreicon.png',
+
+    iconSize:     [50, 59], // size of the icon
+    shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [25, 59], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -65] // point from which the popup should open relative to the iconAnchor
+});
+
+
 // Add some markers to the map
 const markers = [
     { lat: 48.8566, lng: 2.3522, title: 'Parissssssssssssssssssssssssssssss', url: 'https://en.wikipedia.org/wiki/Paris' },
@@ -20,7 +32,8 @@ const markerGroup = L.featureGroup();
 
 markers.forEach(marker => {
     const markerItem = L.marker([marker.lat, marker.lng], {
-        title: marker.title
+        title: marker.title,
+        icon: marker.icon || blueIcon
     }).bindPopup(
         `<div>
             <h3>${marker.title}</h3>
