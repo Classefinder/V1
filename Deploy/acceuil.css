@@ -1,0 +1,209 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    flex: 1;
+}
+
+.sidebar {
+    background: linear-gradient(
+        135deg, /* Angle du dégradé */
+        #70C3FF 0%,  /* Couleur de départ (tomato) à 0% */
+        #ffffff 100% /* Couleur d'arrivée (steelblue) à 100% */
+    );
+    color: #ffffff; /* Couleur du texte pour un bon contraste */
+    padding: 20px; /* Espacement interne pour un bon affichage */
+    z-index: 1;
+}
+
+.banner {
+    background: linear-gradient(
+        135deg, /* Angle du dégradé */
+        #70C3FF 0%,  /* Couleur de départ (tomato) à 0% */
+        #ffffff 100% /* Couleur d'arrivée (steelblue) à 100% */
+    );
+    text-align: center;
+    padding: 1rem;
+}
+
+.sidebar {
+    width: 20%;
+    padding: 1rem;
+} 
+.map-container {
+    flex: 1;
+    position: relative;
+}
+#map {
+    height: 100%;
+    width: 100%;
+}
+/* Style général de la barre de recherche */
+.leaflet-control-search {
+    position: relative; /* Position absolue pour placer la barre de recherche */
+    top: 0px; /* Aligner en haut */
+    left: 0px; /* Aligner à gauche */
+    width: 100%; /* Largeur de 300px */
+    display: flex; /* Utilisation de flexbox pour aligner le champ et l'icône */
+    align-items: center; /* Aligner verticalement l'élément */
+    justify-content: space-between; /* Espacement entre le champ de texte et l'icône */
+    padding: 10px; /* Ajouter un peu de padding */
+    box-sizing: border-box; /* Inclure padding et bordures dans la largeur totale */
+    z-index: 1010; /* Barre de recherche au premier plan */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Ombre portée */
+    background-color: #ffffff6e !important; /* Couleur de fond */
+    border: 2px solid #d9d9d900 !important; /* Bordure */
+    border-radius: 15px; /* Coins arrondis */
+    font-family: 'Arial', sans-serif; /* Police */
+    color: #000000; /* Couleur du texte */
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0); /* Ombre */
+}
+
+.leaflet-control-search .search-tip {
+    background-color : #ee080800;
+    padding: 5px;
+}
+
+/* Bouton pour effacer la recherche (croix) */
+.leaflet-control-search .search-cancel {
+    background: url('./images/cancel-icon.png') no-repeat center center; /* Chemin relatif vers votre icône personnalisée */
+    background-size: 70%; /* Ajuster la taille de l'icône */
+    border: none; /* Pas de bordure */
+    border-radius: 50%; /* Rond */
+    width: 40px; /* Taille */
+    height: 40px; /* Taille */
+    display: flex; /* Utilisation de flexbox pour centrer l'icône */
+    cursor: pointer; /* Curseur pointeur */
+    position: absolute; /* Position absolue pour ajustement */
+    right: 50px; /* Alignement à droite */
+    color: #ffffff; /* Rendre la couleur de l'icône de base transparente */
+    font-size: 0; /* Taille de l'icône à 0 pour masquer l'icône de base */
+}
+
+/* Tooltip de recherche */
+.leaflet-control-search .search-tooltip {
+    box-sizing: border-box;
+    padding: 0px;
+    border-radius: 15px;
+    background-color: #c41c1c00 !important; /* Couleur de fond */
+    color: #00000000 !important;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0); /* Ombre */;
+    font-size: 20px;
+    position: absolute;
+    top: 120%;
+    left: 0px;
+    right: 0;
+    margin: 0;
+    z-index: 1010; /* Tooltip de recherche au premier plan */   
+    height: 80vh !important; /* Ajuste dynamiquement la hauteur */
+    overflow-y: auto; /* Ajout de défilement si nécessaire */
+    display: block;
+}
+
+
+/* Bouton croix survolé */
+.leaflet-control-search .search-cancel:hover {
+    background-color: #d9d9d9; /* Couleur au survol */
+}
+
+
+/* Personnalisation du popup */
+.leaflet-popup-content {
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Résultat survolé */
+.leaflet-control-search .search-tooltip li {
+    padding: 10px; /* Espacement des items */
+    cursor: pointer; /* Curseur pointeur */
+}
+
+
+.leaflet-control-search .search-tooltip li:hover {
+    background-color: #ffffff83; /* Couleur de fond au survol */
+    color: #495057; /* Couleur du texte */
+    border-radius: 1px;
+}
+
+/* Texte des résultats */
+.leaflet-control-search .search-tooltip li span {
+    font-weight: normal; /* Texte en gras */
+}
+
+.leaflet-control-search .search-tooltip {
+    list-style-type: none; /* Supprime les puces de la liste */
+    padding-left: 0px; /* Supprime le padding gauche */
+}
+
+.leaflet-control-search .search-button:hover {
+    background-color: #D9D9D9; /* Changer la couleur au survol */
+}
+button {
+    width: 100%;
+    background-color: #197cb6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+button:hover {
+    background-color: #12557c;
+}
+
+
+/* Largeur du champ de texte */
+.leaflet-control-search input {
+    width: calc(100% - 60px); /* Réduire la largeur pour tenir compte de l'icône */
+    padding: 10px; /* Ajouter un peu de padding */
+    font-size: 24px; /* Taille du texte */
+    box-sizing: border-box; /* Inclure le padding et la bordure dans la largeur totale */
+    border-radius: 300px; /* Coins arrondis */
+    outline: none !important;
+    border: none !important; /* Facultatif : enlève également les bordures si présentes */
+    background-color: #00000000 !important;
+}
+
+/* Style du bouton de recherche (loupe) */
+.leaflet-control-search .search-button {
+    width: 40px; /* Taille de l'icône de recherche */
+    height: 40px; /* Taille de l'icône de recherche */
+    background-color: #ffffff; /* Couleur de fond */
+    background: url('./images/search-icon.png') no-repeat center center; /* Icône de recherche */
+    background-size: 70%; /* Ajuster la taille de l'icône */
+    border: none;
+    border-radius: 50%; /* Rendre le bouton rond */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer; /* Curseur pointer */
+    transition: background-color 0.3s; /* Transition pour l'effet de survol */
+}
+
+.leaflet-control-search .search-button:hover{
+    background: url('./images/search-icon.png') no-repeat center center; /* Icône de recherche */
+    width: 40px; /* Taille de l'icône de recherche */
+    height: 40px; /* Taille de l'icône de recherche */
+    background-color: #d9d9d9; /* Couleur de fond */
+    background-size: 70%; /* Ajuster la taille de l'icône */
+    border: none;
+    border-radius: 50%; /* Rendre le bouton rond */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer; /* Curseur pointer */
+    transition: background-color 0.3s; /* Transition pour l'effet de survol */
+}
