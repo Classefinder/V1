@@ -1,5 +1,5 @@
 // Initialize the map
-const map = L.map('map').setView([48.8566, 2.3522], 13); // Centered on Paris
+const map = L.map('map').setView([46.76356952605256, 2.75827273355483], 7); // Centered on Paris
 
 // Add a tile layer to the map
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
