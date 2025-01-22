@@ -28,40 +28,65 @@
 
         // Fonction pour récupérer l'itinéraire et les noms des points
         function getRouteAndPoints(start, end) {
-            var osrmUrl = `http://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
+    var osrmUrl = `http://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
 
-            fetch(osrmUrl)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.routes && data.routes.length > 0) {
-                        var route = data.routes[0];
-                        var geojson = route.geometry;
+    fetch(osrmUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.routes && data.routes.length > 0) {
+                var route = data.routes[0];
 
-                        // Nettoyer la carte des anciennes routes et marqueurs
-                        map.eachLayer(function(layer) {
-                            if (layer instanceof L.GeoJSON) {
-                                map.removeLayer(layer);
+                // Nettoyer la carte des anciennes routes et marqueurs
+                map.eachLayer(function(layer) {
+                    if (layer instanceof L.GeoJSON) {
+                        map.removeLayer(layer);
+                    }
+                });
+
+                // Nouvelle GeoJSON pour stocker les segments filtrés
+                var filteredSegments = {
+                    type: "FeatureCollection",
+                    features: []
+                };
+
+                // Parcourir les étapes et vérifier les noms
+                route.legs[0].steps.forEach((step, index) => {
+                    var startName = step.name || "";
+                    var endName = (route.legs[0].steps[index + 1] || {}).name || "";
+
+                    // Vérifier si "rue" est présent dans le nom de l'étape ou de la suivante
+                    if (startName.toLowerCase().includes("rue") || endName.toLowerCase().includes("rue")) {
+                        // Ajouter ce segment au GeoJSON
+                        filteredSegments.features.push({
+                            type: "Feature",
+                            geometry: {
+                                type: "LineString",
+                                coordinates: step.geometry.coordinates
+                            },
+                            properties: {
+                                name: startName
                             }
                         });
 
-                        // Ajout de l'itinéraire sur la carte
-                        L.geoJSON(geojson).addTo(map);
-
-                        // Placer les points sur la carte
-                        route.legs[0].steps.forEach((step, index) => {
+                        // Placer un marqueur uniquement si "rue" est présent dans le nom
+                        if (startName.toLowerCase().includes("rue")) {
                             var lat = step.maneuver.location[1];
                             var lon = step.maneuver.location[0];
-                            var marker = L.marker([lat, lon]).addTo(map);
-
-                            // Ajouter un popup avec le nom du point (si disponible)
-                            marker.bindPopup("Point " + (index + 1) + ": " + step.name);
-                        });
+                            L.marker([lat, lon]).addTo(map).bindPopup("Point: " + startName);
+                        }
                     }
-                })
-                .catch(error => {
-                    console.error('Erreur lors de la récupération de l\'itinéraire:', error);
                 });
-        }
+
+                // Ajouter les segments filtrés à la carte
+                L.geoJSON(filteredSegments).addTo(map);
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération de l\'itinéraire:', error);
+        });
+}
+
+
 
         // Fonction de gestion des clics sur la carte
         map.on('click', function(event) {
