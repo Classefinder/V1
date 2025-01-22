@@ -10,7 +10,7 @@
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 </head>
 <body>
-    <h1>Itinéraire avec filtres (rues ou routes)</h1>
+    <h1>Itinéraire avec styles pour rues et routes</h1>
     <div id="map" style="height: 600px;"></div>
 
     <script>
@@ -26,9 +26,14 @@
         var startPoint = null;
         var endPoint = null;
 
-        // Couches GeoJSON pour l'itinéraire
-        var streetLayer = L.geoJSON(null); // Affiche uniquement les segments contenant "rue"
-        var roadLayer = L.geoJSON(null);   // Affiche uniquement les segments contenant "route"
+        // Couches GeoJSON pour l'itinéraire avec styles personnalisés
+        var streetLayer = L.geoJSON(null, {
+            style: { color: "red", weight: 4 } // Style des segments "rue"
+        });
+
+        var roadLayer = L.geoJSON(null, {
+            style: { color: "blue", weight: 4 } // Style des segments "route"
+        });
 
         // Contrôle des calques
         var baseLayers = {
@@ -36,8 +41,8 @@
         };
 
         var overlayLayers = {
-            "Rues": streetLayer,
-            "Routes": roadLayer
+            "Rues (Rouge)": streetLayer,
+            "Routes (Bleu)": roadLayer
         };
 
         L.control.layers(baseLayers, overlayLayers).addTo(map);
