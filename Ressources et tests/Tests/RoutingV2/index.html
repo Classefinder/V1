@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet OSRM Route</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Initialisation de la carte
+        const map = L.map('map').setView([48.8566, 2.3522], 13); // Centré sur Paris
+
+        // Ajout d'un fond de carte OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Points de départ et d'arrivée
+        let startPoint = null;
+        let endPoint = null;
+
+        // Gestionnaire d'événements de clic sur la carte
+        map.on('click', function (e) {
+            if (!startPoint) {
+                startPoint = e.latlng;
+                L.marker(startPoint, { draggable: true }).addTo(map).bindPopup("Point de départ").openPopup();
+            } else if (!endPoint) {
+                endPoint = e.latlng;
+                L.marker(endPoint, { draggable: true }).addTo(map).bindPopup("Point d'arrivée").openPopup();
+                calculateRoute();
+            }
+        });
+
+        // Fonction pour interroger Nominatim pour un nom à partir des coordonnées
+        async function getPlaceName(lat, lng) {
+            const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                return data.display_name || "Point sans nom";
+            } catch (error) {
+                console.error("Erreur lors de la récupération du nom du lieu :", error);
+                return "Point sans nom";
+            }
+        }
+
+        // Fonction pour calculer et afficher l'itinéraire
+        async function calculateRoute() {
+            const osrmUrl = `http://router.project-osrm.org/route/v1/driving/${startPoint.lng},${startPoint.lat};${endPoint.lng},${endPoint.lat}?overview=full&geometries=geojson&steps=true`;
+
+            try {
+                const response = await fetch(osrmUrl);
+                const data = await response.json();
+
+                if (data.routes && data.routes.length > 0) {
+                    const route = data.routes[0];
+
+                    // Tracé de l'itinéraire
+                    const coords = route.geometry.coordinates.map(coord => [coord[1], coord[0]]);
+                    const polyline = L.polyline(coords, { color: 'blue' }).addTo(map);
+                    map.fitBounds(polyline.getBounds());
+
+                    // Ajout des noms des points le long de l'itinéraire
+                    const steps = route.legs[0].steps;
+                    for (const step of steps) {
+                        for (const intersection of step.intersections) {
+                            const latLng = [intersection.location[1], intersection.location[0]];
+                            const name = await getPlaceName(latLng[0], latLng[1]);
+                            L.marker(latLng).addTo(map).bindPopup(name);
+                        }
+                    }
+                } else {
+                    alert("Aucun itinéraire trouvé.");
+                }
+            } catch (error) {
+                console.error("Erreur lors de la récupération de l'itinéraire :", error);
+            }
+        }
+    </script>
+</body>
+</html>
