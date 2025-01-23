@@ -1,6 +1,6 @@
 // Coordonnées du lycée (centre du plan)
 const lyceeCoords = [45.9368, 6.1322];
-const proximityThreshold = 200; // Distance en kilomètres (50m)
+const proximityThreshold = 10; // Distance en kilomètres (50m)
 
 // Fonction pour calculer la distance entre deux coordonnées
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -359,6 +359,35 @@ function highlightResults(results, bounds) {
     });
 }
 
+// Gestion des clics sur la carte
+map.on('click', function(event) {
+    // Si le point de départ n'est pas encore défini
+    if (!startPoint) {
+        startPoint = [event.latlng.lat, event.latlng.lng];
+        L.marker(startPoint).addTo(map).bindPopup("Point de départ").openPopup();
+    }
+    // Si le point de départ est défini et que l'on clique pour définir un point d'arrivée
+    else if (!endPoint) {
+        endPoint = [event.latlng.lat, event.latlng.lng];
+        L.marker(endPoint).addTo(map).bindPopup("Point d'arrivée").openPopup();
+
+        // Appeler la fonction pour récupérer et afficher l'itinéraire
+        getRouteAndPoints(startPoint, endPoint);
+    }
+    // Si les deux points sont déjà définis, réinitialiser pour choisir à nouveau
+    else {
+        startPoint = null;
+        endPoint = null;
+        map.eachLayer(function(layer) {
+            if (layer instanceof L.Marker) {
+                map.removeLayer(layer);
+            }
+        });
+        layerEtage0.clearLayers();
+        layerEtage1.clearLayers();
+    }
+});
+
 // Mettre à jour activeLayer lorsque le calque change
 map.on('layeradd', function(e) {
     if (e.layer === layerEtage1) {
@@ -445,6 +474,69 @@ document.querySelector('.leaflet-control-search input').placeholder = "Recherche
 // Mettre à jour les labels au chargement
 updateLabels();
 }
+
+var startPoint = null;
+var endPoint = null;
+
+        // Couches GeoJSON pour l'itinéraire avec styles personnalisés
+        var layerEtage1 = L.geoJSON(null, {
+            style: { color: "red", weight: 4 } // Style des segments "rue"
+        });
+
+        var layerEtage0 = L.geoJSON(null, {
+            style: { color: "blue", weight: 4 } // Style des segments "route"
+        });
+
+
+
+
+        // Fonction pour récupérer et filtrer les segments
+        function getRouteAndPoints(start, end) {
+            var osrmUrl = `http://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
+
+            fetch(osrmUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.routes && data.routes.length > 0) {
+                        var route = data.routes[0];
+
+                        // Nettoyer les anciennes données des couches
+                        layerEtage1.clearLayers();
+                        layerEtage0.clearLayers();
+
+                        // Parcourir les étapes et construire les couches
+                        route.legs[0].steps.forEach((step, index) => {
+                            var startName = step.name || "";
+                            var endName = (route.legs[0].steps[index + 1] || {}).name || "";
+                            var segment = {
+                                type: "Feature",
+                                geometry: {
+                                    type: "LineString",
+                                    coordinates: step.geometry.coordinates
+                                },
+                                properties: {
+                                    name: startName
+                                }
+                            };
+
+                            // Ajouter le segment au calque correspondant
+                            if (startName.toLowerCase().includes("0") || endName.toLowerCase().includes("0")) {
+                                layerEtage1.addData(segment); // Ajouter uniquement les segments "rue"
+                            }
+                            if (startName.toLowerCase().includes("1") || endName.toLowerCase().includes("1")) {
+                                layerEtage0.addData(segment); // Ajouter uniquement les segments "route"
+                            }
+                        });
+
+                        // Centrer la carte sur l'itinéraire
+                        var bounds = L.geoJSON(route.geometry).getBounds();
+                        map.fitBounds(bounds);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération de l\'itinéraire:', error);
+                });
+        }
 
 // Initialisation au chargement
 document.addEventListener("DOMContentLoaded", () => {
