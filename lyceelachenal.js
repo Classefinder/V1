@@ -72,11 +72,11 @@ function handleGeolocation(map) {
 function initializeSchoolMap(map, userMarker, userCoords) {
 // Fonds de carte spécifiques à chaque étage
 var fondsCartes = {
-    "Étage 1": L.tileLayer('https://github.com/Classefinder/V1/tree/main/Tiles/LyceeLachenaletage0/{z}/{x}/{y}.png', {
+    "Étage 1": L.tileLayer('Tiles/LyceeLachenaletage1/{z}/{x}/{y}.png', {
         minZoom: 17,
         maxZoom: 22,
     }),
-    "Étage 0": L.tileLayer('https://github.com/Classefinder/V1/tree/main/Tiles/LyceeLachenaletage1/{z}/{x}/{y}.png', {
+    "Étage 0": L.tileLayer('Tiles/LyceeLachenaletage0/{z}/{x}/{y}.png', {
         minZoom: 17,
         maxZoom: 22,
     })
