@@ -142,8 +142,6 @@ var baseMaps = {
     "Étage 1": layerEtage2
 };
 
-L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
-
 // Gestion des calques et changement de fond de carte
 map.on('baselayerchange', function(e) {
     // Supprimer tous les fonds de carte
@@ -201,8 +199,8 @@ map.on('zoomend', updateLabels);
 
     // Contrôle des calques pour l'itinéraire
     var overlayRouteLayers = {
-        "Itinéraire (Rouge - Ex: rue)": routeLayerEtage0,
-        "Itinéraire (Bleu - Ex: route)": routeLayerEtage1
+        "étage0": routeLayerEtage0,
+        "étage1": routeLayerEtage1
     };
 
     //Ajouter les calques d'itinéraires au controle des calques existant
