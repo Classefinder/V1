@@ -51,7 +51,7 @@
             }
         }).addTo(map);
 
-        var searchControl = new L.Control.Search({
+        var searchControlStart = new L.Control.Search({
             layer: sallesLayer,
             propertyName: 'name',
             marker: false,
@@ -65,12 +65,33 @@
                         startMarker = L.marker(startPoint).addTo(map).bindPopup("Point de départ").openPopup();
                     }
                     map.setView(startPoint, 18);
-                    if (startPoint && endPoint) {
-                        getRouteAndPoints(startPoint, endPoint);
-                    }
+                    searchControlEnd.addTo(map);
+                    getRouteAndPoints(startPoint, endPoint);
                 }
             }
         }).addTo(map);
+
+        var searchControlEnd = new L.Control.Search({
+            layer: sallesLayer,
+            propertyName: 'name',
+            marker: false,
+            moveToLocation: function(latlng, title, map) {
+                var feature = sallesLayer.getLayers().find(layer => layer.feature.properties.name === title);
+                if (feature) {
+                    endPoint = [latlng.lat, latlng.lng];
+                    if (endMarker) {
+                        endMarker.setLatLng(endPoint);
+                    } else {
+                        endMarker = L.marker(endPoint).addTo(map).bindPopup("Point d'arrivée").openPopup();
+                    }
+                    map.setView(endPoint, 18);
+                    if (startPoint && endPoint) {
+                        getRouteAndPoints(startPoint, endPoint);
+                        map.removeControl(searchControlEnd); // Supprimer la barre de recherche de fin
+                    }
+                }
+            }
+        });
 
         var baseLayers = { "Carte OSM": osmLayer };
         var overlayLayers = { "etage0 (Rouge)": layerEtage0, "etage1 (Bleu)": layerEtage1 };
@@ -105,37 +126,6 @@
             })
             .catch(error => console.error('Erreur lors de la récupération de l\'itinéraire:', error));
         }
-
-        map.on('click', function(event) {
-            if (!startPoint) {
-                startPoint = [event.latlng.lat, event.latlng.lng];
-                if (startMarker) {
-                    startMarker.setLatLng(startPoint);
-                } else {
-                    startMarker = L.marker(startPoint).addTo(map).bindPopup("Point de départ").openPopup();
-                }
-            } else if (!endPoint) {
-                endPoint = [event.latlng.lat, event.latlng.lng];
-                if (endMarker) {
-                    endMarker.setLatLng(endPoint);
-                } else {
-                    endMarker = L.marker(endPoint).addTo(map).bindPopup("Point d'arrivée").openPopup();
-                }
-                getRouteAndPoints(startPoint, endPoint);
-            } else {
-                startPoint = null;
-                endPoint = null;
-                map.eachLayer(function(layer) {
-                    if (layer instanceof L.Marker) {
-                        map.removeLayer(layer);
-                    }
-                });
-                layerEtage0.clearLayers();
-                layerEtage1.clearLayers();
-                startMarker = null;
-                endMarker = null;
-            }
-        });
     </script>
 </body>
 </html>
