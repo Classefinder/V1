@@ -118,8 +118,7 @@ var geojsonDataEtage1 = {
     ]
 };
 
-// Variables pour les calques
-var layerEtage1, layerEtage2;
+
 
 // Fonction pour créer les calques GeoJSON
 function createLayer(geojsonData) {
@@ -129,18 +128,12 @@ function createLayer(geojsonData) {
     });
 }
 
-// Initialiser les calques
-layerEtage1 = createLayer(geojsonDataEtage1);
-layerEtage2 = createLayer(geojsonDataEtage2);
+var layerEtage0 = L.geoJSON(geojsonDataEtage1);  // Convertir GeoJSON en calque Leaflet
+var layerEtage1 = L.geoJSON(geojsonDataEtage2);
 
-// Ajouter uniquement l'étage 1 au chargement
-layerEtage1.addTo(map);
+var etage0 = L.layerGroup([layerEtage0, routeLayerEtage0]);
+var etage1 = L.layerGroup([layerEtage1, routeLayerEtage1]);
 
-// Gestionnaire des couches (calques de base)
-var baseMaps = {
-    "Étage 0": layerEtage1,
-    "Étage 1": layerEtage2
-};
 
 // Gestion des calques et changement de fond de carte
 map.on('baselayerchange', function(e) {
@@ -197,18 +190,24 @@ map.on('zoomend', updateLabels);
     routeLayerEtage0.addTo(map);
     routeLayerEtage1.addTo(map);
 
-    // Contrôle des calques pour l'itinéraire
-    var overlayRouteLayers = {
-        "étage0": routeLayerEtage0,
-        "étage1": routeLayerEtage1
-    };
 
 
-    //Ajouter les calques d'itinéraires au controle des calques existant
-    L.control.layers(baseMaps, overlayRouteLayers, { collapsed: false }).addTo(map);
+    
+
+// Gestionnaire des couches (calques de base)
+var baseMaps = {
+    "Étage 0": etage0, 
+    "Étage 1": etage1
+};
+
+
+//Ajouter les calques d'itinéraires au controle des calques existant
+L.control.layers(baseMaps, { collapsed: false }).addTo(map);
+
+
 
     function getRouteAndPoints(start, end) {
-        var osrmUrl = "http://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full";
+        var osrmUrl = `http://89.168.57.91:5000/route/v1/foot/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
 
         fetch(osrmUrl)
             .then(response => response.json())
@@ -233,10 +232,10 @@ map.on('zoomend', updateLabels);
                             }
                         };
 
-                        if (startName.toLowerCase().includes("de") || endName.toLowerCase().includes("de")) {
+                        if (startName.toLowerCase().includes("1") || endName.toLowerCase().includes("1")) {
                             routeLayerEtage0.addData(segment);
                         }
-                        if (startName.toLowerCase().includes("s") || endName.toLowerCase().includes("s")) {
+                        if (startName.toLowerCase().includes("0") || endName.toLowerCase().includes("0")) {
                             routeLayerEtage1.addData(segment);
                         }
                     });

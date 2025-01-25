@@ -8,13 +8,15 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/leaflet-search/dist/leaflet-search.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-search/dist/leaflet-search.css" />
 </head>
 <body>
     <div id="map" style="height: 100vh;"></div>
 
     <script>
         // Initialisation de la carte Leaflet
-        var map = L.map('map').setView([48.8566, 2.3522], 13); // Position initiale (Paris ici)
+        var map = L.map('map').setView([45.937486634251044, 6.132610739228446], 18); // Position initiale (Paris ici)
 
         // Ajouter une couche de fond à la carte (OpenStreetMap)
         var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -34,6 +36,58 @@
             style: { color: "blue", weight: 4 } // Style des segments "route"
         });
 
+        // Couches GeoJSON représentant les salles avec leurs chemins
+        var sallesGeoJson = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "LineString",
+                        "coordinates": [
+                            [6.1326, 45.9374],
+                            [6.1330, 45.9378] // Coordonnées pour le chemin de la salle 115
+                        ]
+                    },
+                    "properties": {
+                        "name": "salle_115"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "LineString",
+                        "coordinates": [
+                            [6.1325, 45.9375],
+                            [6.1331, 45.9380] // Coordonnées pour le chemin de la salle 116
+                        ]
+                    },
+                    "properties": {
+                        "name": "salle_116"
+                    }
+                }
+            ]
+        };
+
+        // Ajouter les salles GeoJSON à la carte
+        var sallesLayer = L.geoJSON(sallesGeoJson, {
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(feature.properties.name);
+            }
+        }).addTo(map);
+
+        // Ajouter Leaflet Search pour la recherche de salles
+        var searchControl = new L.Control.Search({
+            layer: sallesLayer,
+            propertyName: 'name',
+            marker: false,
+            moveToLocation: function(latlng, title, map) {
+                // Quand une salle est trouvée, le marqueur est placé et la carte centrée
+                L.marker(latlng).addTo(map).bindPopup(title);
+                map.setView(latlng, 18); // Zoom sur le point de la salle
+            }
+        }).addTo(map);
+
         // Contrôle des calques
         var baseLayers = {
             "Carte OSM": osmLayer
@@ -48,7 +102,7 @@
 
         // Fonction pour récupérer et filtrer les segments
         function getRouteAndPoints(start, end) {
-            var osrmUrl = `http://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
+            var osrmUrl = `https://classefinder.duckdns.org/osrm/route/v1/foot/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
 
             fetch(osrmUrl)
                 .then(response => response.json())
@@ -76,10 +130,10 @@
                             };
 
                             // Ajouter le segment au calque correspondant
-                            if (startName.toLowerCase().includes("de") || endName.toLowerCase().includes("de")) {
+                            if (startName.toLowerCase().includes("0") || endName.toLowerCase().includes("0")) {
                                 layerEtage0.addData(segment); // Ajouter uniquement les segments "rue"
                             }
-                            if (startName.toLowerCase().includes("s") || endName.toLowerCase().includes("s")) {
+                            if (startName.toLowerCase().includes("1") || endName.toLowerCase().includes("1")) {
                                 layerEtage1.addData(segment); // Ajouter uniquement les segments "route"
                             }
                         });
