@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte avec Leaflet et OSRM</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/leaflet-search/dist/leaflet-search.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-search/dist/leaflet-search.min.css" />
+</head>
+<body>
+    <div id="map" style="height: 100vh;"></div>
+
+    <script>
+        var map = L.map('map').setView([45.937486634251044, 6.132610739228446], 18);
+
+        var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var startPoint = null;
+        var startMarker = null;
+        var endPoint = null;
+        var endMarker = null;
+
+        var layerEtage0 = L.geoJSON(null, { style: { color: "red", weight: 4 } });
+        var layerEtage1 = L.geoJSON(null, { style: { color: "blue", weight: 4 } });
+
+        var sallesGeoJson = {
+            "type": "FeatureCollection",
+            "features": [
+                { "type": "Feature",
+                    "geometry": { "type": "LineString", "coordinates": [[6.1326, 45.9374], [6.1330, 45.9378]] },
+                    "properties": { "name": "salle_115" }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": { "type": "LineString", "coordinates": [[6.1325, 45.9375], [6.1331, 45.9380]] },
+                    "properties": { "name": "salle_116" }
+                },
+            ]
+        };
+
+        var sallesLayer = L.geoJSON(sallesGeoJson, {
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(feature.properties.name);
+            }
+        }).addTo(map);
+
+        var searchControlStart = new L.Control.Search({
+            layer: sallesLayer,
+            propertyName: 'name',
+            marker: false,
+            moveToLocation: function(latlng, title, map) {
+                var feature = sallesLayer.getLayers().find(layer => layer.feature.properties.name === title);
+                if (feature) {
+                    startPoint = [latlng.lat, latlng.lng];
+                    if (startMarker) {
+                        startMarker.setLatLng(startPoint);
+                    } else {
+                        startMarker = L.marker(startPoint).addTo(map).bindPopup("Point de départ").openPopup();
+                    }
+                    map.setView(startPoint, 18);
+                    searchControlEnd.addTo(map);
+                    getRouteAndPoints(startPoint, endPoint);
+                }
+            }
+        }).addTo(map);
+
+        var searchControlEnd = new L.Control.Search({
+            layer: sallesLayer,
+            propertyName: 'name',
+            marker: false,
+            moveToLocation: function(latlng, title, map) {
+                var feature = sallesLayer.getLayers().find(layer => layer.feature.properties.name === title);
+                if (feature) {
+                    endPoint = [latlng.lat, latlng.lng];
+                    if (endMarker) {
+                        endMarker.setLatLng(endPoint);
+                    } else {
+                        endMarker = L.marker(endPoint).addTo(map).bindPopup("Point d'arrivée").openPopup();
+                    }
+                    map.setView(endPoint, 18);
+                    if (startPoint && endPoint) {
+                        getRouteAndPoints(startPoint, endPoint);
+                        map.removeControl(searchControlEnd);
+                    }
+                }
+            }
+        });
+
+        var baseLayers = { "Carte OSM": osmLayer };
+        var overlayLayers = { "etage0 (Rouge)": layerEtage0, "etage1 (Bleu)": layerEtage1 };
+        L.control.layers(baseLayers, overlayLayers).addTo(map);
+
+        function getRouteAndPoints(start, end) {
+            var osrmUrl = `https://classefinder.duckdns.org/osrm/route/v1/foot/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
+
+            fetch(osrmUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (data.routes && data.routes.length > 0) {
+                    var route = data.routes[0];
+                    layerEtage0.clearLayers();
+                    layerEtage1.clearLayers();
+                    route.legs[0].steps.forEach((step, index) => {
+                        var segment = {
+                            type: "Feature",
+                            geometry: { type: "LineString", coordinates: step.geometry.coordinates },
+                            properties: { name: step.name || "" }
+                        };
+                        if (segment.properties.name.includes("0")) {
+                            layerEtage0.addData(segment);
+                        }
+                        if (segment.properties.name.includes("1")) {
+                            layerEtage1.addData(segment);
+                        }
+                    });
+                    var bounds = L.geoJSON(route.geometry).getBounds();
+                    map.fitBounds(bounds);
+                }
+            })
+            .catch(error => console.error('Erreur lors de la récupération de l\'itinéraire:', error));
+        }
+    </script>
+</body>
+</html>
