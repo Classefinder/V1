@@ -162,15 +162,11 @@
 
         // Contrôle des calques
         var baseLayers = {
-            "Carte OSM": osmLayer
-        };
-
-        var overlayLayers = {
             "Étage 0": etage0,
             "Étage 1": etage1
         };
 
-        L.control.layers(baseLayers, overlayLayers).addTo(map);
+        L.control.layers(baseLayers).addTo(map);
     </script>
 </body>
 </html>
