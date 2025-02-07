@@ -18,68 +18,88 @@
     // --- 1. Initialisation de la carte et couche de fond ---
     var map = L.map('map').setView([45.9368, 6.1322], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 25,
+        maxZoom: 25,
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
     // --- 2. Données GeoJSON de base pour chaque étage ---
-    // Étage 0 : Salles et chemin associé (on supprime cheminEtage1)
+    // Ajout de la propriété "etage" dans les salles pour faciliter la gestion
+    // Étage 0 : Salle A (Polygon) et Chemin associé (LineString)
     var salleEtage0 = {
       "type": "FeatureCollection",
-      "features": [
+        "features": [
         { "type": "Feature", "properties": { "name": "13" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
         { "type": "Feature", "properties": { "name": "14" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
         { "type": "Feature", "properties": { "name": null }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.13281075656434, 45.937507327903141 ], [ 6.132811540684995, 45.937512671949321 ], [ 6.132903753273905, 45.937506782592266 ], [ 6.132903145580401, 45.937501043195077 ], [ 6.13281075656434, 45.937507327903141 ] ] ] ] } }
+        ]
+    };
+    var cheminEtage0 = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "highway": "footway",
+                "foot": "yes",
+                "name": "105"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13262597317,
+                        45.93730997085
+                    ],
+                    [
+                        6.13267764764,
+                        45.93730437775
+                    ]
+                ]
+            }
+        }
       ]
     };
-    var CheminEtage = {
+
+    // Étage 1 : Salle B (Polygon) et Chemin associé (LineString)
+    var salleEtage1 = {
+      "type": "FeatureCollection",
+        "features": [
+        { "type": "Feature", "properties": { "name": "117" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": "115" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": "124" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132338097023253, 45.936716667911078 ], [ 6.132346542802771, 45.936781465154866 ], [ 6.132207412442507, 45.936788228181904 ], [ 6.132199492061409, 45.936723211710948 ], [ 6.132338097023253, 45.936716667911078 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": null }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132199509140655, 45.936723205849191 ], [ 6.132207436089236, 45.936788221178332 ], [ 6.132136377516463, 45.936791117445097 ], [ 6.132132754879041, 45.936762889056567 ], [ 6.132103938445006, 45.93676472132563 ], [ 6.132099429867845, 45.936727498286743 ], [ 6.132199509140655, 45.936723205849191 ] ] ] ] } },
+          ]
+    };
+    var cheminEtage1 = {
       "type": "FeatureCollection",
       "features": [
         {
           "type": "Feature",
-          "properties": {
-            "highway": "footway",
-            "foot": "yes",
-            "name": "117"
-          },
+          "properties": { "name": "117" },
           "geometry": {
             "type": "LineString",
-            "coordinates": [
-              [6.13262597317, 45.93730997085],
-              [6.13267764764, 45.93730437775]
-            ]
+            "coordinates": [[2.353, 48.853], [2.355, 48.855]]
           }
         }
       ]
     };
 
-    // Étage 1 : Salles (pas de chemin ici puisque l'on utilise CheminEtage unique)
-    var salleEtage1 = {
-      "type": "FeatureCollection",
-      "features": [
-        { "type": "Feature", "properties": { "name": "117" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
-        { "type": "Feature", "properties": { "name": "115" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
-        { "type": "Feature", "properties": { "name": "124" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132338097023253, 45.936716667911078 ], [ 6.132346542802771, 45.936781465154866 ], [ 6.132207412442507, 45.936788228181904 ], [ 6.132199492061409, 45.936723211710948 ], [ 6.132338097023253, 45.936716667911078 ] ] ] ] } },
-        { "type": "Feature", "properties": { "name": null }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132199509140655, 45.936723205849191 ], [ 6.132207436089236, 45.936788221178332 ], [ 6.132136377516463, 45.936791117445097 ], [ 6.132132754879041, 45.936762889056567 ], [ 6.132103938445006, 45.93676472132563 ], [ 6.132099429867845, 45.936727498286743 ], [ 6.132199509140655, 45.936723205849191 ] ] ] ] } }
-      ]
-    };
-
-    // --- 3. Création des couches séparées pour les salles ---
+    // --- 3. Création des couches séparées pour salles et chemins ---
     var salleLayer0 = L.geoJSON(salleEtage0, {
       style: { color: 'red', weight: 2, fillOpacity: 0.4 }
     });
+    var cheminLayer0 = L.geoJSON(cheminEtage0, {
+      style: { color: 'transparent'}
+    });
+
     var salleLayer1 = L.geoJSON(salleEtage1, {
       style: { color: 'blue', weight: 2, fillOpacity: 0.4 }
     });
-
-    // --- 4. Création du calque CheminEtage ---
-    var CheminEtageLayer = L.geoJSON(CheminEtage, {
-      style: { color: 'transparent' }
+    var cheminLayer1 = L.geoJSON(cheminEtage1, {
+      style: { color: 'transparent'}
     });
-    // On l'ajoute directement à la carte pour qu'il soit toujours visible
-    CheminEtageLayer.addTo(map);
 
-    // --- 5. Création des couches d'itinéraire (initialement vides) ---
+    // --- 4. Création des couches d'itinéraire (initialement vides) ---
     var itinéraireEtage0 = {
       "type": "FeatureCollection",
       "features": []
@@ -96,15 +116,15 @@
       style: { color: 'pink', weight: 4 }
     });
 
-    // --- 6. Création des groupes par étage ---
-    var etage0 = L.layerGroup([ salleLayer0, itinéraireLayer0 ]).addTo(map);
-    var etage1 = L.layerGroup([ salleLayer1, itinéraireLayer1 ]).addTo(map);
+    // --- 5. Création des groupes par étage ---
+    var etage0 = L.layerGroup([ salleLayer0, cheminLayer0, itinéraireLayer0 ]).addTo(map);
+    var etage1 = L.layerGroup([ salleLayer1, cheminLayer1, itinéraireLayer1 ]).addTo(map);
 
-    // --- 7. Variables pour la gestion des marqueurs (départ et fin) ---
+    // --- 6. Variables pour la gestion des marqueurs (départ et fin) ---
     var startPoint = null;  // Marqueur de départ
     var endPoint = null;    // Marqueur de fin
 
-    // --- 8. Fonction utilitaire de surlignage ---
+    // --- 7. Fonction utilitaire de surlignage ---
     function highlightFeature(layer) {
       layer.setStyle({
         color: 'yellow',
@@ -114,7 +134,7 @@
       layer.bringToFront();
     }
     function resetHighlight() {
-      // Réinitialise le style des salles
+      // Réinitialise le style des salles pour les deux étages
       salleLayer0.eachLayer(function(layer) {
         salleLayer0.resetStyle(layer);
       });
@@ -123,7 +143,7 @@
       });
     }
 
-    // --- 9. Fonction de vérification et calcul de l'itinéraire ---
+    // --- 8. Fonction de vérification et calcul de l'itinéraire ---
     function checkAndCalculateRoute() {
       if (startPoint && endPoint) {
         var startCoords = [startPoint.getLatLng().lat, startPoint.getLatLng().lng];
@@ -132,13 +152,13 @@
       }
     }
 
-    // --- 10. Barre de recherche pour le marqueur de départ ---
-    // La recherche se fait sur les couches de salles
+    // --- 9. Barre de recherche pour le marqueur de départ ---
+    // La recherche ne porte que sur les salles
     var searchGroup = L.featureGroup([ salleLayer0, salleLayer1 ]);
     var searchControlStart = new L.Control.Search({
       layer: searchGroup,
-      propertyName: 'name',  // Recherche par la propriété "name"
-      marker: false,
+      propertyName: 'name',  // Recherche par propriété "name"
+      marker: false,         // Pas de marqueur automatique
       moveToLocation: function(latlng, title, map) {
         map.setView(latlng, 17);
       },
@@ -146,19 +166,23 @@
     });
     map.addControl(searchControlStart);
 
-    // Lorsqu'une salle est trouvée, on cherche dans le calque CheminEtage
+    // Gestion de l'événement de recherche pour le point de départ
     searchControlStart.on('search:locationfound', function(e) {
       resetHighlight();
       if (startPoint) {
         map.removeLayer(startPoint);
         startPoint = null;
       }
+
       var salleFeature = e.layer;
       highlightFeature(salleFeature);
       map.fitBounds(salleFeature.getBounds());
 
+      var etage = salleFeature.feature.properties.etage;
+      var cheminLayer = (name === 0) ? cheminLayer0 : cheminLayer1;
+
       var cheminFeature = null;
-      CheminEtageLayer.eachLayer(function(layer) {
+      cheminLayer.eachLayer(function(layer) {
         if (layer.feature && layer.feature.properties.name === salleFeature.feature.properties.name) {
           cheminFeature = layer;
         }
@@ -169,10 +193,11 @@
           .bindPopup("Point de départ sur le chemin de " + salleFeature.feature.properties.name)
           .openPopup();
       }
+      // Calcul de l'itinéraire si le marqueur de fin existe déjà
       checkAndCalculateRoute();
     });
 
-    // --- 11. Barre de recherche pour le marqueur de fin ---
+    // --- 10. Barre de recherche pour le marqueur de fin ---
     var searchControlEnd = new L.Control.Search({
       layer: searchGroup,
       propertyName: 'name',
@@ -190,12 +215,16 @@
         map.removeLayer(endPoint);
         endPoint = null;
       }
+
       var salleFeature = e.layer;
       highlightFeature(salleFeature);
       map.fitBounds(salleFeature.getBounds());
 
+      var etage = salleFeature.feature.properties.etage;
+      var cheminLayer = (etage === 0) ? cheminLayer0 : cheminLayer1;
+
       var cheminFeature = null;
-      CheminEtageLayer.eachLayer(function(layer) {
+      cheminLayer.eachLayer(function(layer) {
         if (layer.feature && layer.feature.properties.name === salleFeature.feature.properties.name) {
           cheminFeature = layer;
         }
@@ -206,10 +235,11 @@
           .bindPopup("Point de fin sur le chemin de " + salleFeature.feature.properties.name)
           .openPopup();
       }
+      // Calcul de l'itinéraire si le marqueur de départ existe déjà
       checkAndCalculateRoute();
     });
 
-    // --- 12. Récupération de l'itinéraire (OSRM) ---
+    // --- 11. Fonction de récupération de l'itinéraire (OSRM) ---
     function getRouteAndPoints(start, end) {
       var osrmUrl = `http://89.168.57.91:5000/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
 
@@ -218,6 +248,7 @@
         .then(data => {
           if (data.routes && data.routes.length > 0) {
             var route = data.routes[0];
+
             itinéraireLayer0.clearLayers();
             itinéraireLayer1.clearLayers();
 
@@ -230,7 +261,9 @@
                   type: "LineString",
                   coordinates: step.geometry.coordinates
                 },
-                properties: { name: startName }
+                properties: {
+                  name: startName
+                }
               };
 
               if (startName.toLowerCase().includes("0") || endName.toLowerCase().includes("0")) {
@@ -250,11 +283,10 @@
         });
     }
 
-    // --- 13. Contrôle des calques ---
-    // On n'inclut PAS CheminEtageLayer dans le contrôle des couches, il reste toujours affiché.
+    // --- 12. Contrôle des calques pour la gestion d'étage ---
     var baseLayers = {
-      "Étage 0 (Salles & Itinéraires)": etage0,
-      "Étage 1 (Salles & Itinéraires)": etage1
+      "Étage 0 (Salles & Chemins)": etage0,
+      "Étage 1 (Salles & Chemins)": etage1
     };
     L.control.layers(baseLayers, null, { collapsed: false }).addTo(map);
   </script>
