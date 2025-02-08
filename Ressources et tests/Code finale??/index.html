@@ -174,11 +174,13 @@
     var itinéraireLayer1 = L.geoJSON(itinéraireEtage1, { style: { color: 'pink', weight: 4 } });
 
     // --- 6. Définition des fonds de carte personnalisés pour chaque groupe (en plus du fond par défaut) ---
-    var customBackground0 = L.tileLayer('../../Tiles/LyceeLachenaletage0/{z}/{x}/{y}.png', {
-      opacity: 0.7
+    var customBackground0 = L.tileLayer('../../Données/QGIS/QTiles/etage0/{z}/{x}/{y}.png', {
+      opacity: 1,
+      maxZoom: 23
     });
-    var customBackground1 = L.tileLayer('../../Tiles/LyceeLachenaletage1/{z}/{x}/{y}.png', {
-      opacity: 0.7
+    var customBackground1 = L.tileLayer('../../Données/QGIS/QTiles/etage1/{z}/{x}/{y}.png', {
+      opacity: 1,
+      maxZoom: 23 
     });
 
     // --- 7. Création des groupes par étage en ajoutant le fond personnalisé dans le groupe
