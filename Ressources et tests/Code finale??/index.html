@@ -31,7 +31,7 @@
     var nordEst   = L.latLng(45.94071173403467, 6.137074019550861);
     var limites   = L.latLngBounds(sudOuest, nordEst);
 
-    // Fond de carte par défaut (que vous aviez mis)
+    // Fond de carte par défaut (celui que vous aviez mis)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map = L.map('map', {
@@ -114,7 +114,8 @@
       ]
     };
 
-    // --- 3. Création des couches GeoJSON pour les salles (labels affichés selon le zoom uniquement) ---
+    // --- 3. Création des couches GeoJSON pour les salles ---
+    // On n'utilise plus bindTooltip ici afin d'éviter que le label s'affiche automatiquement au survol.
     function onEachSalleFeature(feature, layer, floor) {
       feature.properties.floor = floor;
       layer.on({
@@ -124,7 +125,6 @@
             weight: 3,
             fillOpacity: 0.7
           });
-          // Le tooltip ne s'ouvre plus automatiquement au survol.
         },
         mouseout: function(e) {
           if (floor === "0") {
@@ -132,13 +132,16 @@
           } else {
             salleLayer1.resetStyle(e.target);
           }
+        },
+        click: function(e) {
+          // Au clic, on réinitialise le style (pour ne pas conserver de surlignage) et on zoom sur la feature.
+          if (floor === "0") {
+            salleLayer0.resetStyle(e.target);
+          } else {
+            salleLayer1.resetStyle(e.target);
+          }
+          map.fitBounds(e.target.getBounds());
         }
-      });
-      // On lie le tooltip, qui sera affiché via updateTooltipsVisibility
-      layer.bindTooltip(feature.properties.name, {
-        permanent: false,
-        direction: 'center',
-        className: 'room-label'
       });
     }
 
@@ -173,7 +176,7 @@
     var itinéraireLayer0 = L.geoJSON(itinéraireEtage0, { style: { color: 'purple', weight: 4 } });
     var itinéraireLayer1 = L.geoJSON(itinéraireEtage1, { style: { color: 'pink', weight: 4 } });
 
-    // --- 6. Définition des fonds de carte personnalisés pour chaque groupe (en plus du fond par défaut) ---
+    // --- 6. Fonds de carte personnalisés pour chaque groupe (en plus du fond par défaut) ---
     var customBackground0 = L.tileLayer('../../Données/QGIS/QTiles/etage0/{z}/{x}/{y}.png', {
       opacity: 1,
       maxZoom: 23
@@ -183,52 +186,124 @@
       maxZoom: 23 
     });
 
-    // --- 7. Création des groupes par étage en ajoutant le fond personnalisé dans le groupe
+    // --- 7. Groupes par étage en ajoutant le fond personnalisé dans le groupe ---
     var etage0 = L.layerGroup([ customBackground0, salleLayer0, itinéraireLayer0 ]);
     var etage1 = L.layerGroup([ customBackground1, salleLayer1, itinéraireLayer1 ]);
-    // Par défaut, on ajoute le groupe de l'étage 0 à la carte.
+    // Par défaut, le groupe de l'étage 0 est affiché.
     etage0.addTo(map);
 
-    // --- 8. Gestion des tooltips en fonction du niveau de zoom ---
+    // --- 8. Gestion des labels (tooltips) en fonction du niveau de zoom ---
+    // Ici, on crée manuellement un tooltip permanent pour chaque feature lorsque le zoom est suffisant.
     const tooltipZoomThreshold = 20; // Seuil de zoom pour afficher les labels
-    function updateTooltipsVisibility() {
-      var currentZoom = map.getZoom();
-      salleLayer0.eachLayer(function(layer) {
-        if (currentZoom >= tooltipZoomThreshold) {
-          layer.openTooltip();
-        } else {
-          layer.closeTooltip();
-        }
-      });
-      salleLayer1.eachLayer(function(layer) {
-        if (currentZoom >= tooltipZoomThreshold) {
-          layer.openTooltip();
-        } else {
-          layer.closeTooltip();
-        }
-      });
-    }
-    map.on('zoomend', updateTooltipsVisibility);
-    updateTooltipsVisibility();
 
-    // --- 9. Fonction de basculement automatique du calque en fonction de la salle recherchée
-    function switchFloor(floor) {
-      if (floor === "0") {
-        if (!map.hasLayer(etage0)) { map.addLayer(etage0); }
-        if (map.hasLayer(etage1)) { map.removeLayer(etage1); }
-      } else if (floor === "1") {
-        if (!map.hasLayer(etage1)) { map.addLayer(etage1); }
-        if (map.hasLayer(etage0)) { map.removeLayer(etage0); }
+function updateTooltipsVisibility() {
+  var currentZoom = map.getZoom();
+  
+  // Gestion pour le groupe etage0 (salleLayer0)
+  if (map.hasLayer(etage0)) {
+    salleLayer0.eachLayer(function(layer) {
+      if (currentZoom >= tooltipZoomThreshold) {
+        if (!layer._customTooltip) {
+          var center = layer.getBounds().getCenter();
+          var tooltip = L.tooltip({
+            permanent: true,
+            direction: 'center',
+            className: 'room-label'
+          })
+          .setContent(layer.feature.properties.name)
+          .setLatLng(center);
+          tooltip.addTo(map);
+          layer._customTooltip = tooltip;
+        }
+      } else {
+        if (layer._customTooltip) {
+          map.removeLayer(layer._customTooltip);
+          layer._customTooltip = null;
+        }
       }
-      // Actualisation des labels lors du changement de calque
-      updateTooltipsVisibility();
+    });
+  } else {
+    // Si le groupe n'est pas visible, retirer les tooltips éventuels.
+    salleLayer0.eachLayer(function(layer) {
+      if (layer._customTooltip) {
+        map.removeLayer(layer._customTooltip);
+        layer._customTooltip = null;
+      }
+    });
+  }
+  
+  // Gestion pour le groupe etage1 (salleLayer1)
+  if (map.hasLayer(etage1)) {
+    salleLayer1.eachLayer(function(layer) {
+      if (currentZoom >= tooltipZoomThreshold) {
+        if (!layer._customTooltip) {
+          var center = layer.getBounds().getCenter();
+          var tooltip = L.tooltip({
+            permanent: true,
+            direction: 'center',
+            className: 'room-label'
+          })
+          .setContent(layer.feature.properties.name)
+          .setLatLng(center);
+          tooltip.addTo(map);
+          layer._customTooltip = tooltip;
+        }
+      } else {
+        if (layer._customTooltip) {
+          map.removeLayer(layer._customTooltip);
+          layer._customTooltip = null;
+        }
+      }
+    });
+  } else {
+    salleLayer1.eachLayer(function(layer) {
+      if (layer._customTooltip) {
+        map.removeLayer(layer._customTooltip);
+        layer._customTooltip = null;
+      }
+    });
+  }
+}
+
+map.on('zoomend', updateTooltipsVisibility);
+updateTooltipsVisibility();
+
+
+    // --- 9. Basculement automatique du calque en fonction de la salle recherchée ---
+    function switchFloor(floor) {
+  // Supprime tous les tooltips personnalisés, quel que soit le calque
+  salleLayer0.eachLayer(function(layer) {
+    if (layer._customTooltip) {
+      map.removeLayer(layer._customTooltip);
+      layer._customTooltip = null;
     }
+  });
+  salleLayer1.eachLayer(function(layer) {
+    if (layer._customTooltip) {
+      map.removeLayer(layer._customTooltip);
+      layer._customTooltip = null;
+    }
+  });
+
+  // Basculement du calque visible
+  if (floor === "0") {
+    if (!map.hasLayer(etage0)) { map.addLayer(etage0); }
+    if (map.hasLayer(etage1)) { map.removeLayer(etage1); }
+  } else if (floor === "1") {
+    if (!map.hasLayer(etage1)) { map.addLayer(etage1); }
+    if (map.hasLayer(etage0)) { map.removeLayer(etage0); }
+  }
+  // Mise à jour immédiate des tooltips pour le groupe visible
+  updateTooltipsVisibility();
+}
+
+
 
     // --- 10. Variables pour la gestion des marqueurs de départ et d'arrivée ---
     var startPoint = null;
     var endPoint   = null;
 
-    // --- 11. Fonctions de surlignage (utilisées lors des recherches) ---
+    // --- 11. Fonctions de surlignage (pour les recherches) ---
     function highlightFeature(layer) {
       layer.setStyle({ color: 'yellow', weight: 3, fillOpacity: 0.7 });
       layer.bringToFront();
@@ -258,7 +333,7 @@
       propertyName: 'name',
       marker: false,
       moveToLocation: function(latlng, title, map) {
-        // Ne rien faire ici pour laisser le zoom personnalisé se gérer ailleurs
+        // Laisser le zoom personnalisé se gérer ailleurs
       },
       position: 'topleft'
     });
@@ -269,8 +344,7 @@
       if (startPoint) { map.removeLayer(startPoint); startPoint = null; }
       var salleFeature = e.layer;
       switchFloor(salleFeature.feature.properties.floor);
-      highlightFeature(salleFeature);
-      // Zoom sur la forme GeoJSON sans inclure le marqueur dans le calcul du zoom
+      // Zoom sur la feature (comme avec la recherche)
       map.fitBounds(salleFeature.getBounds());
 
       var cheminFeature = null;
@@ -305,7 +379,6 @@
       if (endPoint) { map.removeLayer(endPoint); endPoint = null; }
       var salleFeature = e.layer;
       switchFloor(salleFeature.feature.properties.floor);
-      highlightFeature(salleFeature);
       map.fitBounds(salleFeature.getBounds());
 
       var cheminFeature = null;
