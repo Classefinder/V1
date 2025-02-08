@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Carte avec Leaflet, OSRM et GeoJSON</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet-search@4.0.0/dist/leaflet-search.min.css" />  
@@ -10,57 +10,65 @@
   <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
   <script src="https://unpkg.com/leaflet-search@4.0.0/dist/leaflet-search.min.js"></script>  
+  <style>
+    /* Style personnalisé pour les labels */
+    .room-label {
+      font-weight: bold;
+      color: black;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid gray;
+      border-radius: 3px;
+      padding: 2px 4px;
+    }
+  </style>
 </head>
 <body>
   <div id="map" style="height: 100vh;"></div>
 
   <script>
-    // --- 1. Initialisation de la carte et couche de fond ---
-    var map = L.map('map').setView([45.9368, 6.1322], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 25,
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+    // --- 1. Initialisation de la carte avec les limites définies ---
+    var sudOuest = L.latLng(45.935272295928755, 6.129041676650091);
+    var nordEst   = L.latLng(45.94071173403467, 6.137074019550861);
+    var limites   = L.latLngBounds(sudOuest, nordEst);
 
-    // --- 2. Données GeoJSON de base pour chaque étage ---
+    // Fond de carte par défaut (que vous aviez mis)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map = L.map('map', {
+      center: [45.9368, 6.1322],
+      zoom: 18,
+      minZoom: 18,
+      maxZoom: 23,
+      maxBounds: limites,
+      maxBoundsViscosity: 1.0
+    }));
+
+    // --- 2. Données GeoJSON pour les salles et les chemins ---
     var salleEtage0 = {
       "type": "FeatureCollection",
       "features": [
-        { "type": "Feature", "properties": { "name": "13" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
-        { "type": "Feature", "properties": { "name": null }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.13281075656434, 45.937507327903141 ], [ 6.132811540684995, 45.937512671949321 ], [ 6.132903753273905, 45.937506782592266 ], [ 6.132903145580401, 45.937501043195077 ], [ 6.13281075656434, 45.937507327903141 ] ] ] ] } }
-      ]
-    };
-    var CheminEtage = {
-      "type": "FeatureCollection",
-      "features": [
-        {
-          "type": "Feature",
-          "properties": {
-            "highway": "footway",
-            "foot": "yes",
-            "name": "117"
-          },
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [ 6.13262597317, 45.93730997085 ],
-              [ 6.13267764764, 45.93730437775 ]
-            ]
+        { 
+          "type": "Feature", 
+          "properties": { "name": "8" }, 
+          "geometry": { 
+            "type": "MultiPolygon", 
+            "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ],
+                                  [ 6.132451800410498, 45.936862076107261 ],
+                                  [ 6.132332645198166, 45.936867696926917 ],
+                                  [ 6.132323764318674, 45.936798784599809 ],
+                                  [ 6.132443855592967, 45.936792791783532 ] ] ] ]
           }
         },
-        {
-          "type": "Feature",
-          "properties": {
-            "highway": "footway",
-            "foot": "yes",
-            "name": "13"
-          },
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [ 6.13262517, 45.93730997085 ],
-              [ 6.13267764764, 45.937775 ]
-            ]
+        { 
+          "type": "Feature", 
+          "properties": { "name": "14" }, 
+          "geometry": { 
+            "type": "MultiPolygon", 
+            "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ],
+                                  [ 6.132332645193752, 45.936867696937178 ],
+                                  [ 6.132169440848435, 45.936875476859768 ],
+                                  [ 6.132160492656691, 45.936806544549889 ],
+                                  [ 6.132323764318674, 45.93679878003244 ] ] ] ]
           }
         }
       ]
@@ -69,41 +77,156 @@
     var salleEtage1 = {
       "type": "FeatureCollection",
       "features": [
-        { "type": "Feature", "properties": { "name": "117" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
-        { "type": "Feature", "properties": { "name": null }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132684614005758, 45.937194477877519 ], [ 6.132735001598985, 45.937222992336032 ], [ 6.132715571089178, 45.93723696327018 ], [ 6.132666006822637, 45.937208677850656 ], [ 6.132684614005758, 45.937194477877519 ] ] ] ] } }
+        { 
+          "type": "Feature", 
+          "properties": { "name": "117" }, 
+          "geometry": { 
+            "type": "MultiPolygon", 
+            "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ],
+                                  [ 6.132451800410498, 45.936862076107261 ],
+                                  [ 6.132332645198166, 45.936867696926917 ],
+                                  [ 6.132323764318674, 45.936798784599809 ],
+                                  [ 6.132443855592967, 45.936792791783532 ] ] ] ]
+          }
+        },
+        { 
+          "type": "Feature", 
+          "properties": { "name": "105" }, 
+          "geometry": { 
+            "type": "MultiPolygon", 
+            "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ],
+                                  [ 6.132332645193752, 45.936867696937178 ],
+                                  [ 6.132169440848435, 45.936875476859768 ],
+                                  [ 6.132160492656691, 45.936806544549889 ],
+                                  [ 6.132323764318674, 45.93679878003244 ] ] ] ]
+          }
+        }
       ]
     };
 
-    // --- 3. Création des couches séparées pour les salles ---
+    var CheminEtage = {
+      "type": "FeatureCollection",
+      "features": [
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"105"},
+         "geometry":{"type":"LineString","coordinates":[[6.13263,45.93731],[6.13268,45.9373]]}},
+        {"type":"Feature","properties":{"name":"8","foot":"yes","highway":"footway"},
+         "geometry":{"type":"LineString","coordinates":[[6.13217,45.93707],[6.13212,45.93707]]}}
+      ]
+    };
+
+    // --- 3. Création des couches GeoJSON pour les salles (labels affichés selon le zoom uniquement) ---
+    function onEachSalleFeature(feature, layer, floor) {
+      feature.properties.floor = floor;
+      layer.on({
+        mouseover: function(e) {
+          e.target.setStyle({
+            color: 'orange',
+            weight: 3,
+            fillOpacity: 0.7
+          });
+          // Le tooltip ne s'ouvre plus automatiquement au survol.
+        },
+        mouseout: function(e) {
+          if (floor === "0") {
+            salleLayer0.resetStyle(e.target);
+          } else {
+            salleLayer1.resetStyle(e.target);
+          }
+        }
+      });
+      // On lie le tooltip, qui sera affiché via updateTooltipsVisibility
+      layer.bindTooltip(feature.properties.name, {
+        permanent: false,
+        direction: 'center',
+        className: 'room-label'
+      });
+    }
+
     var salleLayer0 = L.geoJSON(salleEtage0, {
-      style: { color: 'red', weight: 2, fillOpacity: 0.4 }
-    });
-    var salleLayer1 = L.geoJSON(salleEtage1, {
-      style: { color: 'blue', weight: 2, fillOpacity: 0.4 }
+      style: function(feature) {
+        return { color: 'red', weight: 2, fillOpacity: 0.4 };
+      },
+      onEachFeature: function(feature, layer) {
+         onEachSalleFeature(feature, layer, "0");
+      }
     });
 
-    // --- 4. Création du calque CheminEtage ---
+    var salleLayer1 = L.geoJSON(salleEtage1, {
+      style: function(feature) {
+        return { color: 'blue', weight: 2, fillOpacity: 0.4 };
+      },
+      onEachFeature: function(feature, layer) {
+         onEachSalleFeature(feature, layer, "1");
+      }
+    });
+
+    // --- 4. Calque des chemins ---
     var CheminEtageLayer = L.geoJSON(CheminEtage, {
       style: { color: 'transparent' }
     });
     CheminEtageLayer.addTo(map);
 
-    // --- 5. Création des couches d'itinéraire (initialement vides) ---
+    // --- 5. Couches d'itinéraire (initialement vides) ---
     var itinéraireEtage0 = { "type": "FeatureCollection", "features": [] };
     var itinéraireEtage1 = { "type": "FeatureCollection", "features": [] };
 
     var itinéraireLayer0 = L.geoJSON(itinéraireEtage0, { style: { color: 'purple', weight: 4 } });
     var itinéraireLayer1 = L.geoJSON(itinéraireEtage1, { style: { color: 'pink', weight: 4 } });
 
-    // --- 6. Création des groupes par étage ---
-    var etage0 = L.layerGroup([ salleLayer0, itinéraireLayer0 ]).addTo(map);
-    var etage1 = L.layerGroup([ salleLayer1, itinéraireLayer1 ]).addTo(map);
+    // --- 6. Définition des fonds de carte personnalisés pour chaque groupe (en plus du fond par défaut) ---
+    var customBackground0 = L.tileLayer('../../Tiles/LyceeLachenaletage0/{z}/{x}/{y}.png', {
+      opacity: 0.7
+    });
+    var customBackground1 = L.tileLayer('../../Tiles/LyceeLachenaletage1/{z}/{x}/{y}.png', {
+      opacity: 0.7
+    });
 
-    // --- 7. Variables pour la gestion des marqueurs (départ et fin) ---
+    // --- 7. Création des groupes par étage en ajoutant le fond personnalisé dans le groupe
+    var etage0 = L.layerGroup([ customBackground0, salleLayer0, itinéraireLayer0 ]);
+    var etage1 = L.layerGroup([ customBackground1, salleLayer1, itinéraireLayer1 ]);
+    // Par défaut, on ajoute le groupe de l'étage 0 à la carte.
+    etage0.addTo(map);
+
+    // --- 8. Gestion des tooltips en fonction du niveau de zoom ---
+    const tooltipZoomThreshold = 20; // Seuil de zoom pour afficher les labels
+    function updateTooltipsVisibility() {
+      var currentZoom = map.getZoom();
+      salleLayer0.eachLayer(function(layer) {
+        if (currentZoom >= tooltipZoomThreshold) {
+          layer.openTooltip();
+        } else {
+          layer.closeTooltip();
+        }
+      });
+      salleLayer1.eachLayer(function(layer) {
+        if (currentZoom >= tooltipZoomThreshold) {
+          layer.openTooltip();
+        } else {
+          layer.closeTooltip();
+        }
+      });
+    }
+    map.on('zoomend', updateTooltipsVisibility);
+    updateTooltipsVisibility();
+
+    // --- 9. Fonction de basculement automatique du calque en fonction de la salle recherchée
+    function switchFloor(floor) {
+      if (floor === "0") {
+        if (!map.hasLayer(etage0)) { map.addLayer(etage0); }
+        if (map.hasLayer(etage1)) { map.removeLayer(etage1); }
+      } else if (floor === "1") {
+        if (!map.hasLayer(etage1)) { map.addLayer(etage1); }
+        if (map.hasLayer(etage0)) { map.removeLayer(etage0); }
+      }
+      // Actualisation des labels lors du changement de calque
+      updateTooltipsVisibility();
+    }
+
+    // --- 10. Variables pour la gestion des marqueurs de départ et d'arrivée ---
     var startPoint = null;
-    var endPoint = null;
+    var endPoint   = null;
 
-    // --- 8. Fonctions de surlignage ---
+    // --- 11. Fonctions de surlignage (utilisées lors des recherches) ---
     function highlightFeature(layer) {
       layer.setStyle({ color: 'yellow', weight: 3, fillOpacity: 0.7 });
       layer.bringToFront();
@@ -117,7 +240,7 @@
       });
     }
 
-    // --- 9. Fonction de vérification et calcul de l'itinéraire ---
+    // --- 12. Vérification et calcul de l'itinéraire ---
     function checkAndCalculateRoute() {
       if (startPoint && endPoint) {
         var startCoords = [ startPoint.getLatLng().lat, startPoint.getLatLng().lng ];
@@ -126,14 +249,14 @@
       }
     }
 
-    // --- 10. Barre de recherche pour le marqueur de départ ---
+    // --- 13. Barre de recherche pour le marqueur de départ ---
     var searchGroup = L.featureGroup([ salleLayer0, salleLayer1 ]);
     var searchControlStart = new L.Control.Search({
       layer: searchGroup,
       propertyName: 'name',
       marker: false,
       moveToLocation: function(latlng, title, map) {
-        map.setView(latlng, 17);
+        // Ne rien faire ici pour laisser le zoom personnalisé se gérer ailleurs
       },
       position: 'topleft'
     });
@@ -143,7 +266,9 @@
       resetHighlight();
       if (startPoint) { map.removeLayer(startPoint); startPoint = null; }
       var salleFeature = e.layer;
+      switchFloor(salleFeature.feature.properties.floor);
       highlightFeature(salleFeature);
+      // Zoom sur la forme GeoJSON sans inclure le marqueur dans le calcul du zoom
       map.fitBounds(salleFeature.getBounds());
 
       var cheminFeature = null;
@@ -155,19 +280,19 @@
       if (cheminFeature) {
         var center = cheminFeature.getBounds().getCenter();
         startPoint = L.marker(center).addTo(map)
-          .bindPopup("Point de départ sur le chemin de " + salleFeature.feature.properties.name)
+          .bindPopup("Point de départ sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
           .openPopup();
       }
       checkAndCalculateRoute();
     });
 
-    // --- 11. Barre de recherche pour le marqueur de fin ---
+    // --- 14. Barre de recherche pour le marqueur de fin ---
     var searchControlEnd = new L.Control.Search({
       layer: searchGroup,
       propertyName: 'name',
       marker: false,
       moveToLocation: function(latlng, title, map) {
-        map.setView(latlng, 17);
+        // Pas d'action ici
       },
       position: 'topright'
     });
@@ -177,6 +302,7 @@
       resetHighlight();
       if (endPoint) { map.removeLayer(endPoint); endPoint = null; }
       var salleFeature = e.layer;
+      switchFloor(salleFeature.feature.properties.floor);
       highlightFeature(salleFeature);
       map.fitBounds(salleFeature.getBounds());
 
@@ -189,16 +315,15 @@
       if (cheminFeature) {
         var center = cheminFeature.getBounds().getCenter();
         endPoint = L.marker(center).addTo(map)
-          .bindPopup("Point de fin sur le chemin de " + salleFeature.feature.properties.name)
+          .bindPopup("Point de fin sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
           .openPopup();
       }
       checkAndCalculateRoute();
     });
 
-    // --- 12. Récupération de l'itinéraire (OSRM) ---
+    // --- 15. Récupération de l'itinéraire (OSRM) ---
     function getRouteAndPoints(start, end) {
-      var osrmUrl = `http://89.168.57.91:5000/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
-
+      var osrmUrl = `https://classefinder.duckdns.org/osrm/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
       fetch(osrmUrl)
         .then(response => response.json())
         .then(data => {
@@ -207,10 +332,14 @@
             itinéraireLayer0.clearLayers();
             itinéraireLayer1.clearLayers();
 
-            // Pour chaque étape, on utilise uniquement step.name pour déterminer l'étage.
+            var currentFloor = null;
             route.legs[0].steps.forEach((step) => {
-              // On s'attend à ce que step.name soit exactement "0" ou "1"
               var floor = (step.name || "").trim();
+              if (floor === "" && currentFloor !== null) {
+                floor = currentFloor;
+              } else {
+                currentFloor = floor;
+              }
               var segment = {
                 type: "Feature",
                 geometry: {
@@ -225,9 +354,7 @@
               } else if (floor === "1") {
                 itinéraireLayer1.addData(segment);
               }
-              // Sinon, le segment n'est pas ajouté (ou vous pouvez décider d'une action par défaut)
             });
-
             var bounds = L.geoJSON(route.geometry).getBounds();
             map.fitBounds(bounds);
           }
@@ -237,7 +364,7 @@
         });
     }
 
-    // --- 13. Contrôle des calques ---
+    // --- 16. Contrôle des calques via le sélecteur ---
     var baseLayers = {
       "Étage 0": etage0,
       "Étage 1": etage1
