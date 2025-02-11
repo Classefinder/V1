@@ -486,49 +486,100 @@ updateTooltipsVisibility();
       checkAndCalculateRoute();
     });
 
-    // --- 15. Récupération de l'itinéraire (OSRM) ---
-    function getRouteAndPoints(start, end) {
-      var osrmUrl = `https://classefinder.duckdns.org/osrm/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
-      fetch(osrmUrl)
-        .then(response => response.json())
-        .then(data => {
-          if (data.routes && data.routes.length > 0) {
-            var route = data.routes[0];
-            itinéraireLayer0.clearLayers();
-            itinéraireLayer1.clearLayers();
-
-            var currentFloor = null;
-            route.legs[0].steps.forEach((step) => {
-              var floor = (step.name || "").trim();
-              if (floor === "" && currentFloor !== null) {
-                floor = currentFloor;
-              } else {
-                currentFloor = floor;
-              }
-              var segment = {
-                type: "Feature",
-                geometry: {
-                  type: "LineString",
-                  coordinates: step.geometry.coordinates
-                },
-                properties: { name: floor }
-              };
-
-              if (floor === "0") {
-                itinéraireLayer0.addData(segment);
-              } else if (floor === "1") {
-                itinéraireLayer1.addData(segment);
-              }
-            });
-            var bounds = L.geoJSON(route.geometry).getBounds();
-            map.fitBounds(bounds);
+// Fonction pour récupérer et filtrer les segments avec fusion des étapes consécutives
+function getRouteAndPoints(start, end) {
+  // start et end sont dans l'ordre [lon, lat]
+  // OSRM attend dans l'URL: lat,lon
+  var osrmUrl = `http://89.168.57.91:5000/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
+  
+  fetch(osrmUrl)
+    .then(response => response.json())
+    .then(data => {
+      if (data.routes && data.routes.length > 0) {
+        var route = data.routes[0];
+        
+        // Effacer les anciennes données des calques
+        itinéraireLayer0.clearLayers();
+        itinéraireLayer1.clearLayers();
+        
+        // Fusionner les étapes consécutives ayant le même "nom normalisé"
+        // Ici, on considère que si step.name vaut "0" ou "1", on veut en fait la même valeur : "route"
+        var mergedSteps = [];
+        var currentStep = null;
+        var defaultNames = ["0", "1"];  // valeurs par défaut à normaliser
+        
+        route.legs[0].steps.forEach((step) => {
+          // Normaliser le nom : si c'est "0" ou "1", on le transforme en "route"
+          var normalized = step.name || "";
+          if (defaultNames.includes(normalized)) {
+            normalized = "route";
           }
-        })
-        .catch(error => {
-          console.error('Erreur lors de la récupération de l\'itinéraire:', error);
+          
+          // Si c'est la première étape, initialiser currentStep
+          if (!currentStep) {
+            currentStep = {
+              name: normalized,
+              coordinates: step.geometry.coordinates.slice() // copie des coordonnées
+            };
+          } else {
+            // Si le nom normalisé est identique à celui de la dernière étape fusionnée,
+            // fusionner (concaténer les coordonnées, en évitant la redondance du point de jonction)
+            if (normalized === currentStep.name) {
+              var lastCoord = currentStep.coordinates[currentStep.coordinates.length - 1];
+              var firstCoord = step.geometry.coordinates[0];
+              // Si les points ne sont pas identiques (tolérance faible)
+              if (Math.abs(lastCoord[0] - firstCoord[0]) > 1e-6 || Math.abs(lastCoord[1] - firstCoord[1]) > 1e-6) {
+                currentStep.coordinates = currentStep.coordinates.concat(step.geometry.coordinates);
+              } else {
+                // Sinon, concaténer à partir du second point pour éviter la duplication
+                currentStep.coordinates = currentStep.coordinates.concat(step.geometry.coordinates.slice(1));
+              }
+            } else {
+              // Si le nom change, on enregistre l'étape fusionnée et on démarre une nouvelle étape
+              mergedSteps.push(currentStep);
+              currentStep = {
+                name: normalized,
+                coordinates: step.geometry.coordinates.slice()
+              };
+            }
+          }
         });
-    }
-
+        // Ajouter la dernière étape fusionnée
+        if (currentStep) {
+          mergedSteps.push(currentStep);
+        }
+        
+        // Ajouter chaque segment fusionné au calque correspondant
+        // Ici, par exemple, nous plaçons tous les segments dont le nom normalisé est "route" dans itinéraireLayer1,
+        // et les autres dans itinéraireLayer0.
+        mergedSteps.forEach(step => {
+          var segment = {
+            type: "Feature",
+            geometry: {
+              type: "LineString",
+              coordinates: step.coordinates
+            },
+            properties: {
+              name: step.name
+            }
+          };
+          
+          if (step.name === "route") {
+            itinéraireLayer1.addData(segment);
+          } else {
+            itinéraireLayer0.addData(segment);
+          }
+        });
+        
+        // Centrer la carte sur l'itinéraire complet
+        var bounds = L.geoJSON(route.geometry).getBounds();
+        map.fitBounds(bounds);
+      }
+    })
+    .catch(error => {
+      console.error('Erreur lors de la récupération de l\'itinéraire:', error);
+    });
+}
     // --- 16. Contrôle des calques via le sélecteur ---
     var baseLayers = {
       "Étage 0": etage0,
