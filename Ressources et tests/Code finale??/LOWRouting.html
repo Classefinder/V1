@@ -131,7 +131,7 @@
 
     var salleLayer0 = L.geoJSON(salleEtage0, {
       style: function(feature) {
-        return { color: 'red', weight: 2, fillOpacity: 0.4 };
+        return { color: '#81CAA7', weight: 2, fillOpacity: 0.8 };
       },
       onEachFeature: function(feature, layer) {
          onEachSalleFeature(feature, layer, "0");
@@ -140,7 +140,7 @@
 
     var salleLayer1 = L.geoJSON(salleEtage1, {
       style: function(feature) {
-        return { color: 'blue', weight: 2, fillOpacity: 0.4 };
+        return { color: '#9EF3CA', weight: 2, fillOpacity: 0.8 };
       },
       onEachFeature: function(feature, layer) {
          onEachSalleFeature(feature, layer, "1");
