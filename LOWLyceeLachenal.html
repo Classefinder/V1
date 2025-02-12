@@ -49,8 +49,8 @@
         "type": "FeatureCollection",
         "features": [
         { "type": "Feature", "properties": { "name": "13" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
-        { "type": "Feature", "properties": { "name": "14" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
-        { "type": "Feature", "properties": { "name": null }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.13281075656434, 45.937507327903141 ], [ 6.132811540684995, 45.937512671949321 ], [ 6.132903753273905, 45.937506782592266 ], [ 6.132903145580401, 45.937501043195077 ], [ 6.13281075656434, 45.937507327903141 ] ] ] ] } }
+        { "type": "Feature", "properties": { "name": "13" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": "13" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.13281075656434, 45.937507327903141 ], [ 6.132811540684995, 45.937512671949321 ], [ 6.132903753273905, 45.937506782592266 ], [ 6.132903145580401, 45.937501043195077 ], [ 6.13281075656434, 45.937507327903141 ] ] ] ] } }
         ]
     };
 
@@ -98,44 +98,9 @@
             salleLayer1.resetStyle(e.target);
           }
         },
-        // Modified click handler - REPLACE THIS SECTION
         click: function(e) {
           // Reset all highlights first
           resetHighlight();
-          
-          // Get the clicked feature's name
-          const clickedName = e.target.feature.properties.name;
-          
-          // Array to collect all bounds of matching features
-          const allBounds = [];
-          
-          // Function to process each layer
-          const highlightMatchingFeatures = (layer) => {
-            if (layer.feature.properties.name === clickedName) {
-              // Highlight matching feature
-              layer.setStyle({
-                color: '#6AB28F',
-                weight: 3,
-                fillOpacity: 0.7
-              });
-              
-              // Collect bounds for zooming
-              allBounds.push(layer.getBounds());
-            }
-          };
-
-          // Check both floor layers
-          salleLayer0.eachLayer(highlightMatchingFeatures);
-          salleLayer1.eachLayer(highlightMatchingFeatures);
-
-          // Zoom to show all matching features if any
-          if (allBounds.length > 0) {
-            const combinedBounds = allBounds.reduce((acc, bounds) => {
-              return acc.extend(bounds);
-            }, L.latLngBounds(allBounds[0]));
-            
-            map.fitBounds(combinedBounds.pad(0.2)); // Add 20% padding
-          }
         }
       });
     }
@@ -391,6 +356,9 @@ var EndIcon = L.icon({
       }
       checkAndCalculateRoute();
       updateMarkersVisibility();
+
+      // Highlight matching features
+      highlightMatchingFeatures(salleFeature.feature.properties.name);
     });
 
     // --- 14. Barre de recherche pour le marqueur de fin ---
@@ -430,6 +398,9 @@ var EndIcon = L.icon({
       }
       checkAndCalculateRoute();
       updateMarkersVisibility();
+
+      // Highlight matching features
+      highlightMatchingFeatures(salleFeature.feature.properties.name);
     });
 
 // Fonction pour récupérer et filtrer les segments
@@ -529,6 +500,30 @@ function updateMarkersVisibility() {
     if (endPoint && endPoint.options.floor === "1") {
       map.addLayer(endPoint);
     }
+  }
+}
+
+// Function to highlight matching features
+function highlightMatchingFeatures(name) {
+  const allBounds = [];
+
+  const highlightLayer = (layer) => {
+    if (layer.feature.properties.name === name) {
+      layer.setStyle({
+        color: '#6AB28F',
+        weight: 3,
+        fillOpacity: 0.7
+      });
+      allBounds.push(layer.getBounds());
+    }
+  };
+
+  salleLayer0.eachLayer(highlightLayer);
+  salleLayer1.eachLayer(highlightLayer);
+
+  if (allBounds.length > 0) {
+    const combinedBounds = allBounds.reduce((acc, bounds) => acc.extend(bounds), L.latLngBounds(allBounds[0]));
+    map.fitBounds(combinedBounds.pad(0.2));
   }
 }
 
