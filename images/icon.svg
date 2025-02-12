@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   sodipodi:docname="icon.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.35355339"
+     inkscape:cx="120.20815"
+     inkscape:cy="466.69047"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#pattern6795"
+       id="pattern6"
+       patternTransform="matrix(2,0,0,2,185,405)"
+       x="0"
+       y="0"
+       preserveAspectRatio="xMidYMid" />
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="20"
+       height="20"
+       patternTransform="translate(185,405)"
+       style="fill:#000000"
+       id="pattern6795"
+       inkscape:label="Abstrait 2"
+       inkscape:collect="always"
+       inkscape:isstock="true">
+      <path
+         id="rect6713"
+         style="opacity:1;stroke-width:4.8561;stroke-linecap:square;paint-order:stroke markers fill;stop-color:#000000"
+         d="M 10,10 H 20 L 15,20 H 5 Z M 5,0 H 15 L 10,10 H 0 Z" />
+    </pattern>
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#pattern6795-5"
+       id="pattern6-4"
+       patternTransform="matrix(2,0,0,2,25.755816,354.56382)"
+       x="0"
+       y="0"
+       preserveAspectRatio="xMidYMid" />
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="20"
+       height="20"
+       patternTransform="translate(185,405)"
+       style="fill:#000000"
+       id="pattern6795-5"
+       inkscape:label="Abstrait 2"
+       inkscape:collect="always"
+       inkscape:isstock="true">
+      <path
+         id="rect6713-2"
+         style="opacity:1;stroke-width:4.8561;stroke-linecap:square;paint-order:stroke markers fill;stop-color:#000000"
+         d="M 10,10 H 20 L 15,20 H 5 Z M 5,0 H 15 L 10,10 H 0 Z" />
+    </pattern>
+  </defs>
+  <g
+     inkscape:label="Marqueurs"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline">
+    <g
+       id="g7"
+       inkscape:label="Marqueur de fin">
+      <g
+         id="g3"
+         inkscape:label="Goutte">
+        <circle
+           style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.262982;stroke-opacity:1"
+           id="path1"
+           cx="50"
+           cy="50"
+           r="50" />
+        <circle
+           style="fill:#ffffff;stroke:#ffffff;stroke-width:0.100989;stroke-opacity:1"
+           id="path2"
+           cx="50"
+           cy="108.89989"
+           r="1.3526891" />
+        <path
+           style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+           d="m 48.600673,109.00833 c 0,0 -5.707737,-8.72881 -18.149133,-13.031844 -12.441396,-4.30304 19.17659,-36.575835 19.17659,-36.575835 l 0.654809,49.952669 z"
+           id="path3" />
+        <path
+           style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+           d="m 51.399135,109.00868 c 0,0 5.707737,-8.72881 18.149133,-13.031845 C 81.989664,91.673795 50.371678,59.401 50.371678,59.401 l -0.654809,49.95267 z"
+           id="path3-2" />
+      </g>
+      <circle
+         style="fill:url(#pattern6);fill-opacity:1;stroke:#000000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
+         id="path4"
+         cx="50"
+         cy="50"
+         r="46.542023"
+         inkscape:label="Patern" />
+    </g>
+    <g
+       id="g8"
+       inkscape:label="Marqueur de début">
+      <g
+         id="g3-3"
+         transform="translate(110)"
+         inkscape:label="Goutte">
+        <circle
+           style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.262982;stroke-opacity:1"
+           id="path1-7"
+           cx="50"
+           cy="50"
+           r="50" />
+        <circle
+           style="fill:#ffffff;stroke:#ffffff;stroke-width:0.100989;stroke-opacity:1"
+           id="path2-5"
+           cx="50"
+           cy="108.89989"
+           r="1.3526891" />
+        <path
+           style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+           d="m 48.600673,109.00833 c 0,0 -5.707737,-8.72881 -18.149133,-13.031844 -12.441396,-4.30304 19.17659,-36.575835 19.17659,-36.575835 l 0.654809,49.952669 z"
+           id="path3-9" />
+        <path
+           style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+           d="m 51.399135,109.00868 c 0,0 5.707737,-8.72881 18.149133,-13.031845 C 81.989664,91.673795 50.371678,59.401 50.371678,59.401 l -0.654809,49.95267 z"
+           id="path3-2-2" />
+      </g>
+      <g
+         id="g6"
+         inkscape:label="donut">
+        <circle
+           style="fill:#225500;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
+           id="path4-2"
+           cx="160"
+           cy="49.999996"
+           r="46.542023" />
+        <circle
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.84968;stroke-dasharray:none;stroke-opacity:1"
+           id="path4-2-3"
+           cx="160.00002"
+           cy="50.000023"
+           r="18.609837" />
+      </g>
+    </g>
+    <g
+       id="g10"
+       inkscape:label="Marqueur de début rond"
+       style="display:inline"
+       transform="translate(40.96494,80.50036)">
+      <g
+         id="g9"
+         inkscape:label="donut"
+         transform="translate(-39.422917,37.041667)">
+        <circle
+           style="fill:#225500;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
+           id="circle8"
+           cx="160"
+           cy="49.999996"
+           r="46.542023" />
+        <circle
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.84968;stroke-dasharray:none;stroke-opacity:1"
+           id="circle9"
+           cx="160.00002"
+           cy="50.000023"
+           r="18.609837" />
+      </g>
+    </g>
+    <g
+       id="g7-9"
+       inkscape:label="Marqueur de fin rond"
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none"
+       transform="translate(156.78621,167.9782)">
+      <circle
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2.04297;stroke-dasharray:none;stroke-opacity:1"
+         id="path4-3"
+         cx="-109.24421"
+         cy="-0.43620017"
+         r="47.542"
+         inkscape:label="Fond blanc" />
+      <circle
+         style="display:inline;fill:url(#pattern6-4);fill-opacity:1;stroke:#000000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
+         id="path4-4"
+         cx="-109.24419"
+         cy="-0.43617728"
+         r="46.542023"
+         inkscape:label="Patern" />
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Logo" />
+</svg>

@@ -56,8 +56,8 @@
     var salleEtage1 = {
       "type": "FeatureCollection",
       "features": [
-        { "type": "Feature", "properties": { "name": "117" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
-        { "type": "Feature", "properties": { "name": "115" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } }
+        { "type": "Feature", "properties": { "name": "115" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": "117" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } }
       ]
     };
 
@@ -87,14 +87,44 @@
             salleLayer1.resetStyle(e.target);
           }
         },
+        // Modified click handler - REPLACE THIS SECTION
         click: function(e) {
-          // Au clic, on réinitialise le style (pour ne pas conserver de surlignage) et on zoom sur la feature.
-          if (floor === "0") {
-            salleLayer0.resetStyle(e.target);
-          } else {
-            salleLayer1.resetStyle(e.target);
+          // Reset all highlights first
+          resetHighlight();
+          
+          // Get the clicked feature's name
+          const clickedName = e.target.feature.properties.name;
+          
+          // Array to collect all bounds of matching features
+          const allBounds = [];
+          
+          // Function to process each layer
+          const highlightMatchingFeatures = (layer) => {
+            if (layer.feature.properties.name === clickedName) {
+              // Highlight matching feature
+              layer.setStyle({
+                color: 'yellow',
+                weight: 3,
+                fillOpacity: 0.7
+              });
+              
+              // Collect bounds for zooming
+              allBounds.push(layer.getBounds());
+            }
+          };
+
+          // Check both floor layers
+          salleLayer0.eachLayer(highlightMatchingFeatures);
+          salleLayer1.eachLayer(highlightMatchingFeatures);
+
+          // Zoom to show all matching features if any
+          if (allBounds.length > 0) {
+            const combinedBounds = allBounds.reduce((acc, bounds) => {
+              return acc.extend(bounds);
+            }, L.latLngBounds(allBounds[0]));
+            
+            map.fitBounds(combinedBounds.pad(0.2)); // Add 20% padding
           }
-          map.fitBounds(e.target.getBounds());
         }
       });
     }
@@ -267,6 +297,7 @@ updateTooltipsVisibility();
       layer.setStyle({ color: 'yellow', weight: 3, fillOpacity: 0.7 });
       layer.bringToFront();
     }
+    // Modified resetHighlight function - REPLACE THIS SECTION
     function resetHighlight() {
       salleLayer0.eachLayer(function(layer) {
         salleLayer0.resetStyle(layer);
@@ -291,6 +322,7 @@ updateTooltipsVisibility();
       layer: searchGroup,
       propertyName: 'name',
       marker: false,
+      collapsed: false,
       moveToLocation: function(latlng, title, map) {
         // Laisser le zoom personnalisé se gérer ailleurs
       },
@@ -326,10 +358,11 @@ updateTooltipsVisibility();
       layer: searchGroup,
       propertyName: 'name',
       marker: false,
+      collapsed: false,
       moveToLocation: function(latlng, title, map) {
         // Pas d'action ici
       },
-      position: 'topright'
+      position: 'topleft'
     });
     map.addControl(searchControlEnd);
 
