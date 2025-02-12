@@ -544,7 +544,7 @@ var EndIcon = L.icon({
 
 // Fonction pour récupérer et filtrer les segments
 function getRouteAndPoints(start, end) {
-    var osrmUrl = `http://89.168.57.91:5000/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
+    var osrmUrl = `https://classefinder.duckdns.org/osrm/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
     
     fetch(osrmUrl)
         .then(response => response.json())
