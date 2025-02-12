@@ -24,9 +24,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:document-units="mm"
-     inkscape:zoom="0.35355339"
-     inkscape:cx="120.20815"
-     inkscape:cy="466.69047"
+     inkscape:zoom="1"
+     inkscape:cx="214.5"
+     inkscape:cy="362"
      inkscape:window-width="1920"
      inkscape:window-height="1011"
      inkscape:window-x="0"
@@ -89,7 +89,8 @@
      style="display:inline">
     <g
        id="g7"
-       inkscape:label="Marqueur de fin">
+       inkscape:label="Marqueur de fin"
+       style="display:inline">
       <g
          id="g3"
          inkscape:label="Goutte">
@@ -124,7 +125,8 @@
     </g>
     <g
        id="g8"
-       inkscape:label="Marqueur de début">
+       inkscape:label="Marqueur de début"
+       style="display:inline">
       <g
          id="g3-3"
          transform="translate(110)"
@@ -151,43 +153,46 @@
            id="path3-2-2" />
       </g>
       <g
-         id="g6"
-         inkscape:label="donut">
+         id="g9-0"
+         inkscape:label="donut"
+         transform="translate(2.3e-5,2.6999999e-5)"
+         style="display:inline">
         <circle
-           style="fill:#225500;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
-           id="path4-2"
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
+           id="circle8-7"
            cx="160"
            cy="49.999996"
            r="46.542023" />
         <circle
-           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.84968;stroke-dasharray:none;stroke-opacity:1"
-           id="path4-2-3"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.3023;stroke-dasharray:none;stroke-opacity:1"
+           id="circle9-8"
            cx="160.00002"
            cy="50.000023"
-           r="18.609837" />
+           r="33.224796" />
       </g>
     </g>
     <g
        id="g10"
        inkscape:label="Marqueur de début rond"
-       style="display:inline"
+       style="display:inline;stroke-width:2;stroke-dasharray:none"
        transform="translate(40.96494,80.50036)">
       <g
          id="g9"
          inkscape:label="donut"
-         transform="translate(-39.422917,37.041667)">
+         transform="translate(-39.422917,37.041667)"
+         style="stroke-width:2;stroke-dasharray:none">
         <circle
-           style="fill:#225500;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
+           style="fill:#0021e6;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
            id="circle8"
            cx="160"
            cy="49.999996"
            r="46.542023" />
         <circle
-           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.84968;stroke-dasharray:none;stroke-opacity:1"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.56688;stroke-dasharray:none;stroke-opacity:1"
            id="circle9"
            cx="160.00002"
            cy="50.000023"
-           r="18.609837" />
+           r="20.823738" />
       </g>
     </g>
     <g

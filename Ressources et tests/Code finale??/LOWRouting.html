@@ -24,7 +24,7 @@
   </style>
 </head>
 <body>
-  <div id="map" style="height: 100vh;"></div>
+  <div id="map" style="height: 100  vh;"></div>
 
   <script>
     // --- 1. Initialisation de la carte avec les limites définies ---
@@ -64,7 +64,7 @@
     var CheminEtage = {
       "type": "FeatureCollection",
       "features":[
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"115"},"geometry":{"type":"LineString","coordinates":[[6.13263,45.93731],[6.13268,45.9373]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"117"},"geometry":{"type":"LineString","coordinates":[[6.13263,45.93731],[6.13268,45.9373]]}},
         {"type":"Feature","properties":{"name":"14","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13217,45.93707],[6.13212,45.93707]]}}      ]
     };
 
@@ -157,8 +157,8 @@
     var itinéraireEtage0 = { "type": "FeatureCollection", "features": [] };
     var itinéraireEtage1 = { "type": "FeatureCollection", "features": [] };
 
-    var itinéraireLayer0 = L.geoJSON(itinéraireEtage0, { style: { color: 'purple', weight: 4 } });
-    var itinéraireLayer1 = L.geoJSON(itinéraireEtage1, { style: { color: 'pink', weight: 4 } });
+    var itinéraireLayer0 = L.geoJSON(itinéraireEtage0, { style: { color: '#3A5AC3', weight: 10 } });
+    var itinéraireLayer1 = L.geoJSON(itinéraireEtage1, { style: { color: '#7898FF', weight: 10 } });
 
     // --- 6. Fonds de carte personnalisés pour chaque groupe (en plus du fond par défaut) ---
     var customBackground0 = L.tileLayer('../../Données/QGIS/QTiles/etage0/{z}/{x}/{y}.png', {
@@ -286,6 +286,23 @@ updateTooltipsVisibility();
   updateTooltipsVisibility();
 }
 
+var StartIcon = L.icon({
+    iconUrl: 'image/starticon.png',
+
+    iconSize:     [15, 15], // size of the icon
+    iconAnchor:   [7.5, 7.5], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -10] // point from which the popup should open relative to the iconAnchor
+});
+
+var EndIcon = L.icon({
+    iconUrl: 'image/endicon.png',
+
+    iconSize:     [15, 15], // size of the icon
+    iconAnchor:   [7.5, 7.5], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -10] // point from which the popup should open relative to the iconAnchor
+});
+
+
 
 
     // --- 10. Variables pour la gestion des marqueurs de départ et d'arrivée ---
@@ -346,7 +363,7 @@ updateTooltipsVisibility();
       });
       if (cheminFeature) {
         var center = cheminFeature.getBounds().getCenter();
-        startPoint = L.marker(center).addTo(map)
+        startPoint = L.marker(center, {icon: StartIcon}).addTo(map)
           .bindPopup("Point de départ sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
           .openPopup();
       }
@@ -381,7 +398,7 @@ updateTooltipsVisibility();
       });
       if (cheminFeature) {
         var center = cheminFeature.getBounds().getCenter();
-        endPoint = L.marker(center).addTo(map)
+        endPoint = L.marker(center, {icon:EndIcon}).addTo(map)
           .bindPopup("Point de fin sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
           .openPopup();
       }
