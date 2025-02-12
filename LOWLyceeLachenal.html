@@ -38,7 +38,7 @@
     }).addTo(map = L.map('map', {
       center: [45.9368, 6.1322],
       zoom: 18,
-      minZoom: 18,
+      minZoom: 10,
       maxZoom: 23,
       maxBounds: limites,
       maxBoundsViscosity: 1.0
@@ -63,11 +63,19 @@
         ]
     };
 
-    var CheminEtage = {
+    var CheminEtage0 = {
       "type": "FeatureCollection",
 "features":[
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"105"},"geometry":{"type":"LineString","coordinates":[[6.13263,45.93731],[6.13268,45.9373]]}},
-        {"type":"Feature","properties":{"name":"8","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13217,45.93707],[6.13212,45.93707]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"13"},"geometry":{"type":"LineString","coordinates":[[6.13263,45.93731],[6.13268,45.9373]]}},
+        {"type":"Feature","properties":{"name":"14","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13217,45.93707],[6.13212,45.93707]]}},
+        ]
+    };
+
+    var CheminEtage1 = {
+      "type": "FeatureCollection",
+"features":[
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"115"},"geometry":{"type":"LineString","coordinates":[[6.163,45.93731],[6.268,45.9373]]}},
+        {"type":"Feature","properties":{"name":"117","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13217,45.9707],[6.13212,45.9707]]}},
         ]
     };
 
@@ -151,10 +159,18 @@
     });
 
     // --- 4. Calque des chemins ---
-    var CheminEtageLayer = L.geoJSON(CheminEtage, {
-      style: { color: 'transparent' }
+    //var CheminEtageLayer = L.geoJSON(CheminEtage, {
+     // style: { color: 'transparent' }
+    //});
+   // CheminEtageLayer.addTo(map);
+
+   var CheminEtageLayer0 = L.geoJSON(CheminEtage0, {
+      style: { color: 'red' }
     });
-    CheminEtageLayer.addTo(map);
+
+    var CheminEtageLayer1 = L.geoJSON(CheminEtage1, {
+      style: { color: 'pink' }
+    });
 
     // --- 5. Couches d'itinéraire (initialement vides) ---
     var itinéraireEtage0 = { "type": "FeatureCollection", "features": [] };
@@ -174,8 +190,8 @@
     });
 
     // --- 7. Groupes par étage en ajoutant le fond personnalisé dans le groupe ---
-    var etage0 = L.layerGroup([ customBackground0, salleLayer0, itinéraireLayer0 ]);
-    var etage1 = L.layerGroup([ customBackground1, salleLayer1, itinéraireLayer1 ]);
+    var etage0 = L.layerGroup([ customBackground0, salleLayer0, itinéraireLayer0, CheminEtageLayer0 ]);
+    var etage1 = L.layerGroup([ customBackground1, salleLayer1, itinéraireLayer1, CheminEtageLayer1 ]);
     // Par défaut, le groupe de l'étage 0 est affiché.
     etage0.addTo(map);
 
@@ -287,6 +303,7 @@ updateTooltipsVisibility();
   }
   // Mise à jour immédiate des tooltips pour le groupe visible
   updateTooltipsVisibility();
+  updateMarkersVisibility();
 }
 
 var StartIcon = L.icon({
@@ -355,22 +372,25 @@ var EndIcon = L.icon({
       if (startPoint) { map.removeLayer(startPoint); startPoint = null; }
       var salleFeature = e.layer;
       switchFloor(salleFeature.feature.properties.floor);
-      // Zoom sur la feature (comme avec la recherche)
       map.fitBounds(salleFeature.getBounds());
 
       var cheminFeature = null;
-      CheminEtageLayer.eachLayer(function(layer) {
+      // Sélectionner la bonne couche de chemin
+      var cheminLayer = (salleFeature.feature.properties.floor === "0") ? CheminEtageLayer0 : CheminEtageLayer1;
+      cheminLayer.eachLayer(function(layer) {
         if (layer.feature && layer.feature.properties.name === salleFeature.feature.properties.name) {
           cheminFeature = layer;
         }
       });
+      
       if (cheminFeature) {
         var center = cheminFeature.getBounds().getCenter();
-        startPoint = L.marker(center, {icon: StartIcon}).addTo(map)
+        startPoint = L.marker(center, {icon: StartIcon, floor: salleFeature.feature.properties.floor}).addTo(map)
           .bindPopup("Point de départ sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
           .openPopup();
       }
       checkAndCalculateRoute();
+      updateMarkersVisibility();
     });
 
     // --- 14. Barre de recherche pour le marqueur de fin ---
@@ -394,18 +414,22 @@ var EndIcon = L.icon({
       map.fitBounds(salleFeature.getBounds());
 
       var cheminFeature = null;
-      CheminEtageLayer.eachLayer(function(layer) {
+      // Sélectionner la bonne couche de chemin
+      var cheminLayer = (salleFeature.feature.properties.floor === "0") ? CheminEtageLayer0 : CheminEtageLayer1;
+      cheminLayer.eachLayer(function(layer) {
         if (layer.feature && layer.feature.properties.name === salleFeature.feature.properties.name) {
           cheminFeature = layer;
         }
       });
+      
       if (cheminFeature) {
         var center = cheminFeature.getBounds().getCenter();
-        endPoint = L.marker(center, {icon:EndIcon}).addTo(map)
+        endPoint = L.marker(center, {icon: EndIcon, floor: salleFeature.feature.properties.floor}).addTo(map)
           .bindPopup("Point de fin sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
           .openPopup();
       }
       checkAndCalculateRoute();
+      updateMarkersVisibility();
     });
 
 // Fonction pour récupérer et filtrer les segments
@@ -468,9 +492,45 @@ function getRouteAndPoints(start, end) {
     // Listen for layer changes and update tooltips
     map.on('baselayerchange', function(e) {
       updateTooltipsVisibility();
+      updateMarkersVisibility();
+    });
+
+    map.on('baselayerchange', function(e) {
+      updateTooltipsVisibility();
+      updateMarkersVisibility();
     });
 
     map.removeLayer(etage1);
+
+function updateMarkersVisibility() {
+  if (map.hasLayer(etage0)) {
+    if (startPoint && startPoint.options.floor === "1") {
+      map.removeLayer(startPoint);
+    }
+    if (endPoint && endPoint.options.floor === "1") {
+      map.removeLayer(endPoint);
+    }
+    if (startPoint && startPoint.options.floor === "0") {
+      map.addLayer(startPoint);
+    }
+    if (endPoint && endPoint.options.floor === "0") {
+      map.addLayer(endPoint);
+    }
+  } else if (map.hasLayer(etage1)) {
+    if (startPoint && startPoint.options.floor === "0") {
+      map.removeLayer(startPoint);
+    }
+    if (endPoint && endPoint.options.floor === "0") {
+      map.removeLayer(endPoint);
+    }
+    if (startPoint && startPoint.options.floor === "1") {
+      map.addLayer(startPoint);
+    }
+    if (endPoint && endPoint.options.floor === "1") {
+      map.addLayer(endPoint);
+    }
+  }
+}
 
   </script>
 </body>

@@ -9,6 +9,9 @@
    id="svg1"
    inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
    sodipodi:docname="icon.svg"
+   inkscape:export-filename="endicon.png"
+   inkscape:export-xdpi="4.0069818"
+   inkscape:export-ydpi="4.0069818"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -24,9 +27,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:document-units="mm"
-     inkscape:zoom="0.5"
-     inkscape:cx="250"
-     inkscape:cy="674"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="145.664"
+     inkscape:cy="438.4062"
      inkscape:window-width="1920"
      inkscape:window-height="1011"
      inkscape:window-x="0"
@@ -71,7 +74,7 @@
        width="20"
        height="20"
        patternTransform="translate(185,405)"
-       style="fill:#0021e6"
+       style="fill:#000000"
        id="pattern6795-5"
        inkscape:label="Abstrait 2"
        inkscape:collect="always"
@@ -219,7 +222,10 @@
          cx="-109.24419"
          cy="-0.43617728"
          r="46.542023"
-         inkscape:label="Patern" />
+         inkscape:label="Patern"
+         inkscape:export-filename="endicon.png"
+         inkscape:export-xdpi="4.0069818"
+         inkscape:export-ydpi="4.0069818" />
     </g>
   </g>
   <g
