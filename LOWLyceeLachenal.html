@@ -48,24 +48,27 @@
     var salleEtage0 = {
         "type": "FeatureCollection",
         "features": [
-        { "type": "Feature", "properties": { "name": "" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
-        { "type": "Feature", "properties": { "name": "14" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } }
-      ]
+        { "type": "Feature", "properties": { "name": "13" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": "14" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": null }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.13281075656434, 45.937507327903141 ], [ 6.132811540684995, 45.937512671949321 ], [ 6.132903753273905, 45.937506782592266 ], [ 6.132903145580401, 45.937501043195077 ], [ 6.13281075656434, 45.937507327903141 ] ] ] ] } }
+        ]
     };
 
     var salleEtage1 = {
       "type": "FeatureCollection",
-      "features": [
-        { "type": "Feature", "properties": { "name": "115" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
-        { "type": "Feature", "properties": { "name": "117" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } }
-      ]
+"features": [
+        { "type": "Feature", "properties": { "name": "117" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": "115" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": null }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132684614005758, 45.937194477877519 ], [ 6.132735001598985, 45.937222992336032 ], [ 6.132715571089178, 45.93723696327018 ], [ 6.132666006822637, 45.937208677850656 ], [ 6.132684614005758, 45.937194477877519 ] ] ] ] } }
+        ]
     };
 
     var CheminEtage = {
       "type": "FeatureCollection",
-      "features":[
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"117"},"geometry":{"type":"LineString","coordinates":[[6.13263,45.93731],[6.13268,45.9373]]}},
-        {"type":"Feature","properties":{"name":"14","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13217,45.93707],[6.13212,45.93707]]}}      ]
+"features":[
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"105"},"geometry":{"type":"LineString","coordinates":[[6.13263,45.93731],[6.13268,45.9373]]}},
+        {"type":"Feature","properties":{"name":"8","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13217,45.93707],[6.13212,45.93707]]}},
+        ]
     };
 
     // --- 3. Création des couches GeoJSON pour les salles ---
@@ -75,9 +78,9 @@
       layer.on({
         mouseover: function(e) {
           e.target.setStyle({
-            color: 'orange',
+            color: '#6AB28F',
             weight: 3,
-            fillOpacity: 0.7
+            fillOpacity: 0.9
           });
         },
         mouseout: function(e) {
@@ -103,7 +106,7 @@
             if (layer.feature.properties.name === clickedName) {
               // Highlight matching feature
               layer.setStyle({
-                color: 'yellow',
+                color: '#6AB28F',
                 weight: 3,
                 fillOpacity: 0.7
               });
@@ -161,11 +164,11 @@
     var itinéraireLayer1 = L.geoJSON(itinéraireEtage1, { style: { color: '#7898FF', weight: 10 } });
 
     // --- 6. Fonds de carte personnalisés pour chaque groupe (en plus du fond par défaut) ---
-    var customBackground0 = L.tileLayer('../../Données/QGIS/QTiles/etage0/{z}/{x}/{y}.png', {
+    var customBackground0 = L.tileLayer('./Tiles/etage0/{z}/{x}/{y}.png', {
       opacity: 1,
       maxZoom: 23
     });
-    var customBackground1 = L.tileLayer('../../Données/QGIS/QTiles/etage1/{z}/{x}/{y}.png', {
+    var customBackground1 = L.tileLayer('./Tiles/etage1/{z}/{x}/{y}.png', {
       opacity: 1,
       maxZoom: 23 
     });
@@ -407,7 +410,7 @@ var EndIcon = L.icon({
 
 // Fonction pour récupérer et filtrer les segments
 function getRouteAndPoints(start, end) {
-    var osrmUrl = `http://89.168.57.91:5000/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
+    var osrmUrl = `https://classefinder.duckdns.org/osrm/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
     
     fetch(osrmUrl)
         .then(response => response.json())
@@ -466,6 +469,9 @@ function getRouteAndPoints(start, end) {
     map.on('baselayerchange', function(e) {
       updateTooltipsVisibility();
     });
+
+    map.removeLayer(etage1);
+
   </script>
 </body>
 </html>
