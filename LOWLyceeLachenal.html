@@ -329,7 +329,13 @@ var EndIcon = L.icon({
     }
 
     // --- 13. Barre de recherche pour le marqueur de départ ---
-    var searchGroup = L.featureGroup([ salleLayer0, salleLayer1 ]);
+    var searchGroup = L.featureGroup();
+salleLayer0.eachLayer(function(layer) {
+  searchGroup.addLayer(layer);
+});
+salleLayer1.eachLayer(function(layer) {
+  searchGroup.addLayer(layer);
+});
     var searchControlStart = new L.Control.Search({
       layer: searchGroup,
       propertyName: 'name',
@@ -343,30 +349,44 @@ var EndIcon = L.icon({
     map.addControl(searchControlStart);
 
     searchControlStart.on('search:locationfound', function(e) {
-      resetHighlight();
-      if (startPoint) { map.removeLayer(startPoint); startPoint = null; }
-      var salleFeature = e.layer;
-      switchFloor(salleFeature.feature.properties.floor);
-      map.fitBounds(salleFeature.getBounds());
+  resetHighlight();
+  if (startPoint) { map.removeLayer(startPoint); startPoint = null; }
+  var salleFeature = e.layer;
+  switchFloor(salleFeature.feature.properties.floor);
 
-      var cheminFeature = null;
-      // Sélectionner la bonne couche de chemin
-      var cheminLayer = (salleFeature.feature.properties.floor === "0") ? CheminEtageLayer0 : CheminEtageLayer1;
-      cheminLayer.eachLayer(function(layer) {
-        if (layer.feature && layer.feature.properties.name === salleFeature.feature.properties.name) {
-          cheminFeature = layer;
-        }
-      });
-      
-      if (cheminFeature) {
-        var center = cheminFeature.getBounds().getCenter();
-        startPoint = L.marker(center, {icon: StartIcon, floor: salleFeature.feature.properties.floor}).addTo(map)
-          .bindPopup("Point de départ sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
-          .openPopup();
-      }
-      checkAndCalculateRoute();
-      updateMarkersVisibility();
+  var matchingFeatures = [];
+  searchGroup.eachLayer(function(layer) {
+    if (layer.feature.properties.name === salleFeature.feature.properties.name) {
+      matchingFeatures.push(layer);
+    }
+  });
+
+  if (matchingFeatures.length > 0) {
+    var group = new L.featureGroup(matchingFeatures);
+    map.fitBounds(group.getBounds());
+
+    matchingFeatures.forEach(function(layer) {
+      highlightFeature(layer);
     });
+
+    var cheminFeature = null;
+    var cheminLayer = (salleFeature.feature.properties.floor === "0") ? CheminEtageLayer0 : CheminEtageLayer1;
+    cheminLayer.eachLayer(function(layer) {
+      if (layer.feature && layer.feature.properties.name === salleFeature.feature.properties.name) {
+        cheminFeature = layer;
+      }
+    });
+
+    if (cheminFeature) {
+      var center = cheminFeature.getBounds().getCenter();
+      startPoint = L.marker(center, {icon: StartIcon, floor: salleFeature.feature.properties.floor}).addTo(map)
+        .bindPopup("Point de départ sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
+        .openPopup();
+    }
+  }
+  checkAndCalculateRoute();
+  updateMarkersVisibility();
+});
 
     // --- 14. Barre de recherche pour le marqueur de fin ---
     var searchControlEnd = new L.Control.Search({
@@ -382,30 +402,44 @@ var EndIcon = L.icon({
     map.addControl(searchControlEnd);
 
     searchControlEnd.on('search:locationfound', function(e) {
-      resetHighlight();
-      if (endPoint) { map.removeLayer(endPoint); endPoint = null; }
-      var salleFeature = e.layer;
-      switchFloor(salleFeature.feature.properties.floor);
-      map.fitBounds(salleFeature.getBounds());
+  resetHighlight();
+  if (endPoint) { map.removeLayer(endPoint); endPoint = null; }
+  var salleFeature = e.layer;
+  switchFloor(salleFeature.feature.properties.floor);
 
-      var cheminFeature = null;
-      // Sélectionner la bonne couche de chemin
-      var cheminLayer = (salleFeature.feature.properties.floor === "0") ? CheminEtageLayer0 : CheminEtageLayer1;
-      cheminLayer.eachLayer(function(layer) {
-        if (layer.feature && layer.feature.properties.name === salleFeature.feature.properties.name) {
-          cheminFeature = layer;
-        }
-      });
-      
-      if (cheminFeature) {
-        var center = cheminFeature.getBounds().getCenter();
-        endPoint = L.marker(center, {icon: EndIcon, floor: salleFeature.feature.properties.floor}).addTo(map)
-          .bindPopup("Point de fin sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
-          .openPopup();
-      }
-      checkAndCalculateRoute();
-      updateMarkersVisibility();
+  var matchingFeatures = [];
+  searchGroup.eachLayer(function(layer) {
+    if (layer.feature.properties.name === salleFeature.feature.properties.name) {
+      matchingFeatures.push(layer);
+    }
+  });
+
+  if (matchingFeatures.length > 0) {
+    var group = new L.featureGroup(matchingFeatures);
+    map.fitBounds(group.getBounds());
+
+    matchingFeatures.forEach(function(layer) {
+      highlightFeature(layer);
     });
+
+    var cheminFeature = null;
+    var cheminLayer = (salleFeature.feature.properties.floor === "0") ? CheminEtageLayer0 : CheminEtageLayer1;
+    cheminLayer.eachLayer(function(layer) {
+      if (layer.feature && layer.feature.properties.name === salleFeature.feature.properties.name) {
+        cheminFeature = layer;
+      }
+    });
+
+    if (cheminFeature) {
+      var center = cheminFeature.getBounds().getCenter();
+      endPoint = L.marker(center, {icon: EndIcon, floor: salleFeature.feature.properties.floor}).addTo(map)
+        .bindPopup("Point de fin sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
+        .openPopup();
+    }
+  }
+  checkAndCalculateRoute();
+  updateMarkersVisibility();
+});
 
 // Fonction pour récupérer et filtrer les segments
 function getRouteAndPoints(start, end) {
