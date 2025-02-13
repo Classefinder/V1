@@ -18,6 +18,26 @@ body {
     color: #000000; /* Couleur du texte */
 }
 
+/* Style pour la barre de recherche de départ */
+#search-control-start {
+    background-color: #ffffff;
+    border: 2px solid #d9d9d9 !important;
+    border-radius: 300px !important;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+    color: #000000;
+}
+
+/* Style pour la barre de recherche de fin */
+#search-control-end {
+    background-color: #f5f5f5; /* Exemple : couleur différente pour distinguer */
+    border: 2px solid #cccccc !important;
+    border-radius: 300px !important;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+    color: #000000;
+}
+
 /* Bouton pour effacer la recherche (croix) */
 .leaflet-control-search .search-cancel {
     background: url('./images/cancel-icon.png') no-repeat center center; /* Chemin relatif vers votre icône personnalisée */
@@ -52,6 +72,36 @@ body {
     z-index: 1010; /* Tooltip de recherche au premier plan */
 }
 
+/* Style pour le tooltip de la barre de recherche de départ */
+#search-tooltip-start {
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: #ffffff;
+    border: 2px solid #d60d0d;
+    color: #000000;
+    font-size: 14px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1010;
+    position: absolute; /* Assurez-vous que le tooltip est en position absolue */
+    top: 50px;          /* Ajustez la valeur pour changer la distance par rapport au haut */
+    left: 10px;         /* Par exemple, à 10px du côté gauche */
+    /* Vous pouvez ajouter d'autres propriétés pour affiner le style si besoin */
+}
+
+/* Style pour le tooltip de la barre de recherche de fin */
+#search-tooltip-end {
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: #f9f9f9; /* Exemple : couleur différente */
+    border: 2px solid #cccccc;
+    color: #000000;
+    font-size: 14px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1010;
+}
+
 /* Bouton croix survolé */
 .leaflet-control-search .search-cancel:hover {
     background-color: #d9d9d9; /* Couleur au survol */
@@ -64,7 +114,7 @@ body {
 
 /* Style pour les éléments de la couche lorsqu'ils sont survolés */
 .leaflet-interactive:hover {
-    fill-opacity: 0.5;
+    fill-opacity: 0.9;
     cursor: pointer;
 }
 
@@ -145,16 +195,6 @@ body {
     position: relative; /* Position absolue */
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2) !important; /* Ombre */
 }
-
-
-
-
-
-
-
-
-
-
 
 /* Ajustements pour les petits écrans */
 @media (max-width: 600px), (hover: none) and (pointer: coarse) {
