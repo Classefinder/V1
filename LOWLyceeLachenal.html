@@ -364,9 +364,6 @@ var EndIcon = L.icon({
       }
       checkAndCalculateRoute();
       updateMarkersVisibility();
-
-      // Highlight matching features
-      highlightMatchingFeatures(salleFeature.feature.properties.name);
     });
 
     // --- 14. Barre de recherche pour le marqueur de fin ---
@@ -406,9 +403,6 @@ var EndIcon = L.icon({
       }
       checkAndCalculateRoute();
       updateMarkersVisibility();
-
-      // Highlight matching features
-      highlightMatchingFeatures(salleFeature.feature.properties.name);
     });
 
 // Fonction pour récupérer et filtrer les segments
@@ -508,30 +502,6 @@ function updateMarkersVisibility() {
     if (endPoint && endPoint.options.floor === "1") {
       map.addLayer(endPoint);
     }
-  }
-}
-
-// Function to highlight matching features
-function highlightMatchingFeatures(name) {
-  const allBounds = [];
-
-  const highlightLayer = (layer) => {
-    if (layer.feature.properties.name === name) {
-      layer.setStyle({
-        color: '#6AB28F',
-        weight: 3,
-        fillOpacity: 0.7
-      });
-      allBounds.push(layer.getBounds());
-    }
-  };
-
-  salleLayer0.eachLayer(highlightLayer);
-  salleLayer1.eachLayer(highlightLayer);
-
-  if (allBounds.length > 0) {
-    const combinedBounds = allBounds.reduce((acc, bounds) => acc.extend(bounds), L.latLngBounds(allBounds[0]));
-    map.fitBounds(combinedBounds.pad(0.2));
   }
 }
 
