@@ -101,6 +101,8 @@
         click: function(e) {
           // Reset all highlights first
           resetHighlight();
+          // Zoom to the clicked feature
+          map.fitBounds(e.target.getBounds());
         }
       });
     }
