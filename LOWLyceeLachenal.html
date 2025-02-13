@@ -397,6 +397,7 @@ salleLayer1.eachLayer(function(layer) {
       marker: false,
       collapsed: false,
       moveToLocation: function(latlng, title, map) {
+        searchControlStart.addTo(map);
         // Pas d'action ici
       },
       position: 'topleft'
@@ -542,6 +543,8 @@ function updateMarkersVisibility() {
     }
   }
 }
+
+searchControlStart.remove();
 
   </script>
 </body>
