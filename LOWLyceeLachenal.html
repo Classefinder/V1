@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no" />
   <title>Carte avec Leaflet, OSRM et GeoJSON</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet-search@4.0.0/dist/leaflet-search.min.css" />
@@ -303,9 +303,17 @@ var EndIcon = L.icon({
     function resetHighlight() {
       salleLayer0.eachLayer(function(layer) {
         salleLayer0.resetStyle(layer);
+        if (layer._customTooltip) {
+          map.removeLayer(layer._customTooltip);
+          layer._customTooltip = null;
+        }
       });
       salleLayer1.eachLayer(function(layer) {
         salleLayer1.resetStyle(layer);
+        if (layer._customTooltip) {
+          map.removeLayer(layer._customTooltip);
+          layer._customTooltip = null;
+        }
       });
     }
 
