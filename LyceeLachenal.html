@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Carte avec Leaflet, OSRM et GeoJSON</title>
+  <title>Classefinder | Lycée Lachenal</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet-search@4.0.0/dist/leaflet-search.min.css" />
-  <link rel="stylesheet" href="style.css" />  
+  <link rel="stylesheet" href="LyceeLachenal.css" />  
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
@@ -27,9 +27,11 @@
   <div id="map" style="height: 100  vh;"></div>
 
   <script>
+
+    //test
     // --- 1. Initialisation de la carte avec les limites définies ---
-    var sudOuest = L.latLng(45.935272295928755, 6.129041676650091);
-    var nordEst   = L.latLng(45.94071173403467, 6.137074019550861);
+    var sudOuest = L.latLng(45.93818505744445, 6.134245788738398);
+    var nordEst   = L.latLng(45.93640970079779, 6.13115811037474);
     var limites   = L.latLngBounds(sudOuest, nordEst);
 
     // Fond de carte par défaut (celui que vous aviez mis)
@@ -38,7 +40,7 @@
     }).addTo(map = L.map('map', {
       center: [45.9368, 6.1322],
       zoom: 18,
-      minZoom: 18,
+      minZoom: 10,
       maxZoom: 23,
       maxBounds: limites,
       maxBoundsViscosity: 1.0
@@ -154,56 +156,62 @@
         ]
     };
 
-    var CheminEtage = {
+    var CheminEtage0 = {
       "type": "FeatureCollection",
 "features":[
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"105"},"geometry":{"type":"LineString","coordinates":[[6.13263,45.93731],[6.13268,45.9373]]}},
         {"type":"Feature","properties":{"name":"8","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13217,45.93707],[6.13212,45.93707]]}},
         {"type":"Feature","properties":{"name":"10","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.1321,45.93685],[6.13215,45.93685]]}},
         {"type":"Feature","properties":{"name":"Réunion","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13273,45.93773],[6.13269,45.93776]]}},
         {"type":"Feature","properties":{"name":"1","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13276,45.93756],[6.13276,45.93759]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"Germain somelier"},"geometry":{"type":"LineString","coordinates":[[6.13324,45.9375],[6.13318,45.93746]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"102"},"geometry":{"type":"LineString","coordinates":[[6.13267,45.93767],[6.13262,45.93767]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"112"},"geometry":{"type":"LineString","coordinates":[[6.13243,45.9373],[6.13243,45.93733]]}},
         {"type":"Feature","properties":{"name":"6","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13232,45.9373],[6.13232,45.93733]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"111"},"geometry":{"type":"LineString","coordinates":[[6.13217,45.93711],[6.13221,45.93711]]}},
         {"type":"Feature","properties":{"name":"11","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13214,45.93677],[6.13215,45.9368]]}},
         {"type":"Feature","properties":{"name":"14","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13229,45.93681],[6.13228,45.93679]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"120"},"geometry":{"type":"LineString","coordinates":[[6.13216,45.93697],[6.13211,45.93698]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"122"},"geometry":{"type":"LineString","coordinates":[[6.13215,45.93681],[6.1321,45.93681]]}},
         {"type":"Feature","properties":{"name":"CDI","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13266,45.93761],[6.13261,45.93761]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"1"},"geometry":{"type":"LineString","coordinates":[[6.13271,45.93771],[6.13268,45.93775]]}},
         {"type":"Feature","properties":{"name":"Proviseur","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13285,45.9375],[6.13285,45.93747]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"124"},"geometry":{"type":"LineString","coordinates":[[6.13224,45.93678],[6.13224,45.93679]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"110"},"geometry":{"type":"LineString","coordinates":[[6.13264,45.93741],[6.13257,45.93742]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"107"},"geometry":{"type":"LineString","coordinates":[[6.13257,45.93729],[6.13257,45.93725]]}},
         {"type":"Feature","properties":{"name":"0","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13218,45.93707],[6.13223,45.93707]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"114"},"geometry":{"type":"LineString","coordinates":[[6.13235,45.9373],[6.13235,45.93733]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"Video lecture"},"geometry":{"type":"LineString","coordinates":[[6.13274,45.93753],[6.13273,45.9375]]}},
         {"type":"Feature","properties":{"name":"12","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13225,45.93677],[6.13225,45.93679]]}},
         {"type":"Feature","properties":{"name":"Acceuil","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13284,45.93754],[6.13287,45.93756]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"117"},"geometry":{"type":"LineString","coordinates":[[6.13242,45.93678],[6.13242,45.9368]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"104"},"geometry":{"type":"LineString","coordinates":[[6.13266,45.9376],[6.13261,45.9376]]}},
         {"type":"Feature","properties":{"name":"7","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13219,45.93717],[6.13214,45.93718]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"118"},"geometry":{"type":"LineString","coordinates":[[6.13217,45.93708],[6.13211,45.93708]]}},
         {"type":"Feature","properties":{"name":"7.8","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13218,45.93714],[6.13213,45.93714]]}},
         {"type":"Feature","properties":{"name":"13","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13242,45.9368],[6.13242,45.93678]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"Labo"},"geometry":{"type":"LineString","coordinates":[[6.13215,45.93687],[6.1321,45.93687]]}},
         {"type":"Feature","properties":{"name":"2","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13266,45.9376],[6.13272,45.93761]]}},
         {"type":"Feature","properties":{"name":"Intendance","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13264,45.9374],[6.1327,45.9374]]}},
+        {"type":"Feature","properties":{"name":"Vie scolaire","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13237,45.9373],[6.13237,45.93732]]}},
+        {"type":"Feature","properties":{"name":"9","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13215,45.93687],[6.13209,45.93688]]}},
+      ]
+    };
+
+    var CheminEtage1 = {
+      "type": "FeatureCollection",
+      "features":[
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"116"},"geometry":{"type":"LineString","coordinates":[[6.13218,45.93718],[6.13214,45.93718]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"113"},"geometry":{"type":"LineString","coordinates":[[6.13216,45.93702],[6.13221,45.93701]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"106"},"geometry":{"type":"LineString","coordinates":[[6.13266,45.93757],[6.13262,45.93757]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"115"},"geometry":{"type":"LineString","coordinates":[[6.1322,45.93681],[6.1322,45.9368]]}},
         {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"Audio visuel"},"geometry":{"type":"LineString","coordinates":[[6.13275,45.93753],[6.13275,45.93756]]}},
         {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"101"},"geometry":{"type":"LineString","coordinates":[[6.13267,45.93766],[6.13273,45.93766]]}},
         {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"103"},"geometry":{"type":"LineString","coordinates":[[6.13263,45.93739],[6.13269,45.93738]]}},
         {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"108"},"geometry":{"type":"LineString","coordinates":[[6.13265,45.9375],[6.13259,45.93751]]}},
         {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"109"},"geometry":{"type":"LineString","coordinates":[[6.1324,45.9373],[6.13239,45.93727]]}},
-        {"type":"Feature","properties":{"name":"Vie scolaire","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13237,45.9373],[6.13237,45.93732]]}},
-        {"type":"Feature","properties":{"name":"9","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13215,45.93687],[6.13209,45.93688]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"116"},"geometry":{"type":"LineString","coordinates":[[6.13218,45.93718],[6.13214,45.93718]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"113"},"geometry":{"type":"LineString","coordinates":[[6.13216,45.93702],[6.13221,45.93701]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"106"},"geometry":{"type":"LineString","coordinates":[[6.13266,45.93757],[6.13262,45.93757]]}},
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"115"},"geometry":{"type":"LineString","coordinates":[[6.1322,45.93681],[6.1322,45.9368]]}}
-      ]
-    };
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"Labo"},"geometry":{"type":"LineString","coordinates":[[6.13215,45.93687],[6.1321,45.93687]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"118"},"geometry":{"type":"LineString","coordinates":[[6.13217,45.93708],[6.13211,45.93708]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"117"},"geometry":{"type":"LineString","coordinates":[[6.13242,45.93678],[6.13242,45.9368]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"104"},"geometry":{"type":"LineString","coordinates":[[6.13266,45.9376],[6.13261,45.9376]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"114"},"geometry":{"type":"LineString","coordinates":[[6.13235,45.9373],[6.13235,45.93733]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"Video lecture"},"geometry":{"type":"LineString","coordinates":[[6.13274,45.93753],[6.13273,45.9375]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"124"},"geometry":{"type":"LineString","coordinates":[[6.13224,45.93678],[6.13224,45.93679]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"110"},"geometry":{"type":"LineString","coordinates":[[6.13264,45.93741],[6.13257,45.93742]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"107"},"geometry":{"type":"LineString","coordinates":[[6.13257,45.93729],[6.13257,45.93725]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"1"},"geometry":{"type":"LineString","coordinates":[[6.13271,45.93771],[6.13268,45.93775]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"120"},"geometry":{"type":"LineString","coordinates":[[6.13216,45.93697],[6.13211,45.93698]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"122"},"geometry":{"type":"LineString","coordinates":[[6.13215,45.93681],[6.1321,45.93681]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"111"},"geometry":{"type":"LineString","coordinates":[[6.13217,45.93711],[6.13221,45.93711]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"Germain somelier"},"geometry":{"type":"LineString","coordinates":[[6.13324,45.9375],[6.13318,45.93746]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"102"},"geometry":{"type":"LineString","coordinates":[[6.13267,45.93767],[6.13262,45.93767]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"112"},"geometry":{"type":"LineString","coordinates":[[6.13243,45.9373],[6.13243,45.93733]]}},
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"105"},"geometry":{"type":"LineString","coordinates":[[6.13263,45.93731],[6.13268,45.9373]]}},
+
+    ] };
 
     // --- 3. Création des couches GeoJSON pour les salles ---
     // On n'utilise plus bindTooltip ici afin d'éviter que le label s'affiche automatiquement au survol.
@@ -214,7 +222,6 @@
           e.target.setStyle({
             color: '#6AB28F',
             weight: 3,
-            fillOpacity: 0.9
           });
         },
         mouseout: function(e) {
@@ -224,44 +231,11 @@
             salleLayer1.resetStyle(e.target);
           }
         },
-        // Modified click handler - REPLACE THIS SECTION
         click: function(e) {
           // Reset all highlights first
           resetHighlight();
-          
-          // Get the clicked feature's name
-          const clickedName = e.target.feature.properties.name;
-          
-          // Array to collect all bounds of matching features
-          const allBounds = [];
-          
-          // Function to process each layer
-          const highlightMatchingFeatures = (layer) => {
-            if (layer.feature.properties.name === clickedName) {
-              // Highlight matching feature
-              layer.setStyle({
-                color: '#6AB28F',
-                weight: 3,
-                fillOpacity: 0.7
-              });
-              
-              // Collect bounds for zooming
-              allBounds.push(layer.getBounds());
-            }
-          };
-
-          // Check both floor layers
-          salleLayer0.eachLayer(highlightMatchingFeatures);
-          salleLayer1.eachLayer(highlightMatchingFeatures);
-
-          // Zoom to show all matching features if any
-          if (allBounds.length > 0) {
-            const combinedBounds = allBounds.reduce((acc, bounds) => {
-              return acc.extend(bounds);
-            }, L.latLngBounds(allBounds[0]));
-            
-            map.fitBounds(combinedBounds.pad(0.2)); // Add 20% padding
-          }
+          // Zoom to the clicked feature
+          map.fitBounds(e.target.getBounds());
         }
       });
     }
@@ -285,10 +259,18 @@
     });
 
     // --- 4. Calque des chemins ---
-    var CheminEtageLayer = L.geoJSON(CheminEtage, {
+    //var CheminEtageLayer = L.geoJSON(CheminEtage, {
+     // style: { color: 'transparent' }
+    //});
+   // CheminEtageLayer.addTo(map);
+
+   var CheminEtageLayer0 = L.geoJSON(CheminEtage0, {
       style: { color: 'transparent' }
     });
-    CheminEtageLayer.addTo(map);
+
+    var CheminEtageLayer1 = L.geoJSON(CheminEtage1, {
+      style: { color: 'transparent' }
+    });
 
     // --- 5. Couches d'itinéraire (initialement vides) ---
     var itinéraireEtage0 = { "type": "FeatureCollection", "features": [] };
@@ -298,18 +280,18 @@
     var itinéraireLayer1 = L.geoJSON(itinéraireEtage1, { style: { color: '#7898FF', weight: 10 } });
 
     // --- 6. Fonds de carte personnalisés pour chaque groupe (en plus du fond par défaut) ---
-    var customBackground0 = L.tileLayer('./Tiles/etage0/{z}/{x}/{y}.png', {
+    var customBackground0 = L.tileLayer('Données/QGIS/QTiles/etage0/{z}/{x}/{y}.png', {
       opacity: 1,
       maxZoom: 23
     });
-    var customBackground1 = L.tileLayer('./Tiles/etage1/{z}/{x}/{y}.png', {
+    var customBackground1 = L.tileLayer('Données/QGIS/QTiles/etage1/{z}/{x}/{y}.png', {
       opacity: 1,
       maxZoom: 23 
     });
 
     // --- 7. Groupes par étage en ajoutant le fond personnalisé dans le groupe ---
-    var etage0 = L.layerGroup([ customBackground0, salleLayer0, itinéraireLayer0 ]);
-    var etage1 = L.layerGroup([ customBackground1, salleLayer1, itinéraireLayer1 ]);
+    var etage0 = L.layerGroup([ customBackground0, salleLayer0, itinéraireLayer0, CheminEtageLayer0 ]);
+    var etage1 = L.layerGroup([ customBackground1, salleLayer1, itinéraireLayer1, CheminEtageLayer1 ]);
     // Par défaut, le groupe de l'étage 0 est affiché.
     etage0.addTo(map);
 
@@ -421,6 +403,7 @@ updateTooltipsVisibility();
   }
   // Mise à jour immédiate des tooltips pour le groupe visible
   updateTooltipsVisibility();
+  updateMarkersVisibility();
 }
 
 var StartIcon = L.icon({
@@ -448,16 +431,24 @@ var EndIcon = L.icon({
 
     // --- 11. Fonctions de surlignage (pour les recherches) ---
     function highlightFeature(layer) {
-      layer.setStyle({ color: 'yellow', weight: 3, fillOpacity: 0.7 });
+      layer.setStyle({ color: '#6AB28F', weight: 3, fillOpacity: 0.9 });
       layer.bringToFront();
     }
     // Modified resetHighlight function - REPLACE THIS SECTION
     function resetHighlight() {
       salleLayer0.eachLayer(function(layer) {
         salleLayer0.resetStyle(layer);
+        if (layer._customTooltip) {
+          map.removeLayer(layer._customTooltip);
+          layer._customTooltip = null;
+        }
       });
       salleLayer1.eachLayer(function(layer) {
         salleLayer1.resetStyle(layer);
+        if (layer._customTooltip) {
+          map.removeLayer(layer._customTooltip);
+          layer._customTooltip = null;
+        }
       });
     }
 
@@ -471,8 +462,15 @@ var EndIcon = L.icon({
     }
 
     // --- 13. Barre de recherche pour le marqueur de départ ---
-    var searchGroup = L.featureGroup([ salleLayer0, salleLayer1 ]);
-    var searchControlStart = new L.Control.Search({
+  var searchGroup = L.featureGroup();
+  salleLayer0.eachLayer(function(layer) {
+    searchGroup.addLayer(layer);
+  });
+  salleLayer1.eachLayer(function(layer) {
+    searchGroup.addLayer(layer);
+  });
+  
+  var searchControlStart = new L.Control.Search({
       layer: searchGroup,
       propertyName: 'name',
       marker: false,
@@ -480,35 +478,59 @@ var EndIcon = L.icon({
       moveToLocation: function(latlng, title, map) {
         // Laisser le zoom personnalisé se gérer ailleurs
       },
-      position: 'topleft'
-    });
-    map.addControl(searchControlStart);
-
-    searchControlStart.on('search:locationfound', function(e) {
-      resetHighlight();
-      if (startPoint) { map.removeLayer(startPoint); startPoint = null; }
-      var salleFeature = e.layer;
-      switchFloor(salleFeature.feature.properties.floor);
-      // Zoom sur la feature (comme avec la recherche)
-      map.fitBounds(salleFeature.getBounds());
-
-      var cheminFeature = null;
-      CheminEtageLayer.eachLayer(function(layer) {
-        if (layer.feature && layer.feature.properties.name === salleFeature.feature.properties.name) {
-          cheminFeature = layer;
-        }
-      });
-      if (cheminFeature) {
-        var center = cheminFeature.getBounds().getCenter();
-        startPoint = L.marker(center, {icon: StartIcon}).addTo(map)
-          .bindPopup("Point de départ sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
-          .openPopup();
+      position: 'topleft',
+      textPlaceholder: "Point de départ"
+  });
+  map.addControl(searchControlStart);
+  // Ajout de l'id au container du contrôle start
+  searchControlStart.getContainer().id = "search-control-start";
+  // Lorsqu'une recherche est ouverte, ajouter un id au tooltip
+  searchControlStart.on('search:expanded', function() {
+      if (this._tooltip) {
+          this._tooltip.id = "search-tooltip-start";
       }
-      checkAndCalculateRoute();
+  });
+  
+  searchControlStart.on('search:locationfound', function(e) {
+    resetHighlight();
+    if (startPoint) { map.removeLayer(startPoint); startPoint = null; }
+    var salleFeature = e.layer;
+    switchFloor(salleFeature.feature.properties.floor);
+    var matchingFeatures = [];
+    searchGroup.eachLayer(function(layer) {
+        if (layer.feature.properties.name === salleFeature.feature.properties.name) {
+            matchingFeatures.push(layer);
+        }
     });
+    if (matchingFeatures.length > 0) {
+        var group = new L.featureGroup(matchingFeatures);
+        map.fitBounds(group.getBounds());
+        matchingFeatures.forEach(function(layer) {
+            highlightFeature(layer);
+        });
+        var cheminFeature = null;
+        var cheminLayer = (salleFeature.feature.properties.floor === "0") ? CheminEtageLayer0 : CheminEtageLayer1;
+        cheminLayer.eachLayer(function(layer) {
+            if (layer.feature && layer.feature.properties.name === salleFeature.feature.properties.name) {
+                cheminFeature = layer;
+            }
+        });
+        if (cheminFeature) {
+            var center = cheminFeature.getBounds().getCenter();
+            startPoint = L.marker(center, {icon: StartIcon, floor: salleFeature.feature.properties.floor}).addTo(map)
+                .bindPopup("Point de départ sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
+                .openPopup();
+        }
+    }
+    updateMarkersVisibility(); // Assurez-vous que cette fonction est appelée après avoir ajouté le marqueur
+    checkAndCalculateRoute();
+});
 
-    // --- 14. Barre de recherche pour le marqueur de fin ---
-    var searchControlEnd = new L.Control.Search({
+  
+
+
+  // --- 14. Barre de recherche pour le marqueur de fin ---
+  var searchControlEnd = new L.Control.Search({
       layer: searchGroup,
       propertyName: 'name',
       marker: false,
@@ -516,31 +538,72 @@ var EndIcon = L.icon({
       moveToLocation: function(latlng, title, map) {
         // Pas d'action ici
       },
-      position: 'topleft'
-    });
-    map.addControl(searchControlEnd);
-
-    searchControlEnd.on('search:locationfound', function(e) {
-      resetHighlight();
-      if (endPoint) { map.removeLayer(endPoint); endPoint = null; }
-      var salleFeature = e.layer;
-      switchFloor(salleFeature.feature.properties.floor);
-      map.fitBounds(salleFeature.getBounds());
-
-      var cheminFeature = null;
-      CheminEtageLayer.eachLayer(function(layer) {
-        if (layer.feature && layer.feature.properties.name === salleFeature.feature.properties.name) {
-          cheminFeature = layer;
-        }
-      });
-      if (cheminFeature) {
-        var center = cheminFeature.getBounds().getCenter();
-        endPoint = L.marker(center, {icon:EndIcon}).addTo(map)
-          .bindPopup("Point de fin sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
-          .openPopup();
+      position: 'topleft',
+      textPlaceholder: "Point d\'arrivée"
+  });
+  map.addControl(searchControlEnd);
+  // Ajout de l'id au container du contrôle end
+  searchControlEnd.getContainer().id = "search-control-end";
+  // Lorsqu'une recherche est ouverte, ajouter un id au tooltip
+  searchControlEnd.on('search:expanded', function() {
+      if (this._tooltip) {
+          this._tooltip.id = "search-tooltip-end";
       }
-      checkAndCalculateRoute();
+  });
+
+  searchControlEnd.on('search:locationfound', function(e) {
+    resetHighlight();
+    if (endPoint) { map.removeLayer(endPoint); endPoint = null; }
+    var salleFeature = e.layer;
+    switchFloor(salleFeature.feature.properties.floor);
+    var matchingFeatures = [];
+    searchGroup.eachLayer(function(layer) {
+        if (layer.feature.properties.name === salleFeature.feature.properties.name) {
+            matchingFeatures.push(layer);
+        }
     });
+    if (matchingFeatures.length > 0) {
+        var group = new L.featureGroup(matchingFeatures);
+        map.fitBounds(group.getBounds());
+        matchingFeatures.forEach(function(layer) {
+            highlightFeature(layer);
+        });
+        var cheminFeature = null;
+        var cheminLayer = (salleFeature.feature.properties.floor === "0") ? CheminEtageLayer0 : CheminEtageLayer1;
+        cheminLayer.eachLayer(function(layer) {
+            if (layer.feature && layer.feature.properties.name === salleFeature.feature.properties.name) {
+                cheminFeature = layer;
+            }
+        });
+        if (cheminFeature) {
+            var center = cheminFeature.getBounds().getCenter();
+            endPoint = L.marker(center, {icon: EndIcon, floor: salleFeature.feature.properties.floor}).addTo(map)
+                .bindPopup("Point de fin sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
+                .openPopup();
+        }
+    }
+    updateMarkersVisibility(); // Assurez-vous que cette fonction est appelée après avoir ajouté le marqueur
+    checkAndCalculateRoute();
+});
+
+  searchControlStart.on('search:expanded', function() {
+    if (this._tooltip) {
+        this._tooltip.id = "search-tooltip-start";
+        this._tooltip.classList.add('search-tooltip-start'); // Ajoute une classe spécifique
+        console.log("ID de la tooltip de recherche de départ :", this._tooltip.id);
+    }
+});
+
+searchControlEnd.on('search:expanded', function() {
+    if (this._tooltip) {
+        this._tooltip.id = "search-tooltip-end";
+        this._tooltip.classList.add('search-tooltip-end'); // Ajoute une classe spécifique
+        console.log("ID de la tooltip de recherche de fin :", this._tooltip.id);
+    }
+});
+
+
+
 
 // Fonction pour récupérer et filtrer les segments
 function getRouteAndPoints(start, end) {
@@ -602,7 +665,46 @@ function getRouteAndPoints(start, end) {
     // Listen for layer changes and update tooltips
     map.on('baselayerchange', function(e) {
       updateTooltipsVisibility();
+      updateMarkersVisibility();
     });
+
+    map.on('baselayerchange', function(e) {
+      updateTooltipsVisibility();
+      updateMarkersVisibility();
+    });
+
+    map.removeLayer(etage1);
+
+function updateMarkersVisibility() {
+  if (map.hasLayer(etage0)) {
+    if (startPoint && startPoint.options.floor === "1") {
+      map.removeLayer(startPoint);
+    }
+    if (endPoint && endPoint.options.floor === "1") {
+      map.removeLayer(endPoint);
+    }
+    if (startPoint && startPoint.options.floor === "0") {
+      map.addLayer(startPoint);
+    }
+    if (endPoint && endPoint.options.floor === "0") {
+      map.addLayer(endPoint);
+    }
+  } else if (map.hasLayer(etage1)) {
+    if (startPoint && startPoint.options.floor === "0") {
+      map.removeLayer(startPoint);
+    }
+    if (endPoint && endPoint.options.floor === "0") {
+      map.removeLayer(endPoint);
+    }
+    if (startPoint && startPoint.options.floor === "1") {
+      map.addLayer(startPoint);
+    }
+    if (endPoint && endPoint.options.floor === "1") {
+      map.addLayer(endPoint);
+    }
+  }
+}
+
   </script>
 </body>
 </html>
