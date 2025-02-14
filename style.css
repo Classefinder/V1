@@ -18,10 +18,17 @@ body {
     color: #000000; /* Couleur du texte */
 }
 
+/* Supprimer toute bordure ou ombre autour de l'input en cas de focus */
+.leaflet-control-search input:focus {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
 /* Style pour la barre de recherche de départ */
 #search-control-start {
     background-color: #ffffff;
-    border: 2px solid #d9d9d9 !important;
+    border: none !important;
     border-radius: 300px !important;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
     font-family: 'Arial', sans-serif;
@@ -31,7 +38,7 @@ body {
 /* Style pour la barre de recherche de fin */
 #search-control-end {
     background-color: #f5f5f5; /* Exemple : couleur différente pour distinguer */
-    border: 2px solid #cccccc !important;
+    border: none !important;
     border-radius: 300px !important;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
     font-family: 'Arial', sans-serif;
@@ -77,11 +84,11 @@ body {
     box-sizing: border-box;
     padding: 10px;
     border-radius: 15px;
-    background-color: #ffffff;
-    border: 2px solid #d60d0d;
-    color: #000000;
+    background-color: #f03535 !important;
+    border: 2px solid #d60d0d !important;
+    color: #000000 !important;
     font-size: 14px;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
     z-index: 1010;
     position: absolute; /* Assurez-vous que le tooltip est en position absolue */
     top: 50px;          /* Ajustez la valeur pour changer la distance par rapport au haut */
@@ -98,7 +105,7 @@ body {
     border: 2px solid #cccccc;
     color: #000000;
     font-size: 14px;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
     z-index: 1010;
 }
 
@@ -109,7 +116,8 @@ body {
 
 .leaflet-control-search input {
     outline: none;
-    border: none; /* Facultatif : enlève également les bordures si présentes */
+    border: none !important;
+    box-shadow: none !important;
 }
 
 /* Style pour les éléments de la couche lorsqu'ils sont survolés */
@@ -263,6 +271,19 @@ body {
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Ombre portée */
     }
 
+    #search-tooltip-start {
+        background-color: #ff0000   !important;
+        color: #ff0000 !important;
+        /* Autres styles pour la tooltip de départ */
+    }
+    
+    #search-tooltip-end {
+        background-color: #ff0808;
+        color: #af1414;
+        /* Autres styles pour la tooltip de fin */
+    }
+    
+
     .leaflet-control-layers{
         position: relative;
         display: flex;
@@ -297,4 +318,54 @@ body {
     }
 
     
+}
+
+/* Style pour la tooltip de la barre de recherche de départ */
+#search-control-start .search-tooltip {
+    background-color: #f0f0f0; /* Couleur de fond */
+    color: #333; /* Couleur du texte */
+    border: 1px solid #ccc; /* Bordure */
+    border-radius: 4px; /* Coins arrondis */
+    padding: 8px; /* Espacement interne */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Ombre */
+    font-size: 14px; /* Taille de la police */
+    max-width: 200px; /* Largeur maximale */
+    white-space: nowrap; /* Empêche le texte de se couper */
+    overflow: hidden; /* Cache le débordement */
+    text-overflow: ellipsis; /* Ajoute des points de suspension si le texte est trop long */
+}
+
+/* Style pour chaque élément de la tooltip de départ */
+#search-control-start .search-tip {
+    padding: 4px 0; /* Espacement interne pour chaque élément */
+    cursor: pointer; /* Change le curseur pour indiquer que l'élément est cliquable */
+}
+
+#search-control-start .search-tip:hover {
+    background-color: #e0e0e0; /* Couleur de fond au survol */
+}
+
+/* Style pour la tooltip de la barre de recherche de fin */
+#search-control-end .search-tooltip {
+    background-color: #e0e0e0; /* Couleur de fond */
+    color: #555; /* Couleur du texte */
+    border: 1px solid #aaa; /* Bordure */
+    border-radius: 4px; /* Coins arrondis */
+    padding: 8px; /* Espacement interne */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Ombre */
+    font-size: 14px; /* Taille de la police */
+    max-width: 200px; /* Largeur maximale */
+    white-space: nowrap; /* Empêche le texte de se couper */
+    overflow: hidden; /* Cache le débordement */
+    text-overflow: ellipsis; /* Ajoute des points de suspension si le texte est trop long */
+}
+
+/* Style pour chaque élément de la tooltip de fin */
+#search-control-end .search-tip {
+    padding: 4px 0; /* Espacement interne pour chaque élément */
+    cursor: pointer; /* Change le curseur pour indiquer que l'élément est cliquable */
+}
+
+#search-control-end .search-tip:hover {
+    background-color: #d0d0d0; /* Couleur de fond
 }

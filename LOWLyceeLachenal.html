@@ -393,6 +393,8 @@ var EndIcon = L.icon({
       updateMarkersVisibility();
   });
 
+  
+
 
   // --- 14. Barre de recherche pour le marqueur de fin ---
   var searchControlEnd = new L.Control.Search({
@@ -449,6 +451,25 @@ var EndIcon = L.icon({
       checkAndCalculateRoute();
       updateMarkersVisibility();
   });
+
+  searchControlStart.on('search:expanded', function() {
+    if (this._tooltip) {
+        this._tooltip.id = "search-tooltip-start";
+        this._tooltip.classList.add('search-tooltip-start'); // Ajoute une classe spécifique
+        console.log("ID de la tooltip de recherche de départ :", this._tooltip.id);
+    }
+});
+
+searchControlEnd.on('search:expanded', function() {
+    if (this._tooltip) {
+        this._tooltip.id = "search-tooltip-end";
+        this._tooltip.classList.add('search-tooltip-end'); // Ajoute une classe spécifique
+        console.log("ID de la tooltip de recherche de fin :", this._tooltip.id);
+    }
+});
+
+
+
 
 // Fonction pour récupérer et filtrer les segments
 function getRouteAndPoints(start, end) {
