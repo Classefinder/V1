@@ -346,7 +346,8 @@ var EndIcon = L.icon({
       moveToLocation: function(latlng, title, map) {
         // Laisser le zoom personnalisé se gérer ailleurs
       },
-      position: 'topleft'
+      position: 'topleft',
+      textPlaceholder: "Point de départ"
   });
   map.addControl(searchControlStart);
   // Ajout de l'id au container du contrôle start
@@ -405,7 +406,8 @@ var EndIcon = L.icon({
       moveToLocation: function(latlng, title, map) {
         // Pas d'action ici
       },
-      position: 'topleft'
+      position: 'topleft',
+      textPlaceholder: "Point d\'arrivée"
   });
   map.addControl(searchControlEnd);
   // Ajout de l'id au container du contrôle end
