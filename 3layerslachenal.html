@@ -46,6 +46,10 @@
       maxBoundsViscosity: 1.0
     }));
 
+    // Créez un pane pour les fonds personnalisés
+    map.createPane('floorPane');
+    map.getPane('floorPane').style.zIndex = 450;
+
     // --- 2. Données GeoJSON pour les salles et les chemins ---
     var salleEtage0 = {
         "type": "FeatureCollection",
@@ -64,7 +68,7 @@
 { "type": "Feature", "properties": { "name": "7" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132155652549918, 45.93716013718965 ], [ 6.132172550350009, 45.937297392623044 ], [ 6.132127541824469, 45.937332483498757 ], [ 6.132076181921632, 45.937303309267982 ], [ 6.132058534306163, 45.937165019456316 ], [ 6.132155652549918, 45.93716013718965 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": "Escalier" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132124809654063, 45.936927665818267 ], [ 6.132129592790053, 45.936961966219414 ], [ 6.132034184909476, 45.936967024027155 ], [ 6.132030019268502, 45.936932969021555 ], [ 6.132124809654063, 45.936927665818267 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": "Sanitaire" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132127490366544, 45.937332306272104 ], [ 6.132086245620142, 45.93736513407989 ], [ 6.132037159667203, 45.937368187828461 ], [ 6.132032611767408, 45.937336232522568 ], [ 6.132076130463709, 45.937303254736648 ], [ 6.132127490366544, 45.937332306272104 ] ] ] ] } },
-{ "type": "Feature", "properties": { "name": "Sanitaire" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132138673887373, 45.937393728884139 ], [ 6.132143378611296, 45.937427101967195 ], [ 6.132192150915976, 45.937424484471208 ], [ 6.132237002617387, 45.937389093732136 ], [ 6.132232297893465, 45.93738816670168 ], [ 6.132208382213516, 45.937374043118204 ], [ 6.132186740483465, 45.937390893261785 ], [ 6.132161570210473, 45.937376715147792 ], [ 6.132138673887373, 45.937393728884139 ] ] ] ] } },
+{ "type": "Feature", "properties": { "name": "Sanitaire" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132138673887373, 45.937393728884139 ], [ 6.132143378611296, 45.937427101967195 ], [ 6.132192150915976, 45.937424484471208 ], [ 6.132237002617387, 45.937389093732136 ], [ 6.132232297893465, 45.93738816670168 ], [ 6.132208441757645, 45.93737396577297 ], [ 6.132179048994928, 45.937358162623937 ], [ 6.132138673887373, 45.937393728884139 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": "6" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132343015729806, 45.937316239997791 ], [ 6.132350691535879, 45.937382440072874 ], [ 6.13223712023548, 45.937388848341719 ], [ 6.132236983014368, 45.937389039200923 ], [ 6.132232337099492, 45.93738816670168 ], [ 6.132208441022562, 45.937374084016618 ], [ 6.132231729405984, 45.937355952383939 ], [ 6.132203501062438, 45.937339702073515 ], [ 6.132224358671837, 45.937322579258051 ], [ 6.132343015729806, 45.937316239997791 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": "Vie scolaire" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132400060507383, 45.937214102827369 ], [ 6.132407744889787, 45.93727924051597 ], [ 6.132272680107135, 45.937286629508058 ], [ 6.13233688121087, 45.937233275714483 ], [ 6.132359597431251, 45.93721620484137 ], [ 6.132400060507383, 45.937214102827369 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": "Vie scolaire" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132343015729793, 45.93731622892107 ], [ 6.132555370305162, 45.937303652644516 ], [ 6.132492072165367, 45.937357025115475 ], [ 6.13246746057834, 45.937375797489615 ], [ 6.1323507001122, 45.937382440072881 ], [ 6.132343015729793, 45.93731622892107 ] ] ] ] } },
@@ -162,7 +166,7 @@
 { "type": "Feature", "properties": { "name": "V1" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132559263481, 45.937761742137447 ], [ 6.132605358389325, 45.937758765489001 ], [ 6.132614138371865, 45.937824175393722 ], [ 6.132567165465287, 45.937827991605154 ], [ 6.132559263481, 45.937761742137447 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": "V2" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132607553384967, 45.937773801378285 ], [ 6.132725973399444, 45.93776700851511 ], [ 6.132730253640932, 45.937817306212494 ], [ 6.132614138371868, 45.937824175393722 ], [ 6.132607553384967, 45.937773801378285 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": "R12" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
-{ "type": "Feature", "properties": { "name": "R12" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
+{ "type": "Feature", "properties": { "name": "R11 " }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": "R9" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132338097023253, 45.936716667911078 ], [ 6.132346542802771, 45.936781465154866 ], [ 6.132227172282988, 45.936787083013414 ], [ 6.132219251901891, 45.936722066542458 ], [ 6.132338097023253, 45.936716667911078 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": "R8" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132219253543763, 45.936722064258774 ], [ 6.132227180492344, 45.936787079587916 ], [ 6.132107560408311, 45.936792893842551 ], [ 6.132099429867845, 45.936727498286743 ], [ 6.132219253543763, 45.936722064258774 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": "R7" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132099431509721, 45.936727500570427 ], [ 6.132116122760606, 45.936862250362864 ], [ 6.132020322927197, 45.936866941039654 ], [ 6.132004120953585, 45.936731824727232 ], [ 6.132099431509721, 45.936727500570427 ] ] ] ] } },
@@ -219,7 +223,8 @@
         "type": "FeatureCollection",
         "features":[
         {"type":"Feature","properties":{"name":"11","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13217,45.93707],[6.13212,45.93707]]}},
-
+        {"type":"Feature","properties":{"name":"R12","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13217,45.93707],[6.13212,45.93707]]}},
+   
         //données geojson ici        
         ]
     };
@@ -227,7 +232,7 @@
     var CheminEtage1 = {
       "type": "FeatureCollection",
         "features":[
-        {"type":"Feature","properties":{"name":"124","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.3217,45.93707],[6.132,45.93707]]}},
+        {"type":"Feature","properties":{"name":"8","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.3217,45.93707],[6.132,45.93707]]}},
 
         //données geojson ici        
         ]
@@ -775,9 +780,9 @@ function getRouteAndPoints(start, end) {
 
     // --- 16. Contrôle des calques via le sélecteur ---
     var baseLayers = {
-  "Étage -1": etage2,
-  "Étage 0": etage0,
-  "Étage 1": etage1,
+      "Étage 1": etage1,
+      "Étage 0": etage0,
+      "Étage -1": etage2,
 
 };
 L.control.layers(baseLayers, null, { collapsed: false }).addTo(map);
@@ -805,7 +810,7 @@ function updateMarkersVisibility() {
     if (startPoint && startPoint.options.floor !== "1") { map.removeLayer(startPoint); }
     if (endPoint && endPoint.options.floor !== "1") { map.removeLayer(endPoint); }
     if (startPoint && startPoint.options.floor === "1") { map.addLayer(startPoint); }
-    if (endPoint && endPoint.options.floor === "1") { map.addLayer(endPoint); }
+    if (endPoint && endPoint.optio1000ns.floor === "1") { map.addLayer(endPoint); }
   } else if (map.hasLayer(etage2)) {
     if (startPoint && startPoint.options.floor !== "2") { map.removeLayer(startPoint); }
     if (endPoint && endPoint.options.floor !== "2") { map.removeLayer(endPoint); }
@@ -813,6 +818,28 @@ function updateMarkersVisibility() {
     if (endPoint && endPoint.options.floor === "2") { map.addLayer(endPoint); }
   }
 }
+
+// Supposons que etage0, etage1, etage2 soient déjà définis.
+
+// Fonction pour afficher un étage en retirant les autres
+function showFloor(floor) {
+  [etage0, etage1, etage2].forEach(function(layer) {
+    if (map.hasLayer(layer)) {
+      map.removeLayer(layer);
+    }
+  });
+  map.addLayer(floor);
+}
+
+// Tableau contenant les étages dans l'ordre souhaité
+var floors = [etage0, etage1, etage2];
+var delayBetween = 1; // délai en millisecondes (ajustable)
+
+floors.forEach(function(floor, index) {
+  setTimeout(function() {
+    showFloor(floor);
+  }, index * delayBetween);
+});
 
   </script>
 </body>
