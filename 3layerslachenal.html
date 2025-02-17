@@ -210,7 +210,7 @@
 { "type": "Feature", "properties": { "name": "V15" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132517130711181, 45.937206389313886 ], [ 6.13259724805184, 45.937201466345925 ], [ 6.132606302408835, 45.937268517895475 ], [ 6.132539135542419, 45.937272639445091 ], [ 6.132536172298312, 45.937253634519237 ], [ 6.132524785758457, 45.937254054306834 ], [ 6.132517130711181, 45.937206389313886 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": null }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132680575573622, 45.93727553979469 ], [ 6.132709154245301, 45.937292259734491 ], [ 6.13265423562601, 45.93729568958743 ], [ 6.132680575573622, 45.93727553979469 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": null }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.13274730344091, 45.93728988889027 ], [ 6.132748949687636, 45.937307672604646 ], [ 6.132656540371424, 45.93731332065007 ], [ 6.132654564875353, 45.93729568958743 ], [ 6.13274730344091, 45.93728988889027 ] ] ] ] } },
-{ "type": "Feature", "properties": { "name": "VDI0" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132748719041615, 45.937307648753091 ], [ 6.132751462786156, 45.937338560346042 ], [ 6.13266124846558, 45.937344361038107 ], [ 6.132656529224967, 45.93731322047357 ], [ 6.132748719041615, 45.937307648753091 ] ] ] ] } },
+{ "type": "Feature", "properties": { "name": "VDI0" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132748719041615, 45.937307648753091 ], [ 6.132751462786156, 45.937338560346042 ], [ 6.13266124846558, 45.937344361038136 ], [ 6.132656529224967, 45.93731322047357 ], [ 6.132748719041615, 45.937307648753091 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": "V7" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132844654069588, 45.937441866001564 ], [ 6.132896181592108, 45.937439270959757 ], [ 6.132903644577266, 45.937511474136642 ], [ 6.132865012654101, 45.937513305928498 ], [ 6.132863146907809, 45.937493919461708 ], [ 6.132850800057366, 45.93749426292279 ], [ 6.132844654069588, 45.937441866001564 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": "V5" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132859333102897, 45.937565073104345 ], [ 6.132863723094168, 45.93760583041928 ], [ 6.132780532759623, 45.93761113497397 ], [ 6.132773728273158, 45.937548930451669 ], [ 6.132842870635642, 45.937546946011778 ], [ 6.132845065631278, 45.937565340240411 ], [ 6.132859333102897, 45.937565073104345 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": "V3" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132780738540482, 45.937611144514577 ], [ 6.13278578703044, 45.937672356749367 ], [ 6.132694914211173, 45.937674951780274 ], [ 6.132688987722962, 45.937628241205417 ], [ 6.132715547170139, 45.937627172662388 ], [ 6.132713818611077, 45.937614216576598 ], [ 6.132780738540482, 45.937611144514577 ] ] ] ] } },
@@ -595,6 +595,7 @@ var EndIcon = L.icon({
     popupAnchor:  [0, -10] // point from which the popup should open relative to the iconAnchor
 });
 
+var markersGroup = L.layerGroup().addTo(map);
 
 
 
@@ -872,23 +873,42 @@ L.control.layers(baseLayers, null, { collapsed: false }).addTo(map);
 
     map.removeLayer(etage1);
 
+var currentFloor; // étage actuellement affiché
+
 function updateMarkersVisibility() {
-  if (map.hasLayer(etage0)) {
-    if (startPoint && startPoint.options.floor !== "0") { map.removeLayer(startPoint); }
-    if (endPoint && endPoint.options.floor !== "0") { map.removeLayer(endPoint); }
-    if (startPoint && startPoint.options.floor === "0") { map.addLayer(startPoint); }
-    if (endPoint && endPoint.options.floor === "0") { map.addLayer(endPoint); }
-  } else if (map.hasLayer(etage1)) {
-    if (startPoint && startPoint.options.floor !== "1") { map.removeLayer(startPoint); }
-    if (endPoint && endPoint.options.floor !== "1") { map.removeLayer(endPoint); }
-    if (startPoint && startPoint.options.floor === "1") { map.addLayer(startPoint); }
-    if (endPoint && endPoint.optio1000ns.floor === "1") { map.addLayer(endPoint); }
-  } else if (map.hasLayer(etage2)) {
-    if (startPoint && startPoint.options.floor !== "2") { map.removeLayer(startPoint); }
-    if (endPoint && endPoint.options.floor !== "2") { map.removeLayer(endPoint); }
-    if (startPoint && startPoint.options.floor === "2") { map.addLayer(startPoint); }
-    if (endPoint && endPoint.options.floor === "2") { map.addLayer(endPoint); }
-  }
+    markersGroup.eachLayer(function(marker) {
+        var markerFloor;
+        if (marker.options && marker.options.floor !== undefined) {
+            markerFloor = marker.options.floor;
+        } else if (marker.feature && marker.feature.properties && marker.feature.properties.floor !== undefined) {
+            markerFloor = marker.feature.properties.floor;
+        }
+        
+        if (markerFloor !== undefined && markerFloor === currentFloor) {
+            if (!map.hasLayer(marker)) {
+                marker.addTo(map);
+            }
+        } else {
+            if (map.hasLayer(marker)) {
+                map.removeLayer(marker);
+            }
+        }
+    });
+}
+
+function showFloor(floor, layer) {
+    // Met à jour l'étage global
+    currentFloor = floor;
+    // Retire tous les calques d'étage
+    [etage0, etage1, etage2].forEach(function(l) {
+        if (map.hasLayer(l)) {
+            map.removeLayer(l);
+        }
+    });
+    // Affiche le calque correspondant à l'étage demandé
+    map.addLayer(layer);
+    // Met à jour la visibilité des marqueurs
+    updateMarkersVisibility();
 }
 
 // Supposons que etage0, etage1, etage2 soient déjà définis.
@@ -912,6 +932,10 @@ floors.forEach(function(floor, index) {
     showFloor(floor);
   }, index * delayBetween);
 });
+
+// Définir l'étage par défaut (ici "0") et mettre à jour la visibilité des marqueurs
+currentFloor = "0";
+updateMarkersVisibility();
 
   </script>
 </body>
