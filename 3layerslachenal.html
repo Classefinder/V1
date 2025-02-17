@@ -616,6 +616,26 @@ function updateMarkersVisibility() {
   }
 }
 
+// Fonction de cycle des calques au démarrage
+function cycleLayers() {
+  // Afficher étage 0 immédiatement
+  switchFloor("0");
+  // Après 3 secondes, afficher étage 1
+  setTimeout(function() {
+    switchFloor("1");
+    // Après 3 secondes supplémentaires, afficher étage 2
+    setTimeout(function() {
+      switchFloor("2");
+      setTimeout(function() {
+        switchFloor("0");
+      }, 1);
+    }, 1);
+  }, 1);
+}
+
+// Appeler la fonction lors du chargement du site
+cycleLayers();
+
   </script>
 </body>
 </html>
