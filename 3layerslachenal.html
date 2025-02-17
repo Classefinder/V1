@@ -40,16 +40,13 @@
     }).addTo(map = L.map('map', {
       center: [45.9368, 6.1322],
       zoom: 18,
-      minZoom: 10,
+      minZoom: 1,
       maxZoom: 23,
       maxBounds: limites,
       maxBoundsViscosity: 1.0
     }));
 
-    // Créez un pane pour les fonds personnalisés
-    map.createPane('floorPane');
-    map.getPane('floorPane').style.zIndex = 450;
-
+    // --- 2. Données GeoJSON pour les salles et les chemins ---
     // --- 2. Données GeoJSON pour les salles et les chemins ---
     var salleEtage0 = {
         "type": "FeatureCollection",
@@ -287,7 +284,7 @@
 {"type":"Feature","properties":{"foot":"yes","name":"V3","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.13275,45.93766],[6.13266,45.93767]]}},
 {"type":"Feature","properties":{"foot":"yes","name":"V10","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.13272,45.93744],[6.13264,45.93745]]}},
 {"type":"Feature","properties":{"foot":"yes","name":"Adjoint","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.13208,45.93733],[6.13215,45.93735]]}},
-{"type":"Feature","properties":{"foot":"yes","name":"R11","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.13238,45.93681],[6.13238,45.93679]]}},
+{"type":"Feature","properties":{"foot":"yes","name":"R12","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.13238,45.93681],[6.13238,45.93679]]}},
 {"type":"Feature","properties":{"foot":"yes","name":"R1 STS Bâtiment","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.1326,45.93768],[6.13267,45.93768]]}},
 {"type":"Feature","properties":{"foot":"yes","name":"VDI0","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.1327,45.93733],[6.13263,45.93734]]}},
 {"type":"Feature","properties":{"layer":"-2","highway":"footway","tunnel":"yes","name":"V11","foot":"yes"},"geometry":{"type":"LineString","coordinates":[[6.13272,45.93736],[6.13263,45.93736]]}},
@@ -323,35 +320,35 @@
     // --- 3. Création des couches GeoJSON pour les salles ---
     // On n'utilise plus bindTooltip ici afin d'éviter que le label s'affiche automatiquement au survol.
     function onEachSalleFeature(feature, layer, floor) {
-  feature.properties.floor = floor;
-  // Pour l'étage 1, si 'name' n'existe pas, le récupérer via 'salle'
-  if (floor === "1" && feature.properties.salle && !feature.properties.name) {
-    feature.properties.name = feature.properties.salle;
-  }
-  layer.on({
-    mouseover: function(e) {
-      e.target.setStyle({
-        color: '#6AB28F',
-        weight: 3
-      });
-    },
-    mouseout: function(e) {
-      if (floor === "0") {
-        salleLayer0.resetStyle(e.target);
-      } else if (floor === "1") {
-        salleLayer1.resetStyle(e.target);
-      } else if (floor === "2") {
-        salleLayer2.resetStyle(e.target);
+      feature.properties.floor = floor;
+      // Pour l'étage 1, si la propriété "name" est absente, on la copie depuis "salle"
+      if (floor === "1" && !feature.properties.name && feature.properties.salle) {
+        feature.properties.name = feature.properties.salle;
       }
-    },
-    click: function(e) {
-      // Reset all highlights first
-      resetHighlight();
-      // Zoom to the clicked feature
-      map.fitBounds(e.target.getBounds());
+      layer.on({
+        mouseover: function(e) {
+          e.target.setStyle({
+            color: '#6AB28F',
+            weight: 3,
+          });
+        },
+        mouseout: function(e) {
+          if (floor === "0") {
+            salleLayer0.resetStyle(e.target);
+          } else if (floor === "1") {
+            salleLayer1.resetStyle(e.target);
+          } else if (floor === "2") {
+            salleLayer2.resetStyle(e.target);
+          }
+        },
+        click: function(e) {
+          // Réinitialise tous les surlignages
+          resetHighlight();
+          // Zoom sur la feature cliquée
+          map.fitBounds(e.target.getBounds());
+        }
+      });
     }
-  });
-}
 
     var salleLayer0 = L.geoJSON(salleEtage0, {
       style: function(feature) {
@@ -373,7 +370,7 @@
 
     var salleLayer2 = L.geoJSON(salleEtage2, {
       style: function(feature) {
-        return { color: '#ffffff', weight: 2, fillOpacity: 0.8 }; // modifiez la couleur au besoin
+        return { color: '#FF9999', weight: 2, fillOpacity: 0.8 }; // modifiez la couleur au besoin
       },
       onEachFeature: function(feature, layer) {
         onEachSalleFeature(feature, layer, "2");
@@ -416,7 +413,7 @@
       opacity: 1,
       maxZoom: 23 
     });
-    var customBackground2 = L.tileLayer('Données/QGIS/QTiles/etage2/{z}/{x}/{y}.png', {
+    var customBackground2 = L.tileLayer('../Données/QGIS/QTiles/etage2/{z}/{x}/{y}.png', {
       opacity: 1,
       maxZoom: 23
     });
@@ -433,106 +430,70 @@
     const tooltipZoomThreshold = 20; // Seuil de zoom pour afficher les labels
 
     function updateTooltipsVisibility() {
-  var currentZoom = map.getZoom();
-  
-  // Pour etage0
-  if (map.hasLayer(etage0)) {
-    salleLayer0.eachLayer(function(layer) {
-      if (currentZoom >= tooltipZoomThreshold) {
-        if (!layer._customTooltip) {
-          var name = layer.feature.properties.name;
-          if (name) {
-            var center = layer.getBounds().getCenter();
-            var tooltip = L.tooltip({
-              permanent: true,
-              direction: 'center',
-              className: 'room-label'
-            })
-            .setContent(name)
-            .setLatLng(center);
-            tooltip.addTo(map);
-            layer._customTooltip = tooltip;
-          }
-        }
-      } else if (layer._customTooltip) {
-        map.removeLayer(layer._customTooltip);
-        layer._customTooltip = null;
-      }
-    });
-  } else {
-    salleLayer0.eachLayer(function(layer) {
-      if (layer._customTooltip) {
-        map.removeLayer(layer._customTooltip);
-        layer._customTooltip = null;
-      }
-    });
-  }
-  
-  // Pour etage1
-  if (map.hasLayer(etage1)) {
-    salleLayer1.eachLayer(function(layer) {
-      if (currentZoom >= tooltipZoomThreshold) {
-        if (!layer._customTooltip) {
-          var name = layer.feature.properties.name;
-          if (name) {
-            var center = layer.getBounds().getCenter();
-            var tooltip = L.tooltip({
-              permanent: true,
-              direction: 'center',
-              className: 'room-label'
-            })
-            .setContent(name)
-            .setLatLng(center);
-            tooltip.addTo(map);
-            layer._customTooltip = tooltip;
-          }
-        }
-      } else if (layer._customTooltip) {
-        map.removeLayer(layer._customTooltip);
-        layer._customTooltip = null;
-      }
-    });
-  } else {
-    salleLayer1.eachLayer(function(layer) {
-      if (layer._customTooltip) {
-        map.removeLayer(layer._customTooltip);
-        layer._customTooltip = null;
-      }
-    });
-  }
-  
-  // Pour etage2
-  if (map.hasLayer(etage2)) {
-    salleLayer2.eachLayer(function(layer) {
-      if (currentZoom >= tooltipZoomThreshold) {
-        if (!layer._customTooltip) {
-          var name = layer.feature.properties.name;
-          if (name) {
-            var center = layer.getBounds().getCenter();
-            var tooltip = L.tooltip({
-              permanent: true,
-              direction: 'center',
-              className: 'room-label'
-            })
-            .setContent(name)
-            .setLatLng(center);
-            tooltip.addTo(map);
-            layer._customTooltip = tooltip;
-          }
-        }
-      } else if (layer._customTooltip) {
-        map.removeLayer(layer._customTooltip);
-        layer._customTooltip = null;
-      }
-    });
-  } else {
-    salleLayer2.eachLayer(function(layer) {
-      if (layer._customTooltip) {
-        map.removeLayer(layer._customTooltip);
-        layer._customTooltip = null;
-      }
-    });
-  }
+    var currentZoom = map.getZoom();
+    const tooltipZoomThreshold = 20; // Seuil abaissé pour afficher les labels dès le zoom 18
+
+    function toggleTooltips(layerGroup) {
+        layerGroup.eachLayer(function(layer) {
+            if (currentZoom >= tooltipZoomThreshold) {
+                if (!layer._customTooltip) {
+                    // Utilisation de "name" ou de "salle" selon la disponibilité
+                    var labelContent = layer.feature.properties.name || layer.feature.properties.salle;
+                    if (labelContent) {
+                        var center = layer.getBounds().getCenter();
+                        var tooltip = L.tooltip({
+                            permanent: true,
+                            direction: 'center',
+                            className: 'room-label'
+                        })
+                        .setContent(labelContent)
+                        .setLatLng(center);
+                        tooltip.addTo(map);
+                        layer._customTooltip = tooltip;
+                    }
+                }
+            } else if (layer._customTooltip) {
+                map.removeLayer(layer._customTooltip);
+                layer._customTooltip = null;
+            }
+        });
+    }
+
+    // Etage 0
+    if (map.hasLayer(etage0)) {
+        toggleTooltips(salleLayer0);
+    } else {
+        salleLayer0.eachLayer(function(layer) {
+            if (layer._customTooltip) {
+                map.removeLayer(layer._customTooltip);
+                layer._customTooltip = null;
+            }
+        });
+    }
+
+    // Etage 1
+    if (map.hasLayer(etage1)) {
+        toggleTooltips(salleLayer1);
+    } else {
+        salleLayer1.eachLayer(function(layer) {
+            if (layer._customTooltip) {
+                map.removeLayer(layer._customTooltip);
+                layer._customTooltip = null;
+            }
+        });
+    }
+
+    // Etage 2
+    if (map.hasLayer(etage2)) {
+        toggleTooltips(salleLayer2);
+    } else {
+        salleLayer2.eachLayer(function(layer) {
+            if (layer._customTooltip) {
+                map.removeLayer(layer._customTooltip);
+                layer._customTooltip = null;
+            }
+        });
+    }
 }
 
 map.on('zoomend', updateTooltipsVisibility);
@@ -595,7 +556,6 @@ var EndIcon = L.icon({
     popupAnchor:  [0, -10] // point from which the popup should open relative to the iconAnchor
 });
 
-var markersGroup = L.layerGroup().addTo(map);
 
 
 
@@ -610,19 +570,14 @@ var markersGroup = L.layerGroup().addTo(map);
     }
     // Modified resetHighlight function - REPLACE THIS SECTION
     function resetHighlight() {
-      salleLayer0.eachLayer(function(layer) {
-        salleLayer0.resetStyle(layer);
-        if (layer._customTooltip) {
-          map.removeLayer(layer._customTooltip);
-          layer._customTooltip = null;
-        }
-      });
-      salleLayer1.eachLayer(function(layer) {
-        salleLayer1.resetStyle(layer);
-        if (layer._customTooltip) {
-          map.removeLayer(layer._customTooltip);
-          layer._customTooltip = null;
-        }
+      [salleLayer0, salleLayer1, salleLayer2].forEach(function(layerGroup) {
+        layerGroup.eachLayer(function(layer) {
+          layerGroup.resetStyle(layer);
+          if (layer._customTooltip) {
+            map.removeLayer(layer._customTooltip);
+            layer._customTooltip = null;
+          }
+        });
       });
     }
 
@@ -674,37 +629,39 @@ var markersGroup = L.layerGroup().addTo(map);
     if (startPoint) { map.removeLayer(startPoint); startPoint = null; }
     var salleFeature = e.layer;
     switchFloor(salleFeature.feature.properties.floor);
+    var key = salleFeature.feature.properties.name || salleFeature.feature.properties.salle;
     var matchingFeatures = [];
     searchGroup.eachLayer(function(layer) {
-        if (layer.feature.properties.name === salleFeature.feature.properties.name) {
-            matchingFeatures.push(layer);
-        }
+      var layerKey = layer.feature.properties.name || layer.feature.properties.salle;
+      if (layerKey === key) {
+        matchingFeatures.push(layer);
+      }
     });
     if (matchingFeatures.length > 0) {
-        var group = new L.featureGroup(matchingFeatures);
-        map.fitBounds(group.getBounds());
-        matchingFeatures.forEach(function(layer) {
-            highlightFeature(layer);
-        });
-        var cheminFeature = null;
-        var cheminLayer = (salleFeature.feature.properties.floor === "0") ? CheminEtageLayer0 :
-                          (salleFeature.feature.properties.floor === "1") ? CheminEtageLayer1 :
-                          CheminEtageLayer2;
-        cheminLayer.eachLayer(function(layer) {
-            if (layer.feature && layer.feature.properties.name === salleFeature.feature.properties.name) {
-                cheminFeature = layer;
-            }
-        });
-        if (cheminFeature) {
-            var center = cheminFeature.getBounds().getCenter();
-            startPoint = L.marker(center, {icon: StartIcon, floor: salleFeature.feature.properties.floor}).addTo(map)
-                .bindPopup("Point de départ sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
-                .openPopup();
+      var group = new L.featureGroup(matchingFeatures);
+      map.fitBounds(group.getBounds());
+      matchingFeatures.forEach(function(layer) {
+        highlightFeature(layer);
+      });
+      var cheminFeature = null;
+      var floor = salleFeature.feature.properties.floor;
+      var cheminLayer = (floor === "0") ? CheminEtageLayer0 : (floor === "1") ? CheminEtageLayer1 : CheminEtageLayer2;
+      cheminLayer.eachLayer(function(layer) {
+        var layerKey = layer.feature.properties.name || layer.feature.properties.salle;
+        if (layer.feature && layerKey === key) {
+          cheminFeature = layer;
         }
+      });
+      if (cheminFeature) {
+        var center = cheminFeature.getBounds().getCenter();
+        startPoint = L.marker(center, {icon: StartIcon, floor: floor}).addTo(map)
+            .bindPopup("Point de départ sur le chemin de " + key, { autoPan: false })
+            .openPopup();
+      }
     }
-    updateMarkersVisibility(); // Assurez-vous que cette fonction est appelée après avoir ajouté le marqueur
+    updateMarkersVisibility();
     checkAndCalculateRoute();
-});
+  });
 
   // --- 14. Barre de recherche pour le marqueur de fin ---
   var searchControlEnd = new L.Control.Search({
@@ -729,64 +686,43 @@ var markersGroup = L.layerGroup().addTo(map);
   });
 
   searchControlEnd.on('search:locationfound', function(e) {
-  resetHighlight();
-  if (endPoint) { 
-      map.removeLayer(endPoint); 
-      endPoint = null; 
-  }
-  var salleFeature = e.layer;
-  switchFloor(salleFeature.feature.properties.floor);
-  
-  var matchingFeatures = [];
-  searchGroup.eachLayer(function(layer) {
-      if (layer.feature.properties.name === salleFeature.feature.properties.name) {
-          matchingFeatures.push(layer);
+    resetHighlight();
+    if (endPoint) { map.removeLayer(endPoint); endPoint = null; }
+    var salleFeature = e.layer;
+    switchFloor(salleFeature.feature.properties.floor);
+    var key = salleFeature.feature.properties.name || salleFeature.feature.properties.salle;
+    var matchingFeatures = [];
+    searchGroup.eachLayer(function(layer) {
+      var layerKey = layer.feature.properties.name || layer.feature.properties.salle;
+      if (layerKey === key) {
+        matchingFeatures.push(layer);
       }
-  });
-  
-  if (matchingFeatures.length > 0) {
+    });
+    if (matchingFeatures.length > 0) {
       var group = new L.featureGroup(matchingFeatures);
       map.fitBounds(group.getBounds());
       matchingFeatures.forEach(function(layer) {
-          highlightFeature(layer);
+        highlightFeature(layer);
       });
-      
       var cheminFeature = null;
-      var cheminLayer = null;
-      // Gestion multi-étages (0, 1 ou 2)
-      if (salleFeature.feature.properties.floor === "0") {
-          cheminLayer = CheminEtageLayer0;
-      } else if (salleFeature.feature.properties.floor === "1") {
-          cheminLayer = CheminEtageLayer1;
-      } else if (salleFeature.feature.properties.floor === "2") {
-          cheminLayer = CheminEtageLayer2;
+      var floor = salleFeature.feature.properties.floor;
+      var cheminLayer = (floor === "0") ? CheminEtageLayer0 : (floor === "1") ? CheminEtageLayer1 : CheminEtageLayer2;
+      cheminLayer.eachLayer(function(layer) {
+        var layerKey = layer.feature.properties.name || layer.feature.properties.salle;
+        if (layer.feature && layerKey === key) {
+          cheminFeature = layer;
+        }
+      });
+      if (cheminFeature) {
+        var center = cheminFeature.getBounds().getCenter();
+        endPoint = L.marker(center, {icon: EndIcon, floor: floor}).addTo(map)
+            .bindPopup("Point de fin sur le chemin de " + key, { autoPan: false })
+            .openPopup();
       }
-      
-      if (cheminLayer) {
-          cheminLayer.eachLayer(function(layer) {
-              if (layer.feature && layer.feature.properties.name === salleFeature.feature.properties.name) {
-                  cheminFeature = layer;
-              }
-          });
-      }
-      var center;
-      // Si un segment chemin est trouvé, on l'utilise, sinon on prend le centre de la salle
-      if (cheminFeature && cheminFeature.getBounds) {
-          center = cheminFeature.getBounds().getCenter();
-      } else if (salleFeature.getBounds) {
-          center = salleFeature.getBounds().getCenter();
-      } else {
-          center = e.latlng;
-      }
-      
-      endPoint = L.marker(center, {icon: EndIcon, floor: salleFeature.feature.properties.floor})
-                  .addTo(map)
-                  .bindPopup("Point de fin sur le chemin de " + salleFeature.feature.properties.name, { autoPan: false })
-                  .openPopup();
-  }
-  updateMarkersVisibility(); // S'assurer que l'affichage des marqueurs est à jour
-  checkAndCalculateRoute();
-});
+    }
+    updateMarkersVisibility();
+    checkAndCalculateRoute();
+  });
 
   searchControlStart.on('search:expanded', function() {
     if (this._tooltip) {
@@ -856,7 +792,6 @@ function getRouteAndPoints(start, end) {
       "Étage 1": etage1,
       "Étage 0": etage0,
       "Étage -1": etage2,
-
 };
 L.control.layers(baseLayers, null, { collapsed: false }).addTo(map);
 
@@ -873,69 +808,24 @@ L.control.layers(baseLayers, null, { collapsed: false }).addTo(map);
 
     map.removeLayer(etage1);
 
-var currentFloor; // étage actuellement affiché
-
 function updateMarkersVisibility() {
-    markersGroup.eachLayer(function(marker) {
-        var markerFloor;
-        if (marker.options && marker.options.floor !== undefined) {
-            markerFloor = marker.options.floor;
-        } else if (marker.feature && marker.feature.properties && marker.feature.properties.floor !== undefined) {
-            markerFloor = marker.feature.properties.floor;
-        }
-        
-        if (markerFloor !== undefined && markerFloor === currentFloor) {
-            if (!map.hasLayer(marker)) {
-                marker.addTo(map);
-            }
-        } else {
-            if (map.hasLayer(marker)) {
-                map.removeLayer(marker);
-            }
-        }
-    });
+  if (map.hasLayer(etage0)) {
+    if (startPoint && startPoint.options.floor !== "0") { map.removeLayer(startPoint); }
+    if (endPoint && endPoint.options.floor !== "0") { map.removeLayer(endPoint); }
+    if (startPoint && startPoint.options.floor === "0") { map.addLayer(startPoint); }
+    if (endPoint && endPoint.options.floor === "0") { map.addLayer(endPoint); }
+  } else if (map.hasLayer(etage1)) {
+    if (startPoint && startPoint.options.floor !== "1") { map.removeLayer(startPoint); }
+    if (endPoint && endPoint.options.floor !== "1") { map.removeLayer(endPoint); }
+    if (startPoint && startPoint.options.floor === "1") { map.addLayer(startPoint); }
+    if (endPoint && endPoint.options.floor === "1") { map.addLayer(endPoint); }
+  } else if (map.hasLayer(etage2)) {
+    if (startPoint && startPoint.options.floor !== "2") { map.removeLayer(startPoint); }
+    if (endPoint && endPoint.options.floor !== "2") { map.removeLayer(endPoint); }
+    if (startPoint && startPoint.options.floor === "2") { map.addLayer(startPoint); }
+    if (endPoint && endPoint.options.floor === "2") { map.addLayer(endPoint); }
+  }
 }
-
-function showFloor(floor, layer) {
-    // Met à jour l'étage global
-    currentFloor = floor;
-    // Retire tous les calques d'étage
-    [etage0, etage1, etage2].forEach(function(l) {
-        if (map.hasLayer(l)) {
-            map.removeLayer(l);
-        }
-    });
-    // Affiche le calque correspondant à l'étage demandé
-    map.addLayer(layer);
-    // Met à jour la visibilité des marqueurs
-    updateMarkersVisibility();
-}
-
-// Supposons que etage0, etage1, etage2 soient déjà définis.
-
-// Fonction pour afficher un étage en retirant les autres
-function showFloor(floor) {
-  [etage0, etage1, etage2].forEach(function(layer) {
-    if (map.hasLayer(layer)) {
-      map.removeLayer(layer);
-    }
-  });
-  map.addLayer(floor);
-}
-
-// Tableau contenant les étages dans l'ordre souhaité
-var floors = [etage0, etage1, etage2];
-var delayBetween = 1; // délai en millisecondes (ajustable)
-
-floors.forEach(function(floor, index) {
-  setTimeout(function() {
-    showFloor(floor);
-  }, index * delayBetween);
-});
-
-// Définir l'étage par défaut (ici "0") et mettre à jour la visibilité des marqueurs
-currentFloor = "0";
-updateMarkersVisibility();
 
   </script>
 </body>
