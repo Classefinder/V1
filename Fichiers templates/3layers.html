@@ -132,8 +132,7 @@
           }
         },
         click: function(e) {
-          // Réinitialise tous les surlignages
-          resetHighlight();
+          // Supprimer l'appel à resetHighlight() pour conserver les labels
           // Zoom sur la feature cliquée
           map.fitBounds(e.target.getBounds());
         }
@@ -616,6 +615,26 @@ function updateMarkersVisibility() {
     if (endPoint && endPoint.options.floor === "2") { map.addLayer(endPoint); }
   }
 }
+
+// Fonction de cycle des calques au démarrage
+function cycleLayers() {
+  // Afficher étage 0 immédiatement
+  switchFloor("0");
+  // Après 3 secondes, afficher étage 1
+  setTimeout(function() {
+    switchFloor("1");
+    // Après 3 secondes supplémentaires, afficher étage 2
+    setTimeout(function() {
+      switchFloor("2");
+      setTimeout(function() {
+        switchFloor("0");
+      }, 1);
+    }, 1);
+  }, 1);
+}
+
+// Appeler la fonction lors du chargement du site
+cycleLayers();
 
   </script>
 </body>
