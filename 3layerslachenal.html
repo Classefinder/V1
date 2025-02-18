@@ -777,10 +777,25 @@ function getRouteAndPoints(start, end) {
             weight: 10
           });
 
-          // Ajouter des flèches à la polyligne avec la même couleur
+          // Ajouter des flèches pleines à la polyligne avec la même couleur
           var arrow = L.polylineDecorator(polyline, {
             patterns: [
-              {offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({pixelSize: 17, polygon: false, pathOptions: {stroke: true, color: color}})}
+              {
+                offset: '100%',
+                repeat: 0,
+                symbol: L.Symbol.arrowHead({
+                  pixelSize: 25, // Augmenter la taille de la flèche pour allonger la pointe
+                  headAngle: 30, // Réduire l'angle de la tête pour allonger la pointe
+                  polygon: true,
+                  pathOptions: {
+                    stroke: true,
+                    color: 'black',
+                    fill: true,
+                    fillColor: color,
+                    fillOpacity: 1
+                  }
+                })
+              }
             ]
           });
 
