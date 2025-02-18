@@ -784,12 +784,13 @@ function getRouteAndPoints(start, end) {
                 offset: '100%',
                 repeat: 0,
                 symbol: L.Symbol.arrowHead({
-                  pixelSize: 25, // Augmenter la taille de la flèche pour allonger la pointe
+                  pixelSize: 15, // Augmenter la taille de la flèche pour allonger la pointe
                   headAngle: 30, // Réduire l'angle de la tête pour allonger la pointe
                   polygon: true,
                   pathOptions: {
                     stroke: true,
                     color: 'black',
+                    weight: 3,
                     fill: true,
                     fillColor: color,
                     fillOpacity: 1
