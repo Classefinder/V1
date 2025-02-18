@@ -1,38 +1,37 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Classefinder | Lycée Lachenal changement</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-search@4.0.0/dist/leaflet-search.min.css" />
-  <link rel="stylesheet" href="LyceeLachenal.css" />  
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
-  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-  <script src="https://unpkg.com/leaflet-search@4.0.0/dist/leaflet-search.min.js"></script>  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-polylinedecorator/1.1.0/leaflet.polylineDecorator.min.js"></script>
-  <style>
-    /* Style personnalisé pour les labels */
-    .room-label {
-      font-weight: bold;
-      color: black;
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid gray;
-      border-radius: 3px;
-      padding: 2px 4px;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Classefinder | Lycée Lachenal changement</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-search@4.0.0/dist/leaflet-search.min.css" />
+    <link rel="stylesheet" href="LyceeLachenal.css" />  
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/leaflet-search@4.0.0/dist/leaflet-search.min.js"></script>  
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
+    
+    <style>
+        /* Style personnalisé pour les labels */
+        .room-label {
+            font-weight: bold;
+            color: black;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid gray;
+            border-radius: 3px;
+            padding: 2px 4px;
+        }
+    </style>
 </head>
 <body>
-  <div id="map" style="height: 100  vh;"></div>
-
-  <script>
-
-    // --- 1. Initialisation de la carte avec les limites définies ---
-    var sudOuest = L.latLng(45.93818505744445, 6.134245788738398);
-    var nordEst   = L.latLng(45.93640970079779, 6.13115811037474);
-    var limites   = L.latLngBounds(sudOuest, nordEst);
+    <div id="map" style="height: 100vh;"></div>
+    <script>
+        // --- 1. Initialisation de la carte avec les limites définies ---
+        var sudOuest = L.latLng(45.93818505744445, 6.134245788738398);
+        var nordEst   = L.latLng(45.93640970079779, 6.13115811037474);
+        var limites   = L.latLngBounds(sudOuest, nordEst);
 
     // Fond de carte par défaut (celui que vous aviez mis)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -50,61 +49,49 @@
     var salleEtage0 = {
         "type": "FeatureCollection",
         "features": [
-            //données geojson ici
-            { "type": "Feature", "properties": { "name": "13" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
-{ "type": "Feature", "properties": { "name": "14" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
-
+        { "type": "Feature", "properties": { "name": "13" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": "14" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
         ]
     };
 
     var salleEtage1 = {
         "type": "FeatureCollection",
         "features": [
-        //données geojson ici
-        { "type": "Feature", "properties": { "salle": "115" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
-          { "type": "Feature", "properties": { "salle": "124" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132338097023253, 45.936716667911078 ], [ 6.132346542802771, 45.936781465154866 ], [ 6.132207412442507, 45.936788228181904 ], [ 6.132199492061409, 45.936723211710948 ], [ 6.132338097023253, 45.936716667911078 ] ] ] ] } },
-
+        { "type": "Feature", "properties": { "name": "117" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": "115" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
         ]
     };
 
     var salleEtage2 = {
         "type": "FeatureCollection",
-        "features": [
-        //données geojson ici
-        { "type": "Feature", "properties": { "name": "V1" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132559263481, 45.937761742137447 ], [ 6.132605358389325, 45.937758765489001 ], [ 6.132614138371865, 45.937824175393722 ], [ 6.132567165465287, 45.937827991605154 ], [ 6.132559263481, 45.937761742137447 ] ] ] ] } },
+"features": [
+{ "type": "Feature", "properties": { "name": "V1" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132559263481, 45.937761742137447 ], [ 6.132605358389325, 45.937758765489001 ], [ 6.132614138371865, 45.937824175393722 ], [ 6.132567165465287, 45.937827991605154 ], [ 6.132559263481, 45.937761742137447 ] ] ] ] } },
 { "type": "Feature", "properties": { "name": "V2" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132607553384967, 45.937773801378285 ], [ 6.132725973399444, 45.93776700851511 ], [ 6.132730253640932, 45.937817306212494 ], [ 6.132614138371868, 45.937824175393722 ], [ 6.132607553384967, 45.937773801378285 ] ] ] ] } },
-  
-        ]
+]
     };
 
     var CheminEtage0 = {
         "type": "FeatureCollection",
-        "features":[
-        {"type":"Feature","properties":{"name":"13","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13242,45.9368],[6.13242,45.93678]]}},
+"features":[
         {"type":"Feature","properties":{"name":"14","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13229,45.93681],[6.13228,45.93679]]}},
- 
-        //données geojson ici        
-        ]
+        {"type":"Feature","properties":{"name":"13","foot":"yes","highway":"footway"},"geometry":{"type":"LineString","coordinates":[[6.13242,45.9368],[6.13242,45.93678]]}},
+      ]
     };
 
     var CheminEtage1 = {
       "type": "FeatureCollection",
-        "features":[
-        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"124"},"geometry":{"type":"LineString","coordinates":[[6.13224,45.93678],[6.13224,45.93679]]}},
+      "features":[
         {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"115"},"geometry":{"type":"LineString","coordinates":[[6.1322,45.93681],[6.1322,45.9368]]}},
-
-        //données geojson ici        
-        ]
+        {"type":"Feature","properties":{"highway":"footway","foot":"yes","name":"117"},"geometry":{"type":"LineString","coordinates":[[6.13242,45.93678],[6.13242,45.9368]]}},
+      ]
     };
 
     var CheminEtage2 = {
       "type": "FeatureCollection",
         "features":[
-        //données geojson ici    
-        {"type":"Feature","properties":{"foot":"yes","name":"V1","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.13259,45.93777],[6.13262,45.93777]]}},
-        {"type":"Feature","properties":{"foot":"yes","name":"V2","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.13272,45.9378],[6.13268,45.93775]]}},
-    
-        ]
+{"type":"Feature","properties":{"foot":"yes","name":"V1","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.13259,45.93777],[6.13262,45.93777]]}},
+{"type":"Feature","properties":{"foot":"yes","name":"V2","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.13272,45.9378],[6.13268,45.93775]]}},
+]
     };
 
     // --- 3. Création des couches GeoJSON pour les salles ---
@@ -189,60 +176,9 @@
     var itinéraireEtage1 = { "type": "FeatureCollection", "features": [] };
     var itinéraireEtage2 = { "type": "FeatureCollection", "features": [] };
 
-    var itinéraireLayer0 = L.geoJSON(null, { 
-      style: { color: '#3A5AC3', weight: 10 },
-      onEachFeature: function(feature, layer){
-        L.polylineDecorator(layer, {
-          patterns: [
-            {
-              offset: '50%',
-              repeat: '0px',
-              symbol: L.Symbol.arrowHead({
-                pixelSize: 20,
-                polygon: false,
-                pathOptions: { stroke: true, color: '#3A5AC3', weight: 2 }
-              })
-            }
-          ]
-        }).addTo(map);
-      }
-    });
-    var itinéraireLayer1 = L.geoJSON(null, { 
-      style: { color: '#7898FF', weight: 10 },
-      onEachFeature: function(feature, layer){
-        L.polylineDecorator(layer, {
-          patterns: [
-            {
-              offset: '50%',
-              repeat: '0px',
-              symbol: L.Symbol.arrowHead({
-                pixelSize: 20,
-                polygon: false,
-                pathOptions: { stroke: true, color: '#7898FF', weight: 2 }
-              })
-            }
-          ]
-        }).addTo(map);
-      }
-    });
-    var itinéraireLayer2 = L.geoJSON(null, { 
-      style: { color: '#FFA500', weight: 10 },
-      onEachFeature: function(feature, layer){
-        L.polylineDecorator(layer, {
-          patterns: [
-            {
-              offset: '50%',
-              repeat: '0px',
-              symbol: L.Symbol.arrowHead({
-                pixelSize: 20,
-                polygon: false,
-                pathOptions: { stroke: true, color: '#FFA500', weight: 2 }
-              })
-            }
-          ]
-        }).addTo(map);
-      }
-    });
+    var itinéraireLayer0 = L.geoJSON(itinéraireEtage0, { style: { color: '#3A5AC3', weight: 10 } });
+    var itinéraireLayer1 = L.geoJSON(itinéraireEtage1, { style: { color: '#7898FF', weight: 10 } });
+    var itinéraireLayer2 = L.geoJSON(itinéraireEtage2, { style: { color: '#FFA500', weight: 10 } });
 
     // --- 6. Fonds de carte personnalisés pour chaque groupe (en plus du fond par défaut) ---
     var customBackground0 = L.tileLayer('../Données/QGIS/QTiles/etage0/{z}/{x}/{y}.png', {
@@ -271,7 +207,7 @@
 
     function updateTooltipsVisibility() {
     var currentZoom = map.getZoom();
-    const tooltipZoomThreshold = 18; // Seuil abaissé pour afficher les labels dès le zoom 18
+    const tooltipZoomThreshold = 20; // Seuil abaissé pour afficher les labels dès le zoom 18
 
     function toggleTooltips(layerGroup) {
         layerGroup.eachLayer(function(layer) {
@@ -580,108 +516,73 @@ searchControlEnd.on('search:expanded', function() {
     }
 });
 
-// Fonction pour récupérer et filtrer les segments
 function getRouteAndPoints(start, end) {
   var osrmUrl = `https://classefinder.duckdns.org/osrm/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
-  
+
   fetch(osrmUrl)
     .then(response => response.json())
     .then(data => {
       if (data.routes && data.routes.length > 0) {
         var route = data.routes[0];
-        console.log("Route reçue. Nombre d'étapes :", route.legs[0].steps.length);
-        
-        // Nettoyer les anciennes données des calques d'itinéraire
+
+        // Nettoyer les anciennes données des calques
         itinéraireLayer0.clearLayers();
         itinéraireLayer1.clearLayers();
         itinéraireLayer2.clearLayers();
-        
-        // Pour chaque segment de la route, transformer les coordonnées et l'ajouter dans le bon calque
+
         route.legs[0].steps.forEach((step, index) => {
           var startName = step.name || "";
-          // Transformation des coordonnées [lon, lat] -> [lat, lon]
-          var transformedCoords = step.geometry.coordinates.map(function(coord) {
-            return [coord[1], coord[0]];
-          });
           var segment = {
             type: "Feature",
             geometry: {
               type: "LineString",
-              coordinates: transformedCoords
+              coordinates: step.geometry.coordinates
             },
             properties: { name: startName }
           };
-          
-          console.log("Étape", index, ":", segment);
-          
-          // Affecter le segment selon le nom – si le nom contient "1" ou "2", sinon par défaut étage 0
-          if (startName.toLowerCase().includes("1")) {
-            itinéraireLayer1.addData(segment);
-          } else if (startName.toLowerCase().includes("2")) {
-            itinéraireLayer2.addData(segment);
-          } else {
-            itinéraireLayer0.addData(segment);
-          }
-        });
-        
-        // Déterminer le calque d'itinéraire actif en fonction du calque d'étage affiché
-        let activeItineraryLayer;
-        if (map.hasLayer(etage0)) {
-          activeItineraryLayer = itinéraireLayer0;
-        } else if (map.hasLayer(etage1)) {
-          activeItineraryLayer = itinéraireLayer1;
-        } else if (map.hasLayer(etage2)) {
-          activeItineraryLayer = itinéraireLayer2;
-        }
 
-        // Ajuster le zoom en se basant uniquement sur les segments du calque actif
-        if (activeItineraryLayer) {
-          map.fitBounds(activeItineraryLayer.getBounds(), { padding: [50, 50] });
-          console.log("Bords du calque actif :", activeItineraryLayer.getBounds());
-          
-          // Ajouter le décorateur (flèche) sur chaque segment de ce calque
-          activeItineraryLayer.eachLayer(function(segmentLayer) {
-            console.log("Décorateur—for active segment :", segmentLayer);
-            L.polylineDecorator(segmentLayer, {
-              patterns: [
-                {
-                  offset: '50%',       // Placer la flèche au milieu du segment
-                  repeat: '0px',       // Pas de répétition
-                  symbol: L.Symbol.arrowHead({
-                    pixelSize: 20,
-                    polygon: false,
-                    pathOptions: { stroke: true, color: (map.hasLayer(etage0) ? '#3A5AC3' : (map.hasLayer(etage1) ? '#7898FF' : '#FFA500')), weight: 2 }
-                  })
-                }
-              ]
-            }).addTo(map);
+          // Définir la couleur en fonction du calque
+          var color = '#3A5AC3'; // Couleur par défaut
+          var itineraireLayer = itinéraireLayer0;
+          if (startName.toLowerCase().includes("1")) {
+            color = '#7898FF';
+            itineraireLayer = itinéraireLayer1;
+          } else if (startName.toLowerCase().includes("2")) {
+            color = '#FFA500';
+            itineraireLayer = itinéraireLayer2;
+          }
+
+          // Ajouter la polyligne de l'itinéraire avec la couleur appropriée
+          var polyline = L.polyline(step.geometry.coordinates.map(coord => [coord[1], coord[0]]), {
+            color: color,
+            weight: 10
           });
-        }
-      } else {
-        console.log("Aucun itinéraire trouvé.");
+
+          // Ajouter des flèches à la polyligne avec la même couleur
+          var arrow = L.polylineDecorator(polyline, {
+            patterns: [
+              {offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({pixelSize: 15, polygon: false, pathOptions: {stroke: true, color: color}})}
+            ]
+          });
+
+          // Ajouter les segments aux couches d'itinéraire
+          itineraireLayer.addLayer(polyline).addLayer(arrow);
+        });
+
+        var bounds = L.geoJSON(route.geometry).getBounds();
+        map.fitBounds(bounds);
       }
     })
     .catch(error => {
-      console.error("Erreur lors de la récupération de l'itinéraire:", error);
+      console.error('Erreur lors de la récupération de l\'itinéraire:', error);
     });
 }
 
-    // Polyline statique pour test
-var testPolyline = L.polyline([[45.9368, 6.1322], [45.9370, 6.1325]], { color: 'red', weight: 10 }).addTo(map);
 
-L.polylineDecorator(testPolyline, {
-    patterns: [
-      {
-        offset: '0%',
-        repeat: '30px',
-        symbol: L.Symbol.arrowHead({
-          pixelSize: 20,
-          polygon: false,
-          pathOptions: { stroke: true, color: 'red', weight: 2 }
-        })
-      }
-    ]
-}).addTo(map);
+
+
+
+
 
     // --- 16. Contrôle des calques via le sélecteur ---
     var baseLayers = {
