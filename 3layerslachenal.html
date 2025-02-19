@@ -421,7 +421,6 @@
     etage0.addTo(map);
 
     // --- 8. Gestion des labels (tooltips) en fonction du niveau de zoom ---
-    // Ici, on crée manuellement un tooltip permanent pour chaque feature lorsque le zoom est suffisant.
     const tooltipZoomThreshold = 20; // Seuil de zoom pour afficher les labels
 
     function updateTooltipsVisibility() {
@@ -491,8 +490,30 @@
     }
 }
 
-map.on('zoomend', updateTooltipsVisibility);
+// --- Function to update polyline decorations visibility ---
+function updatePolylineDecorationsVisibility() {
+  var currentZoom = map.getZoom();
+  var showDecorations = currentZoom > 20;
+
+  [itinéraireLayer0, itinéraireLayer1, itinéraireLayer2].forEach(function(layerGroup) {
+    layerGroup.eachLayer(function(layer) {
+      if (layer instanceof L.PolylineDecorator) {
+        if (showDecorations) {
+          map.addLayer(layer);
+        } else {
+          map.removeLayer(layer);
+        }
+      }
+    });
+  });
+}
+
+map.on('zoomend', function() {
+  updateTooltipsVisibility();
+  updatePolylineDecorationsVisibility();
+});
 updateTooltipsVisibility();
+updatePolylineDecorationsVisibility();
 
 
     // --- 9. Basculement automatique du calque en fonction de la salle recherchée ---
