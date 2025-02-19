@@ -27,23 +27,32 @@
 </head>
 <body>
     <div id="map" style="height: 100vh;"></div>
+    <button id="dark-mode-toggle" style="position: absolute; top: 10px; right: 10px; z-index: 1000;">Mode Sombre</button>
     <script>
         // --- 1. Initialisation de la carte avec les limites définies ---
         var sudOuest = L.latLng(45.93818505744445, 6.134245788738398);
         var nordEst   = L.latLng(45.93640970079779, 6.13115811037474);
         var limites   = L.latLngBounds(sudOuest, nordEst);
 
-    // Fond de carte par défaut (celui que vous aviez mis)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map = L.map('map', {
-      center: [45.9368, 6.1322],
-      zoom: 18,
-      minZoom: 1,
-      maxZoom: 23,
-      maxBounds: limites,
-      maxBoundsViscosity: 1.0
-    }));
+    // Fond de carte par défaut (clair)
+    var lightMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    });
+
+    // Fond de carte sombre
+    var darkMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    });
+
+    var map = L.map('map', {
+        center: [45.9368, 6.1322],
+        zoom: 18,
+        minZoom: 1,
+        maxZoom: 23,
+        maxBounds: limites,
+        maxBoundsViscosity: 1.0,
+        layers: [lightMap] // Par défaut, le fond de carte clair est affiché
+    });
 
     // --- 2. Données GeoJSON pour les salles et les chemins ---
     var salleEtage0 = {
@@ -93,6 +102,21 @@
 {"type":"Feature","properties":{"foot":"yes","name":"V2","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.13272,45.9378],[6.13268,45.93775]]}},
 ]
     };
+
+    document.getElementById('dark-mode-toggle').addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        if (document.body.classList.contains('dark-mode')) {
+            map.removeLayer(lightMap);
+            map.addLayer(darkMap);
+            this.textContent = 'Mode Clair';
+        } else {
+            map.removeLayer(darkMap);
+            map.addLayer(lightMap);
+            this.textContent = 'Mode Sombre';
+        }
+    });
+
+
     // --- 3. Création des couches GeoJSON pour les salles ---
     // On n'utilise plus bindTooltip ici afin d'éviter que le label s'affiche automatiquement au survol.
     function onEachSalleFeature(feature, layer, floor) {
