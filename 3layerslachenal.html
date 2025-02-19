@@ -347,7 +347,7 @@
 
     var salleLayer0 = L.geoJSON(salleEtage0, {
       style: function(feature) {
-        return { color: '#81CAA7', weight: 2, fillOpacity: 0.8 };
+        return { color: '#27B155', weight: 2, fillOpacity: 0.9 };
       },
       onEachFeature: function(feature, layer) {
          onEachSalleFeature(feature, layer, "0");
@@ -356,7 +356,7 @@
 
     var salleLayer1 = L.geoJSON(salleEtage1, {
       style: function(feature) {
-        return { color: '#9EF3CA', weight: 2, fillOpacity: 0.8 };
+        return { color: '#66DE8E', weight: 2, fillOpacity: 0.9 };
       },
       onEachFeature: function(feature, layer) {
          onEachSalleFeature(feature, layer, "1");
@@ -365,7 +365,7 @@
 
     var salleLayer2 = L.geoJSON(salleEtage2, {
       style: function(feature) {
-        return { color: '#FF9999', weight: 2, fillOpacity: 0.8 }; // modifiez la couleur au besoin
+        return { color: '#096929', weight: 2, fillOpacity: 0.9 }; // modifiez la couleur au besoin
       },
       onEachFeature: function(feature, layer) {
         onEachSalleFeature(feature, layer, "2");
@@ -395,9 +395,9 @@
     var itinéraireEtage1 = { "type": "FeatureCollection", "features": [] };
     var itinéraireEtage2 = { "type": "FeatureCollection", "features": [] };
 
-    var itinéraireLayer0 = L.geoJSON(itinéraireEtage0, { style: { color: '#3A5AC3', weight: 10 } });
-    var itinéraireLayer1 = L.geoJSON(itinéraireEtage1, { style: { color: '#7898FF', weight: 10 } });
-    var itinéraireLayer2 = L.geoJSON(itinéraireEtage2, { style: { color: '#FFA500', weight: 10 } });
+    var itinéraireLayer0 = L.geoJSON(itinéraireEtage0, { style: { color: '#0031D2', weight: 10 } });
+    var itinéraireLayer1 = L.geoJSON(itinéraireEtage1, { style: { color: '#426EFF', weight: 10 } });
+    var itinéraireLayer2 = L.geoJSON(itinéraireEtage2, { style: { color: '#002499', weight: 10 } });
 
     // --- 6. Fonds de carte personnalisés pour chaque groupe (en plus du fond par défaut) ---
     var customBackground0 = L.tileLayer('../Données/QGIS/QTiles/etage0/{z}/{x}/{y}.png', {
@@ -761,13 +761,13 @@ function getRouteAndPoints(start, end) {
           };
 
           // Définir la couleur en fonction du calque
-          var color = '#3A5AC3'; // Couleur par défaut
+          var color = '#0031D2'; // Couleur par défaut
           var itineraireLayer = itinéraireLayer0;
           if (startName.toLowerCase().includes("1")) {
-            color = '#7898FF';
+            color = '#426EFF';
             itineraireLayer = itinéraireLayer1;
           } else if (startName.toLowerCase().includes("2")) {
-            color = '#FFA500';
+            color = '#002499';
             itineraireLayer = itinéraireLayer2;
           }
 
@@ -777,23 +777,30 @@ function getRouteAndPoints(start, end) {
             weight: 10
           });
 
-          // Ajouter des flèches pleines à la polyligne avec la même couleur
+          // Ajouter des flèches simples à intervalle régulier à la polyligne avec la même couleur
           var arrow = L.polylineDecorator(polyline, {
             patterns: [
               {
-                offset: '100%',
-                repeat: 0,
+                offset: '20m',
+                repeat: '100m', // Intervalle régulier pour les flèches
                 symbol: L.Symbol.arrowHead({
-                  pixelSize: 15, // Augmenter la taille de la flèche pour allonger la pointe
-                  headAngle: 30, // Réduire l'angle de la tête pour allonger la pointe
-                  polygon: true,
+                  pixelSize: 15,
+                  polygon: false, // Ne pas remplir la flèche
                   pathOptions: {
-                    stroke: true,
-                    color: 'black',
-                    weight: 3,
-                    fill: true,
-                    fillColor: color,
-                    fillOpacity: 1
+                    color: 'white',
+                    fillOpacity: 0, // Flèche non pleine
+                    weight: 2 // Épaisseur du trait du milieu
+                  }
+                })
+              },
+              {
+                offset: '110m',
+                repeat: '100m', // Intervalle régulier pour les traits du milieu
+                symbol: L.Symbol.dash({
+                  pixelSize: 15,
+                  pathOptions: {
+                    color: 'white',
+                    weight: 2 // Épaisseur du trait du milieu
                   }
                 })
               }
