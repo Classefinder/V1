@@ -201,18 +201,16 @@
     etage0.addTo(map);
 
     // --- 8. Gestion des labels (tooltips) en fonction du niveau de zoom ---
-    // Ici, on crée manuellement un tooltip permanent pour chaque feature lorsque le zoom est suffisant.
-    const tooltipZoomThreshold = 20; // Seuil de zoom pour afficher les labels
+const tooltipZoomThreshold = 20; // Seuil de zoom pour afficher les labels
+const arrowZoomThreshold = 21; // Seuil de zoom pour afficher les flèches
 
-    function updateTooltipsVisibility() {
+function updateTooltipsVisibility() {
     var currentZoom = map.getZoom();
-    const tooltipZoomThreshold = 20; // Seuil abaissé pour afficher les labels dès le zoom 18
 
     function toggleTooltips(layerGroup) {
         layerGroup.eachLayer(function(layer) {
             if (currentZoom >= tooltipZoomThreshold) {
                 if (!layer._customTooltip) {
-                    // Utilisation de "name" ou de "salle" selon la disponibilité
                     var labelContent = layer.feature.properties.name || layer.feature.properties.salle;
                     if (labelContent) {
                         var center = layer.getBounds().getCenter();
@@ -269,11 +267,62 @@
             }
         });
     }
+
+    updateArrowsVisibility();
+}
+
+function updateArrowsVisibility() {
+    var currentZoom = map.getZoom();
+
+    function toggleArrows(layerGroup) {
+        layerGroup.eachLayer(function(layer) {
+            if (layer instanceof L.PolylineDecorator) {
+                if (currentZoom >= arrowZoomThreshold) {
+                    if (!map.hasLayer(layer)) {
+                        map.addLayer(layer);
+                    }
+                } else {
+                    if (map.hasLayer(layer)) {
+                        map.removeLayer(layer);
+                    }
+                }
+            }
+        });
+    }
+
+    if (map.hasLayer(etage0)) {
+        toggleArrows(itinéraireLayer0);
+    } else {
+        itinéraireLayer0.eachLayer(function(layer) {
+            if (layer instanceof L.PolylineDecorator && map.hasLayer(layer)) {
+                map.removeLayer(layer);
+            }
+        });
+    }
+
+    if (map.hasLayer(etage1)) {
+        toggleArrows(itinéraireLayer1);
+    } else {
+        itinéraireLayer1.eachLayer(function(layer) {
+            if (layer instanceof L.PolylineDecorator && map.hasLayer(layer)) {
+                map.removeLayer(layer);
+            }
+        });
+    }
+
+    if (map.hasLayer(etage2)) {
+        toggleArrows(itinéraireLayer2);
+    } else {
+        itinéraireLayer2.eachLayer(function(layer) {
+            if (layer instanceof L.PolylineDecorator && map.hasLayer(layer)) {
+                map.removeLayer(layer);
+            }
+        });
+    }
 }
 
 map.on('zoomend', updateTooltipsVisibility);
-updateTooltipsVisibility();
-
+map.on('baselayerchange', updateTooltipsVisibility);
 
     // --- 9. Basculement automatique du calque en fonction de la salle recherchée ---
     function switchFloor(floor) {
@@ -516,93 +565,95 @@ searchControlEnd.on('search:expanded', function() {
 });
 
 function getRouteAndPoints(start, end) {
-  var osrmUrl = `https://classefinder.duckdns.org/osrm/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
+    var osrmUrl = `https://classefinder.duckdns.org/osrm/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?steps=true&geometries=geojson&overview=full`;
 
-  fetch(osrmUrl)
-    .then(response => response.json())
-    .then(data => {
-      if (data.routes && data.routes.length > 0) {
-        var route = data.routes[0];
+    fetch(osrmUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.routes && data.routes.length > 0) {
+                var route = data.routes[0];
 
-        // Nettoyer les anciennes données des calques
-        itinéraireLayer0.clearLayers();
-        itinéraireLayer1.clearLayers();
-        itinéraireLayer2.clearLayers();
+                itinéraireLayer0.clearLayers();
+                itinéraireLayer1.clearLayers();
+                itinéraireLayer2.clearLayers();
 
-        route.legs[0].steps.forEach((step, index) => {
-          var startName = step.name || "";
-          var segment = {
-            type: "Feature",
-            geometry: {
-              type: "LineString",
-              coordinates: step.geometry.coordinates
-            },
-            properties: { name: startName }
-          };
+                route.legs[0].steps.forEach((step, index) => {
+                    var startName = step.name || "";
+                    var segment = {
+                        type: "Feature",
+                        geometry: {
+                            type: "LineString",
+                            coordinates: step.geometry.coordinates
+                        },
+                        properties: { name: startName }
+                    };
 
-          // Définir la couleur en fonction du calque
-          var color = '#3A5AC3'; // Couleur par défaut
-          var itineraireLayer = itinéraireLayer0;
-          if (startName.toLowerCase().includes("1")) {
-            color = '#7898FF';
-            itineraireLayer = itinéraireLayer1;
-          } else if (startName.toLowerCase().includes("2")) {
-            color = '#FFA500';
-            itineraireLayer = itinéraireLayer2;
-          }
+                    var color = '#3A5AC3';
+                    var itineraireLayer = itinéraireLayer0;
+                    if (startName.toLowerCase().includes("1")) {
+                        color = '#7898FF';
+                        itineraireLayer = itinéraireLayer1;
+                    } else if (startName.toLowerCase().includes("2")) {
+                        color = '#FFA500';
+                        itineraireLayer = itinéraireLayer2;
+                    }
 
-          // Ajouter la polyligne de l'itinéraire avec la couleur appropriée
-          var polyline = L.polyline(step.geometry.coordinates.map(coord => [coord[1], coord[0]]), {
-            color: color,
-            weight: 10
-          });
+                    var polyline = L.polyline(step.geometry.coordinates.map(coord => [coord[1], coord[0]]), {
+                        color: color,
+                        weight: 10
+                    });
 
-          // Calculer la distance totale du segment
-          var totalDistance = 0;
-          for (var i = 0; i < step.geometry.coordinates.length - 1; i++) {
-            var p1 = L.latLng(step.geometry.coordinates[i][1], step.geometry.coordinates[i][0]);
-            var p2 = L.latLng(step.geometry.coordinates[i + 1][1], step.geometry.coordinates[i + 1][0]);
-            totalDistance += p1.distanceTo(p2);
-          }
-
-          // Définir l'intervalle en mètres (par exemple, tous les 5 mètres)
-          var interval = 5; // 5 mètres
-          var repeat = (interval / totalDistance) * 100 + '%';
-
-          // Ajouter des flèches à intervalle régulier à la polyligne avec la même couleur
-          var arrow = L.polylineDecorator(polyline, {
-            patterns: [
-              {
-                offset: '50%',
-                repeat: repeat, // Intervalle régulier pour les flèches
-                symbol: L.Symbol.arrowHead({
-                  pixelSize: 15, // Augmenter la taille de la flèche pour allonger la pointe
-                  headAngle: 30, // Réduire l'angle de la tête pour allonger la pointe
-                  polygon: true,
-                  pathOptions: {
+                    var arrow = L.polylineDecorator(polyline, {
+    patterns: [
+        {
+            offset: '10s',
+            repeat: '50%',
+            symbol: L.Symbol.arrowHead({
+                pixelSize: 15,
+                headAngle: 60,
+                polygon: false,
+                pathOptions: {
                     stroke: true,
-                    color: 'black',
+                    color: 'white',
                     weight: 3,
-                    fill: true,
-                    fillColor: color,
+                    fill: false,
                     fillOpacity: 1
-                  }
-                })
-              }
-            ]
-          });
+                }
+            })
+        },
+        {
+            offset: '0%',
+            repeat: '50%',
+            symbol: L.Symbol.dash({
+                pixelSize: 10,
+                pathOptions: {
+                    stroke: true,
+                    color: 'white',
+                    weight: 3,
+                    fill: false,
+                    fillOpacity: 1
+                }
+            })
+        }
+    ]
+})
 
-          // Ajouter les segments aux couches d'itinéraire
-          itineraireLayer.addLayer(polyline).addLayer(arrow);
+
+arrow.addTo(map);
+
+
+
+
+                    itineraireLayer.addLayer(polyline).addLayer(arrow);
+                });
+
+                var bounds = L.geoJSON(route.geometry).getBounds();
+                map.fitBounds(bounds);
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération de l\'itinéraire:', error);
         });
-
-        var bounds = L.geoJSON(route.geometry).getBounds();
-        map.fitBounds(bounds);
-      }
-    })
-    .catch(error => {
-      console.error('Erreur lors de la récupération de l\'itinéraire:', error);
-    });
 }
 
     // --- 16. Contrôle des calques via le sélecteur ---
