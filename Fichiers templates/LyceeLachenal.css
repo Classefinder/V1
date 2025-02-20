@@ -555,6 +555,7 @@ body.dark-mode #search-control-end {
 /* Mode sombre pour le bouton d'effacement de la recherche */
 body.dark-mode .leaflet-control-search .search-cancel {
     background: url('./images/cancel-icon-dark.png') no-repeat center center;
+    background-size: 70%;
     /* Assurez-vous d'avoir une icône adaptée au mode sombre */
     border: none;
     color: #ffffff;
@@ -562,10 +563,12 @@ body.dark-mode .leaflet-control-search .search-cancel {
 
 body.dark-mode .leaflet-control-search .search-button:hover {
     background: url('./images/search-icon-dark.png') no-repeat center center;
+    background-size: 70%;
 }
 
 body.dark-mode .leaflet-control-search .search-button {
     background: url('./images/search-icon-dark.png') no-repeat center center;
+    background-size: 70%;
 }
 
 /* Mode sombre pour la tooltip de recherche */

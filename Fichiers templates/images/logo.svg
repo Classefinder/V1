@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   sodipodi:docname="logo.svg"
+   inkscape:export-filename="endicon.png"
+   inkscape:export-xdpi="4.0069818"
+   inkscape:export-ydpi="4.0069818"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.37269382"
+     inkscape:cx="-222.70291"
+     inkscape:cy="330.02962"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer2" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient44"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#e6e6e6;stop-opacity:1;"
+         offset="0"
+         id="stop45" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop44" />
+    </linearGradient>
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#pattern6795"
+       id="pattern6"
+       patternTransform="matrix(2,0,0,2,185,405)"
+       x="0"
+       y="0"
+       preserveAspectRatio="xMidYMid" />
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="20"
+       height="20"
+       patternTransform="translate(185,405)"
+       style="fill:#000000"
+       id="pattern6795"
+       inkscape:label="Abstrait 2"
+       inkscape:collect="always"
+       inkscape:isstock="true">
+      <path
+         id="rect6713"
+         style="opacity:1;stroke-width:4.8561;stroke-linecap:square;paint-order:stroke markers fill;stop-color:#000000"
+         d="M 10,10 H 20 L 15,20 H 5 Z M 5,0 H 15 L 10,10 H 0 Z" />
+    </pattern>
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#pattern6795-5"
+       id="pattern6-4"
+       patternTransform="matrix(3,0,0,3,25.755816,354.56382)"
+       x="0"
+       y="50"
+       preserveAspectRatio="xMidYMid" />
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="20"
+       height="20"
+       patternTransform="translate(185,405)"
+       style="fill:#000000"
+       id="pattern6795-5"
+       inkscape:label="Abstrait 2"
+       inkscape:collect="always"
+       inkscape:isstock="true">
+      <path
+         id="rect6713-2"
+         style="opacity:1;stroke-width:4.8561;stroke-linecap:square;paint-order:stroke markers fill;stop-color:#000000"
+         d="M 10,10 H 20 L 15,20 H 5 Z M 5,0 H 15 L 10,10 H 0 Z" />
+    </pattern>
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#pattern6795-53"
+       id="pattern6-7"
+       patternTransform="matrix(2,0,0,2,185,405)"
+       x="0"
+       y="0"
+       preserveAspectRatio="xMidYMid" />
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="20"
+       height="20"
+       patternTransform="translate(185,405)"
+       style="fill:#000000"
+       id="pattern6795-53"
+       inkscape:label="Abstrait 2"
+       inkscape:collect="always"
+       inkscape:isstock="true">
+      <path
+         id="rect6713-5"
+         style="opacity:1;stroke-width:4.8561;stroke-linecap:square;paint-order:stroke markers fill;stop-color:#000000"
+         d="M 10,10 H 20 L 15,20 H 5 Z M 5,0 H 15 L 10,10 H 0 Z" />
+    </pattern>
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Blur"
+       id="filter44"
+       x="-0.12164783"
+       y="-0.10329141"
+       width="1.2432957"
+       height="1.2070408">
+      <feGaussianBlur
+         stdDeviation="5.06866 4.74506"
+         result="blur"
+         id="feGaussianBlur44" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Blur"
+       id="filter44-6"
+       x="-0.12164783"
+       y="-0.10329141"
+       width="1.2432957"
+       height="1.2070408">
+      <feGaussianBlur
+         stdDeviation="5.06866 4.74506"
+         result="blur"
+         id="feGaussianBlur44-1" />
+    </filter>
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#pattern6795-53-6"
+       id="pattern6-7-0"
+       patternTransform="matrix(2,0,0,2,185,405)"
+       x="0"
+       y="0"
+       preserveAspectRatio="xMidYMid" />
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="20"
+       height="20"
+       patternTransform="translate(185,405)"
+       style="fill:#000000"
+       id="pattern6795-53-6"
+       inkscape:label="Abstrait 2"
+       inkscape:collect="always"
+       inkscape:isstock="true">
+      <path
+         id="rect6713-5-3"
+         style="opacity:1;stroke-width:4.8561;stroke-linecap:square;paint-order:stroke markers fill;stop-color:#000000"
+         d="M 10,10 H 20 L 15,20 H 5 Z M 5,0 H 15 L 10,10 H 0 Z" />
+    </pattern>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient44"
+       id="linearGradient46"
+       gradientUnits="userSpaceOnUse"
+       x1="65"
+       y1="131.1062"
+       x2="65"
+       y2="8.8937988" />
+  </defs>
+  <g
+     inkscape:label="Marqueurs"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:none">
+    <g
+       id="g7"
+       inkscape:label="Marqueur de fin"
+       style="display:inline">
+      <g
+         id="g3"
+         inkscape:label="Goutte">
+        <circle
+           style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.262982;stroke-opacity:1"
+           id="path1"
+           cx="50"
+           cy="50"
+           r="50" />
+        <circle
+           style="fill:#ffffff;stroke:#ffffff;stroke-width:0.100989;stroke-opacity:1"
+           id="path2"
+           cx="50"
+           cy="108.89989"
+           r="1.3526891" />
+        <path
+           style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+           d="m 48.600673,109.00833 c 0,0 -5.707737,-8.72881 -18.149133,-13.031844 -12.441396,-4.30304 19.17659,-36.575835 19.17659,-36.575835 l 0.654809,49.952669 z"
+           id="path3" />
+        <path
+           style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+           d="m 51.399135,109.00868 c 0,0 5.707737,-8.72881 18.149133,-13.031845 C 81.989664,91.673795 50.371678,59.401 50.371678,59.401 l -0.654809,49.95267 z"
+           id="path3-2" />
+      </g>
+      <circle
+         style="fill:url(#pattern6);fill-opacity:1;stroke:#000000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
+         id="path4"
+         cx="50"
+         cy="50"
+         r="46.542023"
+         inkscape:label="Patern" />
+    </g>
+    <g
+       id="g8"
+       inkscape:label="Marqueur de début"
+       style="display:inline">
+      <g
+         id="g3-3"
+         transform="translate(110)"
+         inkscape:label="Goutte">
+        <circle
+           style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.262982;stroke-opacity:1"
+           id="path1-7"
+           cx="50"
+           cy="50"
+           r="50" />
+        <circle
+           style="fill:#ffffff;stroke:#ffffff;stroke-width:0.100989;stroke-opacity:1"
+           id="path2-5"
+           cx="50"
+           cy="108.89989"
+           r="1.3526891" />
+        <path
+           style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+           d="m 48.600673,109.00833 c 0,0 -5.707737,-8.72881 -18.149133,-13.031844 -12.441396,-4.30304 19.17659,-36.575835 19.17659,-36.575835 l 0.654809,49.952669 z"
+           id="path3-9" />
+        <path
+           style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+           d="m 51.399135,109.00868 c 0,0 5.707737,-8.72881 18.149133,-13.031845 C 81.989664,91.673795 50.371678,59.401 50.371678,59.401 l -0.654809,49.95267 z"
+           id="path3-2-2" />
+      </g>
+      <g
+         id="g9-0"
+         inkscape:label="donut"
+         transform="translate(2.3e-5,2.6999999e-5)"
+         style="display:inline">
+        <circle
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
+           id="circle8-7"
+           cx="160"
+           cy="49.999996"
+           r="46.542023" />
+        <circle
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.3023;stroke-dasharray:none;stroke-opacity:1"
+           id="circle9-8"
+           cx="160.00002"
+           cy="50.000023"
+           r="33.224796" />
+      </g>
+    </g>
+    <g
+       id="g10"
+       inkscape:label="Marqueur de début rond"
+       style="display:inline;stroke-width:2;stroke-dasharray:none"
+       transform="translate(40.96494,80.50036)"
+       inkscape:export-filename="../Ressources et tests/Code finale??/image/starticon.png"
+       inkscape:export-xdpi="4.0069818"
+       inkscape:export-ydpi="4.0069818">
+      <g
+         id="g9"
+         inkscape:label="donut"
+         transform="translate(-39.422917,37.041667)"
+         style="stroke-width:2;stroke-dasharray:none">
+        <circle
+           style="fill:#0021e6;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
+           id="circle8"
+           cx="160"
+           cy="49.999996"
+           r="46.542023" />
+        <circle
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
+           id="circle9"
+           cx="160.00002"
+           cy="50.000023"
+           r="20.823738" />
+      </g>
+    </g>
+    <g
+       id="g7-9"
+       inkscape:label="Marqueur de fin rond"
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none"
+       transform="translate(156.78621,167.9782)"
+       inkscape:export-filename="../Ressources et tests/Code finale??/image/endicon.png"
+       inkscape:export-xdpi="4.0069818"
+       inkscape:export-ydpi="4.0069818">
+      <circle
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2.04297;stroke-dasharray:none;stroke-opacity:1"
+         id="path4-3"
+         cx="-109.24421"
+         cy="-0.43620017"
+         r="47.542"
+         inkscape:label="Fond blanc" />
+      <circle
+         style="display:inline;fill:url(#pattern6-4);fill-opacity:1;stroke:#000000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
+         id="path4-4"
+         cx="-109.24419"
+         cy="-0.43617728"
+         r="46.542023"
+         inkscape:label="Patern"
+         inkscape:export-filename="endicon.png"
+         inkscape:export-xdpi="4.0069818"
+         inkscape:export-ydpi="4.0069818" />
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Logo"
+     style="display:inline">
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2;stroke-opacity:1"
+       id="rect46"
+       width="241.37328"
+       height="344.31189"
+       x="-12.778585"
+       y="-9.2289791"
+       ry="2.6458333"
+       inkscape:label="bg" />
+    <g
+       id="g44"
+       inkscape:label="Logo web">
+      <g
+         id="g7-5"
+         inkscape:label="Shadow Marqueur de fin"
+         style="display:inline;fill:#a3a3a3;fill-opacity:1;filter:url(#filter44)"
+         transform="matrix(1.0456081,0,0,1.0456081,12.719595,11.907535)">
+        <g
+           id="g3-92"
+           inkscape:label="Goutte"
+           style="fill:#a3a3a3;fill-opacity:1">
+          <circle
+             style="fill:#a3a3a3;fill-opacity:1;stroke:none;stroke-width:0.262982;stroke-opacity:1"
+             id="path1-2"
+             cx="50"
+             cy="50"
+             r="50" />
+          <circle
+             style="fill:#a3a3a3;fill-opacity:1;stroke:#ffffff;stroke-width:0.100989;stroke-opacity:1"
+             id="path2-8"
+             cx="50"
+             cy="108.89989"
+             r="1.3526891" />
+          <path
+             style="fill:#a3a3a3;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+             d="m 48.600673,109.00833 c 0,0 -5.707737,-8.72881 -18.149133,-13.031844 -12.441396,-4.30304 19.17659,-36.575835 19.17659,-36.575835 l 0.654809,49.952669 z"
+             id="path3-97" />
+          <path
+             style="fill:#a3a3a3;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+             d="m 51.399135,109.00868 c 0,0 5.707737,-8.72881 18.149133,-13.031845 C 81.989664,91.673795 50.371678,59.401 50.371678,59.401 l -0.654809,49.95267 z"
+             id="path3-2-3" />
+        </g>
+      </g>
+      <g
+         id="g7-2"
+         inkscape:label="Marqueur de fin"
+         style="display:inline"
+         transform="translate(15,12)">
+        <g
+           id="g3-9"
+           inkscape:label="Goutte">
+          <circle
+             style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.262982;stroke-opacity:1"
+             id="path1-1"
+             cx="50"
+             cy="50"
+             r="50" />
+          <circle
+             style="fill:#ffffff;stroke:#ffffff;stroke-width:0.100989;stroke-opacity:1"
+             id="path2-2"
+             cx="50"
+             cy="108.89989"
+             r="1.3526891" />
+          <path
+             style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+             d="m 48.600673,109.00833 c 0,0 -5.707737,-8.72881 -18.149133,-13.031844 -12.441396,-4.30304 19.17659,-36.575835 19.17659,-36.575835 l 0.654809,49.952669 z"
+             id="path3-7" />
+          <path
+             style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+             d="m 51.399135,109.00868 c 0,0 5.707737,-8.72881 18.149133,-13.031845 C 81.989664,91.673795 50.371678,59.401 50.371678,59.401 l -0.654809,49.95267 z"
+             id="path3-2-0" />
+        </g>
+        <circle
+           style="fill:url(#pattern6-7);fill-opacity:1;stroke:#000000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
+           id="path4-9"
+           cx="50"
+           cy="50"
+           r="46.542023"
+           inkscape:label="Patern" />
+      </g>
+    </g>
+    <g
+       id="g44-0"
+       inkscape:label="Logo mobile"
+       transform="translate(3.6007754e-7,132.75271)">
+      <rect
+         style="fill:url(#linearGradient46);fill-opacity:1;stroke:none;stroke-width:2.21241;stroke-opacity:1"
+         id="rect1-6"
+         width="120"
+         height="120"
+         x="5"
+         y="10"
+         ry="19.902441" />
+      <g
+         id="g7-5-1"
+         inkscape:label="Shadow Marqueur de fin"
+         style="display:inline;fill:#acacac;fill-opacity:1;filter:url(#filter44-6)"
+         transform="matrix(1.0456081,0,0,1.0456081,12.719595,11.907535)">
+        <g
+           id="g3-92-5"
+           inkscape:label="Goutte"
+           style="fill:#acacac;fill-opacity:1">
+          <circle
+             style="fill:#acacac;fill-opacity:1;stroke:none;stroke-width:0.262982;stroke-opacity:1"
+             id="path1-2-5"
+             cx="50"
+             cy="50"
+             r="50" />
+          <circle
+             style="fill:#acacac;fill-opacity:1;stroke:#ffffff;stroke-width:0.100989;stroke-opacity:1"
+             id="path2-8-4"
+             cx="50"
+             cy="108.89989"
+             r="1.3526891" />
+          <path
+             style="fill:#acacac;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+             d="m 48.600673,109.00833 c 0,0 -5.707737,-8.72881 -18.149133,-13.031844 -12.441396,-4.30304 19.17659,-36.575835 19.17659,-36.575835 l 0.654809,49.952669 z"
+             id="path3-97-7" />
+          <path
+             style="fill:#acacac;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+             d="m 51.399135,109.00868 c 0,0 5.707737,-8.72881 18.149133,-13.031845 C 81.989664,91.673795 50.371678,59.401 50.371678,59.401 l -0.654809,49.95267 z"
+             id="path3-2-3-6" />
+        </g>
+      </g>
+      <g
+         id="g7-2-5"
+         inkscape:label="Marqueur de fin"
+         style="display:inline"
+         transform="translate(15,12)">
+        <g
+           id="g3-9-6"
+           inkscape:label="Goutte">
+          <circle
+             style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.262982;stroke-opacity:1"
+             id="path1-1-9"
+             cx="50"
+             cy="50"
+             r="50" />
+          <circle
+             style="fill:#ffffff;stroke:#ffffff;stroke-width:0.100989;stroke-opacity:1"
+             id="path2-2-3"
+             cx="50"
+             cy="108.89989"
+             r="1.3526891" />
+          <path
+             style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+             d="m 48.600673,109.00833 c 0,0 -5.707737,-8.72881 -18.149133,-13.031844 -12.441396,-4.30304 19.17659,-36.575835 19.17659,-36.575835 l 0.654809,49.952669 z"
+             id="path3-7-7" />
+          <path
+             style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1"
+             d="m 51.399135,109.00868 c 0,0 5.707737,-8.72881 18.149133,-13.031845 C 81.989664,91.673795 50.371678,59.401 50.371678,59.401 l -0.654809,49.95267 z"
+             id="path3-2-0-4" />
+        </g>
+        <circle
+           style="fill:url(#pattern6-7-0);fill-opacity:1;stroke:#000000;stroke-width:2;stroke-dasharray:none;stroke-opacity:1"
+           id="path4-9-5"
+           cx="50"
+           cy="50"
+           r="46.542023"
+           inkscape:label="Patern" />
+      </g>
+    </g>
+  </g>
+</svg>
