@@ -11,17 +11,19 @@ body {
 /* Style général de la barre de recherche */
 .leaflet-control-search {
     background-color: #ffffff;
-    /* Couleur de fond */
     border: 2px solid #d9d9d9 !important;
-    /* Bordure */
     border-radius: 300px !important;
-    /* Coins arrondis */
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-    /* Ombre */
     font-family: 'Arial', sans-serif;
-    /* Police */
     color: #000000;
-    /* Couleur du texte */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    box-sizing: border-box;
+    width: calc(100vw - 20px);
+    z-index: 1010;
+    bottom: 75px;
 }
 
 /* Supprimer toute bordure ou ombre autour de l'input en cas de focus */
@@ -99,6 +101,10 @@ body {
     /* Ombre */
     z-index: 1010;
     /* Tooltip de recherche au premier plan */
+    list-style-type: none;
+    /* Supprime les puces de la liste */
+    padding-left: 20px;
+    /* Supprime le padding gauche */
 }
 
 /* Style pour le tooltip de la barre de recherche de départ */
@@ -145,6 +151,14 @@ body {
     outline: none;
     border: none !important;
     box-shadow: none !important;
+    width: calc(100% - 60px);
+    /* Réduire la largeur pour tenir compte de l'icône */
+    padding: 10px;
+    /* Ajouter un peu de padding */
+    font-size: 14px;
+    /* Taille du texte */
+    border-radius: 300px;
+    /* Coins arrondis */
 }
 
 /* Style pour les éléments de la couche lorsqu'ils sont survolés */
@@ -235,6 +249,7 @@ body {
     /* Distance depuis le bas */
     right: 10px;
     /* Distance depuis la droite */
+    border: none !important;
 }
 
 .leaflet-control-layers {
@@ -316,6 +331,10 @@ body.dark-mode .leaflet-control-zoom .leaflet-control-zoom-out {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+}
+
+body.dark-mode .leaflet-control-zoom a:hover {
+    background-color: #444444;
 }
 
 body.dark-mode .leaflet-control-zoom {
@@ -587,7 +606,7 @@ body.dark-mode {
 
 body.dark-mode .room-label {
     background: rgba(0, 0, 0, 0.7);
-    border-color: #ffffff;
+    border-color: #444444;
     color: #ffffff;
 }
 
@@ -739,4 +758,14 @@ body.dark-mode #dark-mode-toggle {
     height: 30px;
     /* Modifiez la hauteur selon votre besoin */
     /* Vous pouvez aussi utiliser des valeurs comme "em", "%" ou "rem" pour la taille */
+}
+
+.room-label {
+    font-weight: bold;
+    color: black;
+    background: rgba(255, 255, 255, 0.7);
+    border: 2px solid #d9d9d9d9;
+    opacity: 1;
+    border-radius: 15px;
+    padding: 2px 4px;
 }
