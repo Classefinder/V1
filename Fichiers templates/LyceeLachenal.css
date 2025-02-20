@@ -560,6 +560,14 @@ body.dark-mode .leaflet-control-search .search-cancel {
     color: #ffffff;
 }
 
+body.dark-mode .leaflet-control-search .search-button:hover {
+    background: url('./images/search-icon-dark.png') no-repeat center center;
+}
+
+body.dark-mode .leaflet-control-search .search-button {
+    background: url('./images/search-icon-dark.png') no-repeat center center;
+}
+
 /* Mode sombre pour la tooltip de recherche */
 body.dark-mode .leaflet-control-search .search-tooltip {
     background-color: #1e1e1e;
