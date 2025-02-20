@@ -296,20 +296,37 @@
         ],
       };
 
-      document
-        .getElementById("dark-mode-toggle")
-        .addEventListener("click", function () {
-          document.body.classList.toggle("dark-mode");
-          if (document.body.classList.contains("dark-mode")) {
+      // Fonction pour basculer entre les thèmes
+      function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        if (document.body.classList.contains('dark-mode')) {
             map.removeLayer(lightMap);
             map.addLayer(darkMap);
-            this.textContent = "☀️";
-          } else {
+            document.getElementById('dark-mode-toggle').textContent = '☀️';
+        } else {
             map.removeLayer(darkMap);
             map.addLayer(lightMap);
-            this.textContent = "🌙";
-          }
-        });
+            document.getElementById('dark-mode-toggle').textContent = '🌙';
+        }
+      }
+
+      // Détecter le thème préféré de l'utilisateur
+      const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+
+      if (prefersDarkScheme.matches) {
+          document.body.classList.add('dark-mode');
+          document.getElementById('dark-mode-toggle').textContent = '☀️';
+          map.removeLayer(lightMap);
+          map.addLayer(darkMap);
+      } else {
+          document.body.classList.remove('dark-mode');
+          document.getElementById('dark-mode-toggle').textContent = '🌙';
+          map.removeLayer(darkMap);
+          map.addLayer(lightMap);
+      }
+
+      // Ajouter l'événement de clic pour le bouton de basculement
+      document.getElementById('dark-mode-toggle').addEventListener('click', toggleTheme);
 
       // --- 3. Création des couches GeoJSON pour les salles ---
       // On n'utilise plus bindTooltip ici afin d'éviter que le label s'affiche automatiquement au survol.

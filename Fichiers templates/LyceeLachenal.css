@@ -56,7 +56,7 @@ body {
 .leaflet-control-search .search-cancel {
     background: url('./images/cancel-icon.png') no-repeat center center;
     /* Chemin relatif vers votre icône personnalisée */
-    background-size: 70%;
+    background-size: 56%;
     /* Ajuster la taille de l'icône */
     border: none;
     /* Pas de bordure */
@@ -211,7 +211,7 @@ body {
     background: url('./images/search-icon.png') no-repeat center center;
     background-color: #D9D9D9;
     /* Changer la couleur au survol */
-    background-size: 70%;
+    background-size: 60%;
 }
 
 /* Style pour les cercles créés par Leaflet (s'ils ont une classe spécifique, par exemple) */
@@ -309,7 +309,7 @@ body {
         /* Taille de l'icône de recherche */
         background: url('./images/search-icon.png') no-repeat center center;
         /* Icône de recherche */
-        background-size: 65%;
+        background-size: 60%;
         /* Ajuster la taille de l'icône */
         border: none;
         border-radius: 50%;
@@ -379,7 +379,7 @@ body {
         /* Taille de l'icône de recherche */
         background: url('./images/search-icon.png') no-repeat center center;
         /* Icône de recherche */
-        background-size: 65%;
+        background-size: 60%;
         /* Ajuster la taille de l'icône */
         border: none;
         border-radius: 50%;
@@ -401,7 +401,7 @@ body {
 
     #dark-mode-toggle {
         position: absolute;
-        top: 200px;
+        top: 225px;
         right: 10px;
     }
 }
@@ -491,7 +491,7 @@ body {
         /* Couleur de fond */
         background: url('./images/search-icon.png') no-repeat center center;
         /* Icône de recherche */
-        background-size: 70%;
+        background-size: 60%;
         /* Ajuster la taille de l'icône */
         border: none;
         border-radius: 50%;
@@ -555,7 +555,7 @@ body.dark-mode #search-control-end {
 /* Mode sombre pour le bouton d'effacement de la recherche */
 body.dark-mode .leaflet-control-search .search-cancel {
     background: url('./images/cancel-icon-dark.png') no-repeat center center;
-    background-size: 70%;
+    background-size: 56%;
     /* Assurez-vous d'avoir une icône adaptée au mode sombre */
     border: none;
     color: #ffffff;
@@ -563,12 +563,12 @@ body.dark-mode .leaflet-control-search .search-cancel {
 
 body.dark-mode .leaflet-control-search .search-button:hover {
     background: url('./images/search-icon-dark.png') no-repeat center center;
-    background-size: 70%;
+    background-size: 60%;
 }
 
 body.dark-mode .leaflet-control-search .search-button {
     background: url('./images/search-icon-dark.png') no-repeat center center;
-    background-size: 70%;
+    background-size: 60%;
 }
 
 /* Mode sombre pour la tooltip de recherche */
