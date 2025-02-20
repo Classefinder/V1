@@ -29,20 +29,24 @@
     <div id="map" style="height: 100vh;"></div>
     <button id="dark-mode-toggle" style="position: absolute; top: 10px; right: 10px; z-index: 1000;">Mode Sombre</button>
     <script>
+
         // --- 1. Initialisation de la carte avec les limites définies ---
         var sudOuest = L.latLng(45.93818505744445, 6.134245788738398);
         var nordEst   = L.latLng(45.93640970079779, 6.13115811037474);
         var limites   = L.latLngBounds(sudOuest, nordEst);
 
     // Fond de carte par défaut (clair)
-    var lightMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    var lightMap = L.tileLayer('https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=BiyHHi8FTQZ233ADqskZ', {
         attribution: '&copy; OpenStreetMap contributors'
     });
 
-    // Fond de carte sombre
-    var darkMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    });
+    var darkMap = L.tileLayer('https://api.maptiler.com/maps/streets-v2-dark/{z}/{x}/{y}.png?key=BiyHHi8FTQZ233ADqskZ', {
+    attribution: '&copy; <a href="https://www.maptiler.com/copyright/" target="_blank">MapTiler</a> contributors',
+    tileSize: 512,
+    zoomOffset: -1,
+    maxZoom: 20
+});
+
 
     var map = L.map('map', {
         center: [45.9368, 6.1322],
