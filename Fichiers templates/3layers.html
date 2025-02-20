@@ -41,7 +41,8 @@
 <body>
 
     <div id="map"></div>
-    <button id="dark-mode-toggle" style="position: absolute; top: 10px; right: 10px; z-index: 1000;">Mode Sombre</button>
+    <button id="dark-mode-toggle">🌙</button>
+
 
     <script>
         // --- 1. Initialisation des limites ---
@@ -76,20 +77,6 @@ var darkMap = L.maplibreGL({
         // --- 4. Ajout du fond clair par défaut ---
         lightMap.addTo(map);
 
-        // --- 5. Bouton pour basculer en mode sombre ---
-        var isDarkMode = false;
-        document.getElementById('dark-mode-toggle').addEventListener('click', function() {
-            if (isDarkMode) {
-                map.removeLayer(darkMap);
-                map.addLayer(lightMap);
-                this.textContent = 'Mode Sombre';
-            } else {
-                map.removeLayer(lightMap);
-                map.addLayer(darkMap);
-                this.textContent = 'Mode Clair';
-            }
-            isDarkMode = !isDarkMode;
-        });
 
     // --- 2. Données GeoJSON pour les salles et les chemins ---
     var salleEtage0 = {
@@ -145,11 +132,11 @@ var darkMap = L.maplibreGL({
         if (document.body.classList.contains('dark-mode')) {
             map.removeLayer(lightMap);
             map.addLayer(darkMap);
-            this.textContent = 'Mode Clair';
+            this.textContent = '☀️';
         } else {
             map.removeLayer(darkMap);
             map.addLayer(lightMap);
-            this.textContent = 'Mode Sombre';
+            this.textContent = '🌙';
         }
     });
 

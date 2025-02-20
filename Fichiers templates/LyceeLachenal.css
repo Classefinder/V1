@@ -398,9 +398,22 @@ body {
         /* Prendre toute la largeur de la barre de recherche */
         top: 65px;
     }
+
+    #dark-mode-toggle {
+        position: absolute;
+        top: 200px;
+        right: 10px;
+    }
 }
 
 @media(min-width: 600px) {
+
+    #dark-mode-toggle {
+        position: absolute;
+        top: 110px;
+        right: 10px;
+    }
+
     .leaflet-control-search {
         position: absolute;
         /* Position absolue pour placer la barre de recherche */
@@ -613,4 +626,27 @@ body.dark-mode {
 body.dark-mode #map {
     background-color: #313131;
     /* Gris très sombre */
+}
+
+#dark-mode-toggle {
+    z-index: 1000;
+    background-color: #ffffff;
+    border: 2px solid #d9d9d9 !important;
+    border-radius: 15px;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    /* taille de l'icône */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+body.dark-mode #dark-mode-toggle {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    border: 2px solid #444444 !important;
 }
