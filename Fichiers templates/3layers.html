@@ -4,17 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Classefinder | Lycée Lachenal changement</title>
+    
+    <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-search@4.0.0/dist/leaflet-search.min.css" />
-    <link rel="stylesheet" href="LyceeLachenal.css" />  
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- MapLibre GL JS -->
+<link href="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.css" rel="stylesheet" />
+<script src="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.js"></script>
+
+<!-- MapLibre GL Leaflet Plugin -->
+<script src="https://cdn.jsdelivr.net/npm/@maplibre/maplibre-gl-leaflet@0.0.22/leaflet-maplibre-gl.js"></script>
+
+
+    <!-- Leaflet Plugins -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-search@4.0.0/dist/leaflet-search.min.css" />
+
+    <link rel="stylesheet" href="LyceeLachenal.css" />
+    <script src="https://unpkg.com/leaflet-search@4.0.0/dist/leaflet-search.min.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-    <script src="https://unpkg.com/leaflet-search@4.0.0/dist/leaflet-search.min.js"></script>  
     <script src="https://cdn.jsdelivr.net/npm/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
-    
+
     <style>
-        /* Style personnalisé pour les labels */
+        #map { height: 100vh; }
         .room-label {
             font-weight: bold;
             color: black;
@@ -26,37 +39,57 @@
     </style>
 </head>
 <body>
-    <div id="map" style="height: 100vh;"></div>
+
+    <div id="map"></div>
     <button id="dark-mode-toggle" style="position: absolute; top: 10px; right: 10px; z-index: 1000;">Mode Sombre</button>
+
     <script>
-
-        // --- 1. Initialisation de la carte avec les limites définies ---
+        // --- 1. Initialisation des limites ---
         var sudOuest = L.latLng(45.93818505744445, 6.134245788738398);
-        var nordEst   = L.latLng(45.93640970079779, 6.13115811037474);
-        var limites   = L.latLngBounds(sudOuest, nordEst);
+        var nordEst  = L.latLng(45.93640970079779, 6.13115811037474);
+        var limites  = L.latLngBounds(sudOuest, nordEst);
 
-    // Fond de carte par défaut (clair)
-    var lightMap = L.tileLayer('https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=BiyHHi8FTQZ233ADqskZ', {
-        attribution: '&copy; OpenStreetMap contributors'
-    });
+        // --- 2. Création de la carte ---
+        var map = L.map('map', {
+            center: [45.9368, 6.1322],
+            zoom: 18,
+            minZoom: 1,
+            maxZoom: 23,
+            maxBounds: limites,
+            maxBoundsViscosity: 1.0
+        });
 
-    var darkMap = L.tileLayer('https://api.maptiler.com/maps/streets-v2-dark/{z}/{x}/{y}.png?key=BiyHHi8FTQZ233ADqskZ', {
-    attribution: '&copy; <a href="https://www.maptiler.com/copyright/" target="_blank">MapTiler</a> contributors',
-    tileSize: 512,
-    zoomOffset: -1,
-    maxZoom: 20
+        // --- 3. Tuiles vectorielles MapTiler ---
+// Calque clair
+var lightMap = L.maplibreGL({
+    style: 'https://api.maptiler.com/maps/3b544fc3-420c-4a93-a594-a99b71d941bb/style.json?key=BiyHHi8FTQZ233ADqskZ',
+    attribution: '&copy; <a href="https://www.maptiler.com/copyright/" target="_blank">MapTiler</a> contributors'
+});
+
+// Calque sombre
+var darkMap = L.maplibreGL({
+    style: 'https://api.maptiler.com/maps/04c03a5d-804b-4c6f-9736-b7103fdb530b/style.json?key=BiyHHi8FTQZ233ADqskZ',
+    attribution: '&copy; <a href="https://www.maptiler.com/copyright/" target="_blank">MapTiler</a> contributors'
 });
 
 
-    var map = L.map('map', {
-        center: [45.9368, 6.1322],
-        zoom: 18,
-        minZoom: 1,
-        maxZoom: 23,
-        maxBounds: limites,
-        maxBoundsViscosity: 1.0,
-        layers: [lightMap] // Par défaut, le fond de carte clair est affiché
-    });
+        // --- 4. Ajout du fond clair par défaut ---
+        lightMap.addTo(map);
+
+        // --- 5. Bouton pour basculer en mode sombre ---
+        var isDarkMode = false;
+        document.getElementById('dark-mode-toggle').addEventListener('click', function() {
+            if (isDarkMode) {
+                map.removeLayer(darkMap);
+                map.addLayer(lightMap);
+                this.textContent = 'Mode Sombre';
+            } else {
+                map.removeLayer(lightMap);
+                map.addLayer(darkMap);
+                this.textContent = 'Mode Clair';
+            }
+            isDarkMode = !isDarkMode;
+        });
 
     // --- 2. Données GeoJSON pour les salles et les chemins ---
     var salleEtage0 = {
