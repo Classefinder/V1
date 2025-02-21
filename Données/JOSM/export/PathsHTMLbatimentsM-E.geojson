@@ -1,0 +1,1490 @@
+{
+    "type": "FeatureCollection",
+    "generator": "JOSM",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "E9",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13136541806,
+                        45.93735199639
+                    ],
+                    [
+                        6.13135907632,
+                        45.93732739138
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M16 Prof",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13144302117,
+                        45.93668208602
+                    ],
+                    [
+                        6.13144330073,
+                        45.93669322274
+                    ],
+                    [
+                        6.13144385444,
+                        45.93671528077
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "E105",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13148457612,
+                        45.93734271148
+                    ],
+                    [
+                        6.13148190592,
+                        45.93737683352
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "E4",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13172355980,
+                        45.93743997084
+                    ],
+                    [
+                        6.13172022170,
+                        45.93740004601
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "E17",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13104632813,
+                        45.93730673244
+                    ],
+                    [
+                        6.13117549718,
+                        45.93730156753
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M8",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13103464564,
+                        45.93703839792
+                    ],
+                    [
+                        6.13110473861,
+                        45.93704257616
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "E108",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13143684614,
+                        45.93740677733
+                    ],
+                    [
+                        6.13147923571,
+                        45.93740143851
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "M105",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13173390685,
+                        45.93679257778
+                    ],
+                    [
+                        6.13173891316,
+                        45.93681323714
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M2",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13157736554,
+                        45.93706346731
+                    ],
+                    [
+                        6.13159849585,
+                        45.93700976793
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "E2",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13177696363,
+                        45.93738379743
+                    ],
+                    [
+                        6.13180433327,
+                        45.93734712205
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "M101",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13178697725,
+                        45.93694856561
+                    ],
+                    [
+                        6.13174573104,
+                        45.93695239032
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "E11",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13125126681,
+                        45.93739168925
+                    ],
+                    [
+                        6.13119268480,
+                        45.93739657880
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M6",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13126161370,
+                        45.93698524126
+                    ],
+                    [
+                        6.13126361636,
+                        45.93701495316
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M12",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13158237268,
+                        45.93669450473
+                    ],
+                    [
+                        6.13158906988,
+                        45.93673336725
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M3",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13174692379,
+                        45.93718834986
+                    ],
+                    [
+                        6.13169606203,
+                        45.93719459273
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "E109 Prof",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13123157386,
+                        45.93736801286
+                    ],
+                    [
+                        6.13120954464,
+                        45.93737195894
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "E106",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13152996967,
+                        45.93742766835
+                    ],
+                    [
+                        6.13152789925,
+                        45.93739894252
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M2.2",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13163544291,
+                        45.93716769063
+                    ],
+                    [
+                        6.13162580343,
+                        45.93712426872
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "M109",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13168117023,
+                        45.93699382986
+                    ],
+                    [
+                        6.13164311976,
+                        45.93699359773
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "E3",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13159772621,
+                        45.93733064110
+                    ],
+                    [
+                        6.13164512242,
+                        45.93730533970
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M13",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13150059754,
+                        45.93669868299
+                    ],
+                    [
+                        6.13150416982,
+                        45.93673753404
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M2.5",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13143150573,
+                        45.93708157275
+                    ],
+                    [
+                        6.13143250672,
+                        45.93704861138
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M17",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13176895301,
+                        45.93691676479
+                    ],
+                    [
+                        6.13171621639,
+                        45.93691351505
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "E104",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13170720477,
+                        45.93742790047
+                    ],
+                    [
+                        6.13169504354,
+                        45.93738452729
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M14",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13138377575,
+                        45.93672665422
+                    ],
+                    [
+                        6.13144486781,
+                        45.93672620445
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M1.4",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13113477846,
+                        45.93711917703
+                    ],
+                    [
+                        6.13112830341,
+                        45.93704313575
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "M106",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13170820610,
+                        45.93721016922
+                    ],
+                    [
+                        6.13167370197,
+                        45.93721180257
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M2.1 Prof",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13176494803,
+                        45.93722548936
+                    ],
+                    [
+                        6.13169969968,
+                        45.93722960864
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "E103",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13160773950,
+                        45.93736290616
+                    ],
+                    [
+                        6.13160728624,
+                        45.93739487069
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M1.3",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13116014544,
+                        45.93724405945
+                    ],
+                    [
+                        6.13117416404,
+                        45.93729419803
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Entretien",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13139912945,
+                        45.93731880283
+                    ],
+                    [
+                        6.13135849878,
+                        45.93732171528
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "12",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13118818297,
+                        45.93748848439
+                    ],
+                    [
+                        6.13117165063,
+                        45.93747099640
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M9",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13155800653,
+                        45.93686476886
+                    ],
+                    [
+                        6.13145825693,
+                        45.93687053232
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "E1",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13177696363,
+                        45.93738379743
+                    ],
+                    [
+                        6.13180433327,
+                        45.93734712205
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "E10 Entretien atelier",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13125694084,
+                        45.93733528355
+                    ],
+                    [
+                        6.13125285570,
+                        45.93728897379
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M11 Prof",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13167082334,
+                        45.93668603215
+                    ],
+                    [
+                        6.13167108632,
+                        45.93672934199
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "E16",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13090213687,
+                        45.93751796390
+                    ],
+                    [
+                        6.13086041486,
+                        45.93752074936
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M4",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13172889988,
+                        45.93703468394
+                    ],
+                    [
+                        6.13168041275,
+                        45.93703531759
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "foot": "yes",
+                "highway": "footway",
+                "layer": "-1",
+                "name": "M108.1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13177362621,
+                        45.93699475835
+                    ],
+                    [
+                        6.13177362621,
+                        45.93701286404
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "M102",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13177829907,
+                        45.93687428575
+                    ],
+                    [
+                        6.13173924727,
+                        45.93688078524
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Magasin",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13131368277,
+                        45.93732460590
+                    ],
+                    [
+                        6.13135849878,
+                        45.93732171528
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "13",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13108771637,
+                        45.93739656394
+                    ],
+                    [
+                        6.13103531352,
+                        45.93739702818
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "E6",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13148290724,
+                        45.93731648160
+                    ],
+                    [
+                        6.13148376370,
+                        45.93727364408
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "E102",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13182168996,
+                        45.93738960026
+                    ],
+                    [
+                        6.13175573942,
+                        45.93738600716
+                    ],
+                    [
+                        6.13174926055,
+                        45.93738565418
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M16",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13136074520,
+                        45.93669554941
+                    ],
+                    [
+                        6.13144330073,
+                        45.93669322274
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "E14",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13102062738,
+                        45.93736197767
+                    ],
+                    [
+                        6.13102930556,
+                        45.93736197771
+                    ],
+                    [
+                        6.13106602059,
+                        45.93736197790
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "M106.1",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13171521539,
+                        45.93723872038
+                    ],
+                    [
+                        6.13170820610,
+                        45.93721016922
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "E107",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13141248049,
+                        45.93737335168
+                    ],
+                    [
+                        6.13148190592,
+                        45.93737683352
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "E101",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13176895334,
+                        45.93735431762
+                    ],
+                    [
+                        6.13175573942,
+                        45.93738600716
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M7",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13116949117,
+                        45.93696365393
+                    ],
+                    [
+                        6.13117812937,
+                        45.93704431897
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M20",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13164345320,
+                        45.93677191888
+                    ],
+                    [
+                        6.13163890710,
+                        45.93673092131
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "M110",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13167683114,
+                        45.93725682599
+                    ],
+                    [
+                        6.13167783247,
+                        45.93724127374
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "E5",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13165997562,
+                        45.93739818868
+                    ],
+                    [
+                        6.13171573231,
+                        45.93739067966
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M5 Prof",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13131034518,
+                        45.93697293855
+                    ],
+                    [
+                        6.13131117962,
+                        45.93699243699
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M2.4",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13149859472,
+                        45.93716397666
+                    ],
+                    [
+                        6.13150110985,
+                        45.93713773950
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "M104 Prof",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13163677768,
+                        45.93686337612
+                    ],
+                    [
+                        6.13163811279,
+                        45.93683691388
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "E7",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13145053096,
+                        45.93731949920
+                    ],
+                    [
+                        6.13144967867,
+                        45.93727590695
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "M108",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13170553589,
+                        45.93704071893
+                    ],
+                    [
+                        6.13165058847,
+                        45.93704688726
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M18",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13175460097,
+                        45.93672874335
+                    ],
+                    [
+                        6.13170219779,
+                        45.93672781508
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M1",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13132369572,
+                        45.93715770956
+                    ],
+                    [
+                        6.13125125457,
+                        45.93716091908
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "bridge": "yes",
+                "name": "M103",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-1"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13169685771,
+                        45.93695320810
+                    ],
+                    [
+                        6.13174573104,
+                        45.93695239032
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "E15",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13099826438,
+                        45.93755579978
+                    ],
+                    [
+                        6.13099726213,
+                        45.93752174686
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M2.3",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13155934197,
+                        45.93717279735
+                    ],
+                    [
+                        6.13155927632,
+                        45.93713019443
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "M19",
+                "highway": "footway",
+                "foot": "yes",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13171621639,
+                        45.93691351505
+                    ],
+                    [
+                        6.13158871426,
+                        45.93688774898
+                    ]
+                ]
+            }
+        }
+    ]
+}
