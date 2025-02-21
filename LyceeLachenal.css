@@ -112,8 +112,6 @@ body {
     box-sizing: border-box;
     padding: 10px;
     border-radius: 15px;
-    background-color: #f03535 !important;
-    border: 2px solid #d60d0d !important;
     color: #000000 !important;
     font-size: 14px;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
@@ -163,7 +161,7 @@ body {
 
 /* Style pour les éléments de la couche lorsqu'ils sont survolés */
 .leaflet-interactive:hover {
-    fill-opacity: 0.9;
+    fill-opacity: 0.97;
     cursor: pointer;
 }
 
