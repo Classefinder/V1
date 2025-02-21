@@ -368,61 +368,61 @@ function toggleTheme() {
       }
 
       function updateArrowsVisibility() {
-    var currentZoom = map.getZoom();
-
-    function toggleArrows(layerGroup) {
-        var arrowLayers = [];
-        layerGroup.eachLayer(function (layer) {
+        var currentZoom = map.getZoom();
+      
+        function toggleArrows(layerGroup) {
+          var arrowLayers = [];
+          layerGroup.eachLayer(function (layer) {
             if (layer instanceof L.PolylineDecorator) {
-                if (currentZoom >= arrowZoomThreshold) {
-                    if (!map.hasLayer(layer)) {
-                        arrowLayers.push(layer);
-                    }
-                } else {
-                    if (map.hasLayer(layer)) {
-                        map.removeLayer(layer);
-                    }
+              if (currentZoom >= arrowZoomThreshold) {
+                if (!map.hasLayer(layer)) {
+                  arrowLayers.push(layer);
                 }
+              } else {
+                if (map.hasLayer(layer)) {
+                  map.removeLayer(layer);
+                }
+              }
             }
-        });
-        // Add arrow layers after all polylines have been added
-        arrowLayers.forEach((arrow) => {
+            });
+          // Add arrow layers after all polylines have been added
+          arrowLayers.forEach((arrow) => {
             map.addLayer(arrow);
             arrow.bringToFront(); // Ensure the arrow is on top
-        });
-    }
-
-    if (map.hasLayer(etage0)) {
-        toggleArrows(itinéraireLayer0);
-    } else {
-        itinéraireLayer0.eachLayer(function (layer) {
+          });
+        }
+      
+        if (map.hasLayer(etage0)) {
+          toggleArrows(itinéraireLayer0);
+        } else {
+          itinéraireLayer0.eachLayer(function (layer) {
             if (layer instanceof L.PolylineDecorator && map.hasLayer(layer)) {
-                map.removeLayer(layer);
+              map.removeLayer(layer);
             }
-        });
-    }
-
-    if (map.hasLayer(etage1)) {
-        toggleArrows(itinéraireLayer1);
-    } else {
-        itinéraireLayer1.eachLayer(function (layer) {
+          });
+        }
+      
+        if (map.hasLayer(etage1)) {
+          toggleArrows(itinéraireLayer1);
+        } else {
+          itinéraireLayer1.eachLayer(function (layer) {
             if (layer instanceof L.PolylineDecorator && map.hasLayer(layer)) {
-                map.removeLayer(layer);
+              map.removeLayer(layer);
             }
-        });
-    }
-
-    if (map.hasLayer(etage2)) {
-        toggleArrows(itinéraireLayer2);
-    } else {
-        itinéraireLayer2.eachLayer(function (layer) {
+          });
+        }
+      
+        if (map.hasLayer(etage2)) {
+          toggleArrows(itinéraireLayer2);
+        } else {
+          itinéraireLayer2.eachLayer(function (layer) {
             if (layer instanceof L.PolylineDecorator && map.hasLayer(layer)) {
-                map.removeLayer(layer);
+              map.removeLayer(layer);
             }
-        });
-    }
-}
-
+          });
+        }
+      }
+      
 
       map.on("zoomend", updateTooltipsVisibility);
       map.on("baselayerchange", updateTooltipsVisibility);
@@ -456,71 +456,71 @@ function toggleTheme() {
 
       // Modifiez la fonction switchFloor pour utiliser la vérification et effectuer le zoom
       function switchFloor(floor, salleName) {
-        // Supprime tous les tooltips personnalisés pour tous les calques
-        salleLayer0.eachLayer(function (layer) {
-          if (layer._customTooltip) {
-            map.removeLayer(layer._customTooltip);
-            layer._customTooltip = null;
-          }
-        });
-        salleLayer1.eachLayer(function (layer) {
-          if (layer._customTooltip) {
-            map.removeLayer(layer._customTooltip);
-            layer._customTooltip = null;
-          }
-        });
-        salleLayer2.eachLayer(function (layer) {
-          if (layer._customTooltip) {
-            map.removeLayer(layer._customTooltip);
-            layer._customTooltip = null;
-          }
-        });
+  // Supprime tous les tooltips personnalisés pour tous les calques
+  salleLayer0.eachLayer(function (layer) {
+    if (layer._customTooltip) {
+      map.removeLayer(layer._customTooltip);
+      layer._customTooltip = null;
+    }
+  });
+  salleLayer1.eachLayer(function (layer) {
+    if (layer._customTooltip) {
+      map.removeLayer(layer._customTooltip);
+      layer._customTooltip = null;
+    }
+  });
+  salleLayer2.eachLayer(function (layer) {
+    if (layer._customTooltip) {
+      map.removeLayer(layer._customTooltip);
+      layer._customTooltip = null;
+    }
+  });
 
-        // Vérifiez si la salle existe sur le calque actif
-        if (salleExistsOnActiveLayer(salleName)) {
-          updateTooltipsVisibility();
-          updateMarkersVisibility();
-          return;
-        }
+  // Vérifiez si la salle existe sur le calque actif
+  if (salleExistsOnActiveLayer(salleName)) {
+    updateTooltipsVisibility();
+    updateMarkersVisibility();
+    return;
+  }
 
-        // Basculement du calque visible
-        if (floor === "0") {
-          if (!map.hasLayer(etage0)) {
-            map.addLayer(etage0);
-          }
-          if (map.hasLayer(etage1)) {
-            map.removeLayer(etage1);
-          }
-          if (map.hasLayer(etage2)) {
-            map.removeLayer(etage2);
-          }
-        } else if (floor === "1") {
-          if (!map.hasLayer(etage1)) {
-            map.addLayer(etage1);
-          }
-          if (map.hasLayer(etage0)) {
-            map.removeLayer(etage0);
-          }
-          if (map.hasLayer(etage2)) {
-            map.removeLayer(etage2);
-          }
-        } else if (floor === "2") {
-          if (!map.hasLayer(etage2)) {
-            map.addLayer(etage2);
-          }
-          if (map.hasLayer(etage0)) {
-            map.removeLayer(etage0);
-          }
-          if (map.hasLayer(etage1)) {
-            map.removeLayer(etage1);
-          }
-        }
+  // Basculement du calque visible
+  if (floor === "0") {
+    if (!map.hasLayer(etage0)) {
+      map.addLayer(etage0);
+    }
+    if (map.hasLayer(etage1)) {
+      map.removeLayer(etage1);
+    }
+    if (map.hasLayer(etage2)) {
+      map.removeLayer(etage2);
+    }
+  } else if (floor === "1") {
+    if (!map.hasLayer(etage1)) {
+      map.addLayer(etage1);
+    }
+    if (map.hasLayer(etage0)) {
+      map.removeLayer(etage0);
+    }
+    if (map.hasLayer(etage2)) {
+      map.removeLayer(etage2);
+    }
+  } else if (floor === "2") {
+    if (!map.hasLayer(etage2)) {
+      map.addLayer(etage2);
+    }
+    if (map.hasLayer(etage0)) {
+      map.removeLayer(etage0);
+    }
+    if (map.hasLayer(etage1)) {
+      map.removeLayer(etage1);
+    }
+  }
 
-        // Assurez-vous que les flèches sont ajoutées après les segments de l'itinéraire
-        updateTooltipsVisibility();
-        updateMarkersVisibility();
-        updateArrowsVisibility();
-      }
+  // Assurez-vous que les flèches sont ajoutées après les segments de l'itinéraire
+  updateTooltipsVisibility();
+  updateMarkersVisibility();
+  updateArrowsVisibility();
+}
 
       var StartIcon = L.icon({
         iconUrl: "images/starticon.png",
@@ -842,6 +842,8 @@ function toggleTheme() {
 
               var bounds = L.geoJSON(route.geometry).getBounds();
               map.fitBounds(bounds);
+
+              updateArrowsVisibility();
             }
           })
           .catch((error) => {
