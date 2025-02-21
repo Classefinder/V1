@@ -1,0 +1,4 @@
+sudo docker run -t -v "${PWD}:/data" ghcr.io/project-osrm/osrm-backend osrm-extract -p /opt/foot.lua /data/PathsOSRM.osm || echo "osrm-extract failed"
+sudo docker run -t -v "${PWD}:/data" ghcr.io/project-osrm/osrm-backend osrm-partition /data/PathsOSRM.osrm || echo "osrm-partition failed"
+sudo docker run -t -v "${PWD}:/data" ghcr.io/project-osrm/osrm-backend osrm-customize /data/PathsOSRM.osrm || echo "osrm-customize failed"
+sudo docker run -t -i -p 5000:5000 -v "${PWD}:/data" ghcr.io/project-osrm/osrm-backend osrm-routed --algorithm mld /data/PathsOSRM.osrm
