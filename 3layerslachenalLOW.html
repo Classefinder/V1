@@ -70,7 +70,7 @@
         "type": "FeatureCollection",
         "features": [
         { "type": "Feature", "properties": { "name": "13" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
-        { "type": "Feature", "properties": { "name": "13" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": "14" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
        ]
     };
 
@@ -86,7 +86,7 @@
         "type": "FeatureCollection",
 "features": [
 { "type": "Feature", "properties": { "name": "V1" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132559263481, 45.937761742137447 ], [ 6.132605358389325, 45.937758765489001 ], [ 6.132614138371865, 45.937824175393722 ], [ 6.132567165465287, 45.937827991605154 ], [ 6.132559263481, 45.937761742137447 ] ] ] ] } },
-{ "type": "Feature", "properties": { "name": "13" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132607553384967, 45.937773801378285 ], [ 6.132725973399444, 45.93776700851511 ], [ 6.132730253640932, 45.937817306212494 ], [ 6.132614138371868, 45.937824175393722 ], [ 6.132607553384967, 45.937773801378285 ] ] ] ] } },
+{ "type": "Feature", "properties": { "name": "V2" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132607553384967, 45.937773801378285 ], [ 6.132725973399444, 45.93776700851511 ], [ 6.132730253640932, 45.937817306212494 ], [ 6.132614138371868, 45.937824175393722 ], [ 6.132607553384967, 45.937773801378285 ] ] ] ] } },
 ]
     };
 
@@ -125,13 +125,13 @@ function toggleTheme() {
         map.addLayer(darkMap);
         
         // Changer l'icône à partir de l'image dans le dossier ./images
-        toggleButton.innerHTML = '<img src="./images/dark-icon.png" alt="Mode clair" class="theme-icon"/>'; // Remplacez par votre icône de soleil
+        toggleButton.innerHTML = '<img src="./images/light-icon.png" alt="Mode clair" class="theme-icon"/>'; // Remplacez par votre icône de soleil
     } else {
         map.removeLayer(darkMap);
         map.addLayer(lightMap);
         
         // Changer l'icône à partir de l'image dans le dossier ./images
-        toggleButton.innerHTML = '<img src="./images/light-icon.png" alt="Mode sombre" class="theme-icon"/>'; // Remplacez par votre icône de lune
+        toggleButton.innerHTML = '<img src="./images/dark-icon.png" alt="Mode sombre" class="theme-icon"/>'; // Remplacez par votre icône de lune
     }
 }
 
@@ -142,13 +142,13 @@ function toggleTheme() {
       if (prefersDarkScheme.matches) {
           document.body.classList.add('dark-mode');
           const toggleButton = document.getElementById('dark-mode-toggle');
-          toggleButton.innerHTML = '<img src="./images/dark-icon.png" alt="Mode clair" class="theme-icon"/>'; // Icône du soleil
+          toggleButton.innerHTML = '<img src="./images/light-icon.png" alt="Mode clair" class="theme-icon"/>'; // Icône du soleil
           map.removeLayer(lightMap);
           map.addLayer(darkMap);
       } else {
           document.body.classList.remove('dark-mode');
           const toggleButton = document.getElementById('dark-mode-toggle');
-          toggleButton.innerHTML = '<img src="./images/light-icon.png" alt="Mode sombre" class="theme-icon"/>'; // Icône de la lune
+          toggleButton.innerHTML = '<img src="./images/dark-icon.png" alt="Mode sombre" class="theme-icon"/>'; // Icône de la lune
           map.removeLayer(darkMap);
           map.addLayer(lightMap);
       }
@@ -368,57 +368,66 @@ function toggleTheme() {
       }
 
       function updateArrowsVisibility() {
-        var currentZoom = map.getZoom();
+    var currentZoom = map.getZoom();
 
-        function toggleArrows(layerGroup) {
-          layerGroup.eachLayer(function (layer) {
+    function toggleArrows(layerGroup) {
+        var arrowLayers = [];
+        layerGroup.eachLayer(function (layer) {
             if (layer instanceof L.PolylineDecorator) {
-              if (currentZoom >= arrowZoomThreshold) {
-                if (!map.hasLayer(layer)) {
-                  map.addLayer(layer);
+                if (currentZoom >= arrowZoomThreshold) {
+                    if (!map.hasLayer(layer)) {
+                        arrowLayers.push(layer);
+                    }
+                } else {
+                    if (map.hasLayer(layer)) {
+                        map.removeLayer(layer);
+                    }
                 }
-              } else {
-                if (map.hasLayer(layer)) {
-                  map.removeLayer(layer);
-                }
-              }
             }
-          });
-        }
+        });
+        // Add arrow layers after all polylines have been added
+        arrowLayers.forEach((arrow) => {
+            map.addLayer(arrow);
+            arrow.bringToFront(); // Ensure the arrow is on top
+        });
+    }
 
-        if (map.hasLayer(etage0)) {
-          toggleArrows(itinéraireLayer0);
-        } else {
-          itinéraireLayer0.eachLayer(function (layer) {
+    if (map.hasLayer(etage0)) {
+        toggleArrows(itinéraireLayer0);
+    } else {
+        itinéraireLayer0.eachLayer(function (layer) {
             if (layer instanceof L.PolylineDecorator && map.hasLayer(layer)) {
-              map.removeLayer(layer);
+                map.removeLayer(layer);
             }
-          });
-        }
+        });
+    }
 
-        if (map.hasLayer(etage1)) {
-          toggleArrows(itinéraireLayer1);
-        } else {
-          itinéraireLayer1.eachLayer(function (layer) {
+    if (map.hasLayer(etage1)) {
+        toggleArrows(itinéraireLayer1);
+    } else {
+        itinéraireLayer1.eachLayer(function (layer) {
             if (layer instanceof L.PolylineDecorator && map.hasLayer(layer)) {
-              map.removeLayer(layer);
+                map.removeLayer(layer);
             }
-          });
-        }
+        });
+    }
 
-        if (map.hasLayer(etage2)) {
-          toggleArrows(itinéraireLayer2);
-        } else {
-          itinéraireLayer2.eachLayer(function (layer) {
+    if (map.hasLayer(etage2)) {
+        toggleArrows(itinéraireLayer2);
+    } else {
+        itinéraireLayer2.eachLayer(function (layer) {
             if (layer instanceof L.PolylineDecorator && map.hasLayer(layer)) {
-              map.removeLayer(layer);
+                map.removeLayer(layer);
             }
-          });
-        }
-      }
+        });
+    }
+}
+
 
       map.on("zoomend", updateTooltipsVisibility);
       map.on("baselayerchange", updateTooltipsVisibility);
+
+
 
       // --- 9. Basculement automatique du calque en fonction de la salle recherchée ---
       // Fonction pour vérifier si une salle existe sur le calque actif
@@ -506,8 +515,11 @@ function toggleTheme() {
             map.removeLayer(etage1);
           }
         }
+
+        // Assurez-vous que les flèches sont ajoutées après les segments de l'itinéraire
         updateTooltipsVisibility();
         updateMarkersVisibility();
+        updateArrowsVisibility();
       }
 
       var StartIcon = L.icon({
@@ -852,12 +864,9 @@ function toggleTheme() {
       map.on("baselayerchange", function (e) {
         updateTooltipsVisibility();
         updateMarkersVisibility();
+        updateArrowsVisibility();
       });
 
-      map.on("baselayerchange", function (e) {
-        updateTooltipsVisibility();
-        updateMarkersVisibility();
-      });
 
       map.removeLayer(etage1);
 
