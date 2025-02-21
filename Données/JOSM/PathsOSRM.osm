@@ -2756,7 +2756,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3884' action='modify' visible='true'>
     <nd ref='-30930' />
@@ -2765,7 +2765,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3886' action='modify' visible='true'>
     <nd ref='-30932' />
@@ -2774,7 +2774,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3887' action='modify' visible='true'>
     <nd ref='-30933' />
@@ -2783,7 +2783,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3939' action='modify' visible='true'>
     <nd ref='-30984' />
@@ -2793,7 +2793,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3942' action='modify' visible='true'>
     <nd ref='-30988' />
@@ -2802,7 +2802,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3943' action='modify' visible='true'>
     <nd ref='-30989' />
@@ -2811,7 +2811,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3944' action='modify' visible='true'>
     <nd ref='-30990' />
@@ -2820,7 +2820,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3948' action='modify' visible='true'>
     <nd ref='-30993' />
@@ -2833,7 +2833,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3950' action='modify' visible='true'>
     <nd ref='-30996' />
@@ -2842,7 +2842,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3951' action='modify' visible='true'>
     <nd ref='-30997' />
@@ -2851,7 +2851,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3953' action='modify' visible='true'>
     <nd ref='-30999' />
@@ -2860,7 +2860,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3957' action='modify' visible='true'>
     <nd ref='-31003' />
@@ -2869,7 +2869,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3961' action='modify' visible='true'>
     <nd ref='-31005' />
@@ -2878,7 +2878,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3964' action='modify' visible='true'>
     <nd ref='-31009' />
@@ -2887,11 +2887,16 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3966' action='modify' visible='true'>
     <nd ref='-31011' />
     <nd ref='-31012' />
+    <tag k='bridge' v='yes' />
+    <tag k='foot' v='yes' />
+    <tag k='highway' v='footway' />
+    <tag k='layer' v='-1' />
+    <tag k='name' v='0' />
   </way>
   <way id='-3967' action='modify' visible='true'>
     <nd ref='-31012' />
@@ -2900,7 +2905,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-4031' action='modify' visible='true'>
     <nd ref='-31101' />
@@ -2916,7 +2921,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-4058' action='modify' visible='true'>
     <nd ref='-31102' />
@@ -2927,7 +2932,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-4062' action='modify' visible='true'>
     <nd ref='-31106' />
@@ -2936,7 +2941,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-4064' action='modify' visible='true'>
     <nd ref='-31108' />
@@ -2945,7 +2950,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-4066' action='modify' visible='true'>
     <nd ref='-31110' />
@@ -2956,7 +2961,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-4068' action='modify' visible='true'>
     <nd ref='-31112' />
@@ -2965,7 +2970,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-4070' action='modify' visible='true'>
     <nd ref='-31114' />
@@ -2974,7 +2979,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-4072' action='modify' visible='true'>
     <nd ref='-31116' />
@@ -2983,7 +2988,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-4074' action='modify' visible='true'>
     <nd ref='-31118' />
@@ -2992,7 +2997,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-4075' action='modify' visible='true'>
     <nd ref='-31119' />
@@ -3001,7 +3006,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-4090' action='modify' visible='true'>
     <nd ref='-31134' />
@@ -3010,7 +3015,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-4091' action='modify' visible='true'>
     <nd ref='-31135' />
@@ -3019,7 +3024,7 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
   <way id='-4092' action='modify' visible='true'>
     <nd ref='-31136' />
@@ -3028,6 +3033,6 @@
     <tag k='foot' v='yes' />
     <tag k='highway' v='footway' />
     <tag k='layer' v='-1' />
-    <tag k='name' v='2' />
+    <tag k='name' v='0' />
   </way>
 </osm>
