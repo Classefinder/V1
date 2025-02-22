@@ -55,12 +55,15 @@
         maxBoundsViscosity: 1.0,
       });
 
-      // Créez uniquement une fois les deux panes, dans l'ordre souhaité :
+      // Créez uniquement une fois les trois panes, dans l'ordre souhaité :
       map.createPane("routePane");
       map.getPane("routePane").style.zIndex = 600; // Pane pour les itinéraires
 
       map.createPane("arrowPane");
       map.getPane("arrowPane").style.zIndex = 650; // Pane pour les flèches
+
+      map.createPane("markerPane");
+      map.getPane("markerPane").style.zIndex = 700; // Pane for markers
 
       // Assurez-vous que le pane "arrowPane" est le dernier enfant dans le conteneur
       map.getPane("arrowPane").parentNode.appendChild(map.getPane("arrowPane"));
@@ -447,7 +450,7 @@ function toggleTheme() {
       }
       
 // --- Nouvelle fonctionnalité : Boutons sur les formes GeoJSON ---
-const buttonZoomThreshold = 23; // Seuil de zoom pour afficher les boutons
+const buttonZoomThreshold = 22; // Seuil de zoom pour afficher les boutons
 
 function updateButtonsVisibility() {
   var currentZoom = map.getZoom();
@@ -762,6 +765,7 @@ function updateButtonsVisibility() {
         iconSize: [15, 15], // size of the icon
         iconAnchor: [7.5, 7.5], // point of the icon which will correspond to marker's location
         popupAnchor: [0, -10], // point from which the popup should open relative to the iconAnchor
+        pane: "markerPane", // Ensure the icon is added to the markerPane
       });
 
       var EndIcon = L.icon({
@@ -770,6 +774,7 @@ function updateButtonsVisibility() {
         iconSize: [15, 15], // size of the icon
         iconAnchor: [7.5, 7.5], // point of the icon which will correspond to marker's location
         popupAnchor: [0, -10], // point from which the popup should open relative to the iconAnchor
+        pane: "markerPane", // Ensure the icon is added to the markerPane
       });
 
       // --- 10. Variables pour la gestion des marqueurs de départ et d'arrivée ---
