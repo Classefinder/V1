@@ -767,3 +767,34 @@ body.dark-mode #dark-mode-toggle {
     border-radius: 15px;
     padding: 2px 4px;
 }
+
+.custom-geojson-button {
+    background-color: #ffffff;
+    border: 2px solid #d9d9d9;
+    border-radius: 15px !important;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+    color: #000000;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-geojson-button:hover {
+    background-color: #d9d9d9;
+}
+
+/* Dark mode styles for custom GeoJSON buttons */
+body.dark-mode .custom-geojson-button {
+    background-color: #1e1e1e;
+    border: 2px solid #444444;
+    color: #ffffff;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .custom-geojson-button:hover {
+    background-color: #444444;
+}

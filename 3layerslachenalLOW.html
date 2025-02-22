@@ -462,7 +462,7 @@ function updateButtonsVisibility() {
           var center = layer.getBounds().getCenter();
           var btnMarker = L.marker(center, {
             icon: L.divIcon({
-              html: '<div><button class="custom-geojson-button">Start</button><br><button class="custom-geojson-button">End</button></div>',
+              html: '<div style="display: flex; flex-direction: column; align-items: center;"><button class="custom-geojson-button"><img src="./images/starticon.png" alt="Start Icon" style="width: 16px; height: 16px; margin-right: 5px;">Start</button><br><button class="custom-geojson-button"><img src="./images/endicon.png" alt="End Icon" style="width: 16px; height: 16px; margin-right: 5px;">End</button></div>',
               className: '', // Pas de class supplémentaire ici
               iconSize: [30, 60],
               iconAnchor: [15, -15], // Adjusted to move the buttons below the labels
