@@ -101,8 +101,8 @@
     var salleEtage1 = {
         "type": "FeatureCollection",
         "features": [
-        { "type": "Feature", "properties": { "name": "117" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
-        { "type": "Feature", "properties": { "name": "115" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": "115" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": "117" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
         ]
     };
 
@@ -450,14 +450,15 @@ function toggleTheme() {
       }
       
 // --- Nouvelle fonctionnalité : Boutons sur les formes GeoJSON ---
-const buttonZoomThreshold = 21; // Seuil de zoom pour afficher les boutons
+const buttonZoomThreshold = 23; // Seuil de zoom pour afficher les boutons, plus bas pour mobile
 
 function updateButtonsVisibility() {
   var currentZoom = map.getZoom();
 
   function toggleButtons(layerGroup) {
     layerGroup.eachLayer(function (layer) {
-      if (currentZoom >= buttonZoomThreshold) {
+      var roomName = layer.feature.properties.name || layer.feature.properties.salle;
+      if (currentZoom >= buttonZoomThreshold && roomName && roomName !== "null" && roomName !== "Escalier" && roomName !== "Sanitaire") {
         if (!layer._customButton) {
           var center = layer.getBounds().getCenter();
           var btnMarker = L.marker(center, {
