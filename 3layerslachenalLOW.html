@@ -23,6 +23,16 @@
       #map {
         height: 100vh;
       }
+      .custom-geojson-button {
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 2px 5px;
+        cursor: pointer;
+      }
+      .custom-geojson-button:hover {
+        background: #eee;
+      }
     </style>
   </head>
   <body>
@@ -45,6 +55,16 @@
         maxBoundsViscosity: 1.0,
       });
 
+      // Créez uniquement une fois les deux panes, dans l'ordre souhaité :
+      map.createPane("routePane");
+      map.getPane("routePane").style.zIndex = 600; // Pane pour les itinéraires
+
+      map.createPane("arrowPane");
+      map.getPane("arrowPane").style.zIndex = 650; // Pane pour les flèches
+
+      // Assurez-vous que le pane "arrowPane" est le dernier enfant dans le conteneur
+      map.getPane("arrowPane").parentNode.appendChild(map.getPane("arrowPane"));
+
       // --- 3. Tuiles vectorielles MapTiler ---
       // Calque clair
       var lightMap = L.maplibreGL({
@@ -64,6 +84,7 @@
 
       // --- 4. Ajout du fond clair par défaut ---
       lightMap.addTo(map);
+
 
     // --- 2. Données GeoJSON pour les salles et les chemins ---
     var salleEtage0 = {
@@ -113,6 +134,7 @@
 {"type":"Feature","properties":{"foot":"yes","name":"V1","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.13259,45.93777],[6.13262,45.93777]]}},
 {"type":"Feature","properties":{"foot":"yes","name":"V2","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.13272,45.9378],[6.13268,45.93775]]}},
 ]};
+
 
 // Fonction pour basculer entre les thèmes
 function toggleTheme() {
@@ -296,7 +318,7 @@ function toggleTheme() {
 
       // --- 8. Gestion des labels (tooltips) en fonction du niveau de zoom ---
       const tooltipZoomThreshold = 20; // Seuil de zoom pour afficher les labels
-      const arrowZoomThreshold = 21; // Seuil de zoom pour afficher les flèches
+      const arrowZoomThreshold = 20; // Seuil de zoom pour afficher les flèches
 
       function updateTooltipsVisibility() {
         var currentZoom = map.getZoom();
@@ -365,6 +387,7 @@ function toggleTheme() {
         }
 
         updateArrowsVisibility();
+        updateButtonsVisibility();
       }
 
       function updateArrowsVisibility() {
@@ -423,36 +446,215 @@ function toggleTheme() {
         }
       }
       
+// --- Nouvelle fonctionnalité : Boutons sur les formes GeoJSON ---
+const buttonZoomThreshold = 22; // Seuil de zoom pour afficher les boutons
+
+function updateButtonsVisibility() {
+  var currentZoom = map.getZoom();
+
+  function toggleButtons(layerGroup) {
+    layerGroup.eachLayer(function (layer) {
+      if (currentZoom >= buttonZoomThreshold) {
+        if (!layer._customButton) {
+          var center = layer.getBounds().getCenter();
+          var btnMarker = L.marker(center, {
+            icon: L.divIcon({
+              html: '<div><button class="custom-geojson-button">Start</button><br><button class="custom-geojson-button">End</button></div>',
+              className: '', // Pas de class supplémentaire ici
+              iconSize: [30, 60],
+              iconAnchor: [15, 30],
+            }),
+            interactive: true
+          }).addTo(map);
+
+          // Gestion du clic sur le bouton "Start"
+          btnMarker.on("click", function (e) {
+            if (e.originalEvent.target.innerText === "Start") {
+              // Supprimer le précédent point de départ s'il existe
+              if (startPoint) {
+                map.removeLayer(startPoint);
+                startPoint = null;
+              }
+              // Récupérer le nom et l'étage de la salle associée
+              var key = layer.feature.properties.name || layer.feature.properties.salle;
+              var floor = layer.feature.properties.floor;
+              
+              // Rechercher dans la couche active toutes les formes correspondant au même nom
+              var matchingFeatures = [];
+              var activeLayer = map.hasLayer(etage0)
+                ? salleLayer0
+                : map.hasLayer(etage1)
+                ? salleLayer1
+                : salleLayer2;
+              activeLayer.eachLayer(function (l) {
+                var lKey = l.feature.properties.name || l.feature.properties.salle;
+                if (lKey === key) {
+                  matchingFeatures.push(l);
+                }
+              });
+              if (matchingFeatures.length > 0) {
+                var group = L.featureGroup(matchingFeatures);
+                map.fitBounds(group.getBounds());
+                matchingFeatures.forEach(function (l) {
+                  highlightFeature(l);
+                });
+              }
+              
+              // Sélectionner le calque chemin correspondant à l'étage
+              var cheminLayer =
+                floor === "0"
+                  ? CheminEtageLayer0
+                  : floor === "1"
+                  ? CheminEtageLayer1
+                  : CheminEtageLayer2;
+              var cheminFeature = null;
+              cheminLayer.eachLayer(function (clayer) {
+                var clayerKey = clayer.feature.properties.name || clayer.feature.properties.salle;
+                if (clayer.feature && clayerKey === key) {
+                  cheminFeature = clayer;
+                }
+              });
+              if (cheminFeature) {
+                var centerChemin = cheminFeature.getBounds().getCenter();
+                startPoint = L.marker(centerChemin, { icon: StartIcon, floor: floor })
+                  .addTo(map)
+                  .bindPopup(
+                    "Point de départ sur le chemin de " + key,
+                    { autoPan: false }
+                  )
+                  .openPopup();
+              }
+              updateMarkersVisibility();
+              checkAndCalculateRoute();
+            }
+          });
+
+          // Gestion du clic sur le bouton "End"
+          btnMarker.on("click", function (e) {
+            if (e.originalEvent.target.innerText === "End") {
+              // Supprimer le précédent point d'arrivée s'il existe
+              if (endPoint) {
+                map.removeLayer(endPoint);
+                endPoint = null;
+              }
+              // Récupérer le nom et l'étage de la salle associée
+              var key = layer.feature.properties.name || layer.feature.properties.salle;
+              var floor = layer.feature.properties.floor;
+              
+              // Rechercher dans la couche active toutes les formes correspondant au même nom
+              var matchingFeatures = [];
+              var activeLayer = map.hasLayer(etage0)
+                ? salleLayer0
+                : map.hasLayer(etage1)
+                ? salleLayer1
+                : salleLayer2;
+              activeLayer.eachLayer(function (l) {
+                var lKey = l.feature.properties.name || l.feature.properties.salle;
+                if (lKey === key) {
+                  matchingFeatures.push(l);
+                }
+              });
+              if (matchingFeatures.length > 0) {
+                var group = L.featureGroup(matchingFeatures);
+                map.fitBounds(group.getBounds());
+                matchingFeatures.forEach(function (l) {
+                  highlightFeature(l);
+                });
+              }
+              
+              // Sélectionner le calque chemin correspondant à l'étage
+              var cheminLayer =
+                floor === "0"
+                  ? CheminEtageLayer0
+                  : floor === "1"
+                  ? CheminEtageLayer1
+                  : CheminEtageLayer2;
+              var cheminFeature = null;
+              cheminLayer.eachLayer(function (clayer) {
+                var clayerKey = clayer.feature.properties.name || clayer.feature.properties.salle;
+                if (clayer.feature && clayerKey === key) {
+                  cheminFeature = clayer;
+                }
+              });
+              if (cheminFeature) {
+                var centerChemin = cheminFeature.getBounds().getCenter();
+                endPoint = L.marker(centerChemin, { icon: EndIcon, floor: floor })
+                  .addTo(map)
+                  .bindPopup(
+                    "Point d'arrivée sur le chemin de " + key,
+                    { autoPan: false }
+                  )
+                  .openPopup();
+              }
+              updateMarkersVisibility();
+              checkAndCalculateRoute();
+            }
+          });
+
+          layer._customButton = btnMarker;
+        }
+      } else if (layer._customButton) {
+        map.removeLayer(layer._customButton);
+        layer._customButton = null;
+      }
+    });
+  }
+
+  // Appliquer selon l'étage actif
+  if (map.hasLayer(etage0)) {
+    toggleButtons(salleLayer0);
+  } else if (map.hasLayer(etage1)) {
+    toggleButtons(salleLayer1);
+  } else if (map.hasLayer(etage2)) {
+    toggleButtons(salleLayer2);
+  }
+}
 
       map.on("zoomend", updateTooltipsVisibility);
-      map.on("baselayerchange", updateTooltipsVisibility);
+            // Listen for layer changes and update tooltips
+            map.on("baselayerchange", function (e) {
+        updateTooltipsVisibility();
+        updateMarkersVisibility();
+        updateArrowsVisibility();
+      });
 
+      map.on("zoomend", function () {
+        updateTooltipsVisibility();
+        updateButtonsVisibility();
+      });
 
 
       // --- 9. Basculement automatique du calque en fonction de la salle recherchée ---
       // Fonction pour vérifier si une salle existe sur le calque actif
       function salleExistsOnActiveLayer(salleName) {
-        var activeLayer = null;
-        if (map.hasLayer(etage0)) {
-          activeLayer = salleLayer0;
-        } else if (map.hasLayer(etage1)) {
-          activeLayer = salleLayer1;
-        } else if (map.hasLayer(etage2)) {
-          activeLayer = salleLayer2;
-        }
-
-        if (activeLayer) {
-          var exists = false;
-          activeLayer.eachLayer(function (layer) {
-            var layerKey = layer.feature.properties.name || layer.feature.properties.salle;
-            if (layerKey === salleName) {
-              exists = true;
-            }
-          });
-          return exists;
-        }
-        return false;
+  // Si le nom recherché n'est pas valide, retourner false pour forcer le basculement
+  if (!salleName || salleName === "null") {
+    return false;
+  }
+  var activeLayer = null;
+  if (map.hasLayer(etage0)) {
+    activeLayer = salleLayer0;
+  } else if (map.hasLayer(etage1)) {
+    activeLayer = salleLayer1;
+  } else if (map.hasLayer(etage2)) {
+    activeLayer = salleLayer2;
+  }
+  if (activeLayer) {
+    var exists = false;
+    activeLayer.eachLayer(function (layer) {
+      var layerKey = layer.feature.properties.name || layer.feature.properties.salle;
+      // Ne pas tenir compte des noms invalides
+      if (!layerKey || layerKey === "null") {
+        return;
       }
+      if (layerKey === salleName) {
+        exists = true;
+      }
+    });
+    return exists;
+  }
+  return false;
+}
 
       // Modifiez la fonction switchFloor pour utiliser la vérification et effectuer le zoom
       function switchFloor(floor, salleName) {
@@ -520,6 +722,7 @@ function toggleTheme() {
   updateTooltipsVisibility();
   updateMarkersVisibility();
   updateArrowsVisibility();
+  updateButtonsVisibility();
 }
 
       var StartIcon = L.icon({
@@ -797,49 +1000,59 @@ function toggleTheme() {
                     coord[0],
                   ]),
                   {
+                    pane: "routePane", // Affecte le polyline au pane "routePane"
+                    color: color,
+                    weight: 10,
+                  }
+                );
+
+                var polyline = L.polyline(
+                  step.geometry.coordinates.map(coord => [coord[1], coord[0]]),
+                  {
+                    pane: "routePane",
                     color: color,
                     weight: 10,
                   }
                 );
 
                 var arrow = L.polylineDecorator(polyline, {
-                patterns: [
-                    {
-                        offset: "9s",
-                        repeat: "50%",
-                        symbol: L.Symbol.arrowHead({
-                            pixelSize: 9,
-                            headAngle: 60,
-                            polygon: false,
-                            pathOptions: {
-                                stroke: true,
-                                color: "white",
-                                weight: 3,
-                                fill: false,
-                                fillOpacity: 1,
-                            },
-                        }),
-                    },
-                    {
-                        offset: "0%",
-                        repeat: "50%",
-                        symbol: L.Symbol.dash({
-                            pixelSize: 10,
-                            pathOptions: {
-                                stroke: true,
-                                color: "white",
-                                weight: 3,
-                                fill: false,
-                                fillOpacity: 1,
-                            },
-                        }),
-                    },
-                ],
-            });
-
-            itineraireLayer.addLayer(polyline).addLayer(arrow); // Ajoute les deux au groupe
-
-                itineraireLayer.addLayer(polyline).addLayer(arrow);
+  pane: "arrowPane",
+  patterns: [
+    {
+      offset: "9s",
+      repeat: "50%",
+      symbol: L.Symbol.arrowHead({
+        pixelSize: 9,
+        headAngle: 60,
+        polygon: false,
+        pathOptions: {
+          pane: "arrowPane", // Ajouté ici
+          stroke: true,
+          color: "white",
+          weight: 3,
+          fill: false,
+          fillOpacity: 1,
+        },
+      }),
+    },
+    {
+      offset: "0%",
+      repeat: "50%",
+      symbol: L.Symbol.dash({
+        pixelSize: 10,
+        pathOptions: {
+          pane: "arrowPane", // Ajouté ici
+          stroke: true,
+          color: "white",
+          weight: 3,
+          fill: false,
+          fillOpacity: 1,
+        },
+      }),
+    },
+  ],
+});
+    itineraireLayer.addLayer(polyline).addLayer(arrow); // Ajoute les deux au groupe
               });
 
               var bounds = L.geoJSON(route.geometry).getBounds();
