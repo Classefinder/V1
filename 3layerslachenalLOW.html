@@ -450,7 +450,7 @@ function toggleTheme() {
       }
       
 // --- Nouvelle fonctionnalité : Boutons sur les formes GeoJSON ---
-const buttonZoomThreshold = 22; // Seuil de zoom pour afficher les boutons
+const buttonZoomThreshold = 21; // Seuil de zoom pour afficher les boutons
 
 function updateButtonsVisibility() {
   var currentZoom = map.getZoom();
@@ -462,7 +462,7 @@ function updateButtonsVisibility() {
           var center = layer.getBounds().getCenter();
           var btnMarker = L.marker(center, {
             icon: L.divIcon({
-              html: '<div style="display: flex; flex-direction: column; align-items: center;"><button class="custom-geojson-button"><img src="./images/starticon.png" alt="Start Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">Start</button><br><button class="custom-geojson-button"><img src="./images/endicon.png" alt="End Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">End</button></div>',
+              html: '<div style="display: flex; flex-direction: column; align-items: center; line-height: 0;"><button class="custom-geojson-button"><img src="./images/starticon.png" alt="Start Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 40px 80px rgba(0, 0, 0, 1);">Start</button><br><button class="custom-geojson-button"><img src="./images/endicon.png" alt="End Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">End</button></div>',
               className: '', // Pas de class supplémentaire ici
               iconSize: [30, 60],
               iconAnchor: [15, -15], // Adjusted to move the buttons below the labels

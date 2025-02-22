@@ -781,6 +781,8 @@ body.dark-mode #dark-mode-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0;
+    /* Ensure no margin between buttons */
 }
 
 .custom-geojson-button:hover {
