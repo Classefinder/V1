@@ -447,7 +447,7 @@ function toggleTheme() {
       }
       
 // --- Nouvelle fonctionnalité : Boutons sur les formes GeoJSON ---
-const buttonZoomThreshold = 22; // Seuil de zoom pour afficher les boutons
+const buttonZoomThreshold = 23; // Seuil de zoom pour afficher les boutons
 
 function updateButtonsVisibility() {
   var currentZoom = map.getZoom();
@@ -462,7 +462,7 @@ function updateButtonsVisibility() {
               html: '<div><button class="custom-geojson-button">Start</button><br><button class="custom-geojson-button">End</button></div>',
               className: '', // Pas de class supplémentaire ici
               iconSize: [30, 60],
-              iconAnchor: [15, 30],
+              iconAnchor: [15, -15], // Adjusted to move the buttons below the labels
             }),
             interactive: true
           }).addTo(map);
@@ -603,10 +603,35 @@ function updateButtonsVisibility() {
   // Appliquer selon l'étage actif
   if (map.hasLayer(etage0)) {
     toggleButtons(salleLayer0);
-  } else if (map.hasLayer(etage1)) {
+  } else {
+    salleLayer0.eachLayer(function (layer) {
+      if (layer._customButton) {
+        map.removeLayer(layer._customButton);
+        layer._customButton = null;
+      }
+    });
+  }
+
+  if (map.hasLayer(etage1)) {
     toggleButtons(salleLayer1);
-  } else if (map.hasLayer(etage2)) {
+  } else {
+    salleLayer1.eachLayer(function (layer) {
+      if (layer._customButton) {
+        map.removeLayer(layer._customButton);
+        layer._customButton = null;
+      }
+    });
+  }
+
+  if (map.hasLayer(etage2)) {
     toggleButtons(salleLayer2);
+  } else {
+    salleLayer2.eachLayer(function (layer) {
+      if (layer._customButton) {
+        map.removeLayer(layer._customButton);
+        layer._customButton = null;
+      }
+    });
   }
 }
 
@@ -623,6 +648,12 @@ function updateButtonsVisibility() {
         updateButtonsVisibility();
       });
 
+      map.on("baselayerchange", function (e) {
+        updateTooltipsVisibility();
+        updateMarkersVisibility();
+        updateArrowsVisibility();
+        updateButtonsVisibility(); // Add this line to update buttons visibility on layer change
+      });
 
       // --- 9. Basculement automatique du calque en fonction de la salle recherchée ---
       // Fonction pour vérifier si une salle existe sur le calque actif
