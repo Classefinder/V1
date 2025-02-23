@@ -18,6 +18,10 @@
     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-simple-locate@1.5.0/dist/leaflet-simple-locate.min.css">
+    <script src="https://unpkg.com/leaflet-simple-locate@1.5.0/dist/leaflet-simple-locate.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
 
     <style>
       #map {
@@ -33,11 +37,18 @@
       .custom-geojson-button:hover {
         background: #eee;
       }
+      #geolocate-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+      }
     </style>
   </head>
   <body>
     <div id="map"></div>
     <button id="dark-mode-toggle"></button>
+    <button id="geolocate-button">Activer la géolocalisation</button>
 
     <script>
       // --- 1. Initialisation des limites ---
@@ -49,7 +60,7 @@
       var map = L.map("map", {
         center: [45.9368, 6.1322],
         zoom: 18,
-        minZoom: 17,
+        minZoom: 2,
         maxZoom: 23,
         maxBounds: limites,
         maxBoundsViscosity: 1.0,
@@ -1186,6 +1197,78 @@ function updateButtonsVisibility() {
 
       // Appeler la fonction lors du chargement du site
       cycleLayers();
+
+  var currentLocationMarker = null;
+
+  // Ajouter le bouton de géolocalisation en dehors de la barre de recherche
+  document.getElementById('geolocate-button').addEventListener('click', function() {
+    map.locate({ setView: true, watch: true, maxZoom: 18 });
+  });
+
+  // Ajouter le bouton de localisation à la barre de recherche "SearchControlStart"
+  var locateButton = L.easyButton('fa-location-arrow', function() {
+    if (currentLocationMarker) {
+      if (startPoint) {
+        map.removeLayer(startPoint);
+      }
+      startPoint = L.marker(currentLocationMarker.getLatLng(), { icon: StartIcon, floor: "0" }).addTo(map)
+        .bindPopup("Point de départ sur votre position actuelle", { autoPan: false })
+        .openPopup();
+      updateMarkersVisibility();
+      checkAndCalculateRoute();
+    } else {
+      alert("La géolocalisation n'est pas activée ou la position actuelle n'est pas disponible.");
+    }
+  }, 'Utiliser ma position comme point de départ');
+
+  // Ajouter le bouton à la barre de recherche "SearchControlStart"
+  var searchControlStartContainer = document.getElementById('search-control-start');
+  searchControlStartContainer.appendChild(locateButton.button);
+
+  // Utiliser leaflet-simple-locate pour la géolocalisation avec icône et orientation
+  var locateControl = L.control.simpleLocate({
+    position: 'topright',
+    drawCircle: true,
+    follow: true,
+    setView: true,
+    keepCurrentZoomLevel: true,
+    markerStyle: {
+      weight: 1,
+      opacity: 0.8,
+      fillOpacity: 0.8
+    },
+    circleStyle: {
+      weight: 1,
+      clickable: false
+    },
+    icon: 'fa fa-location-arrow',
+    metric: true,
+    strings: {
+      title: "Ma position actuelle",
+      popup: "Vous êtes ici",
+      outsideMapBoundsMsg: "Vous êtes en dehors des limites de la carte"
+    },
+    locateOptions: {
+      maxZoom: 18,
+      watch: true,
+      enableHighAccuracy: true
+    }
+  }).addTo(map);
+
+  // Gérer l'événement de localisation trouvée
+  map.on('locationfound', function(e) {
+    if (currentLocationMarker) {
+      map.removeLayer(currentLocationMarker);
+    }
+    currentLocationMarker = L.marker(e.latlng).addTo(map)
+      .bindPopup("Votre position actuelle", { autoPan: false });
+  });
+
+  // Gérer l'événement de localisation échouée
+  map.on('locationerror', function(e) {
+    alert("Impossible de trouver votre position : " + e.message);
+  });
+
     </script>
   </body>
 </html>
