@@ -23,6 +23,16 @@
       #map {
         height: 100vh;
       }
+      .custom-geojson-button {
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 2px 5px;
+        cursor: pointer;
+      }
+      .custom-geojson-button:hover {
+        background: #eee;
+      }
     </style>
   </head>
   <body>
@@ -45,6 +55,19 @@
         maxBoundsViscosity: 1.0,
       });
 
+      // Créez uniquement une fois les trois panes, dans l'ordre souhaité :
+      map.createPane("routePane");
+      map.getPane("routePane").style.zIndex = 600; // Pane pour les itinéraires
+
+      map.createPane("arrowPane");
+      map.getPane("arrowPane").style.zIndex = 650; // Pane pour les flèches
+
+      map.createPane("markerPane");
+      map.getPane("markerPane").style.zIndex = 700; // Pane for markers
+
+      // Assurez-vous que le pane "arrowPane" est le dernier enfant dans le conteneur
+      map.getPane("arrowPane").parentNode.appendChild(map.getPane("arrowPane"));
+
       // --- 3. Tuiles vectorielles MapTiler ---
       // Calque clair
       var lightMap = L.maplibreGL({
@@ -65,6 +88,7 @@
       // --- 4. Ajout du fond clair par défaut ---
       lightMap.addTo(map);
 
+
     // --- 2. Données GeoJSON pour les salles et les chemins ---
     var salleEtage0 = {
         "type": "FeatureCollection",
@@ -77,8 +101,8 @@
     var salleEtage1 = {
         "type": "FeatureCollection",
         "features": [
-        { "type": "Feature", "properties": { "name": "117" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
-        { "type": "Feature", "properties": { "name": "115" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": "115" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132443855592967, 45.936792791783532 ], [ 6.132451800410498, 45.936862076107261 ], [ 6.132332645198166, 45.936867696926917 ], [ 6.132323764318674, 45.936798784599809 ], [ 6.132443855592967, 45.936792791783532 ] ] ] ] } },
+        { "type": "Feature", "properties": { "name": "117" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 6.132323764318674, 45.93679878003244 ], [ 6.132332645193752, 45.936867696937178 ], [ 6.132169440848435, 45.936875476859768 ], [ 6.132160492656691, 45.936806544549889 ], [ 6.132323764318674, 45.93679878003244 ] ] ] ] } },
         ]
     };
 
@@ -113,6 +137,7 @@
 {"type":"Feature","properties":{"foot":"yes","name":"V1","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.13259,45.93777],[6.13262,45.93777]]}},
 {"type":"Feature","properties":{"foot":"yes","name":"V2","highway":"footway","layer":"-2","tunnel":"yes"},"geometry":{"type":"LineString","coordinates":[[6.13272,45.9378],[6.13268,45.93775]]}},
 ]};
+
 
 // Fonction pour basculer entre les thèmes
 function toggleTheme() {
@@ -296,7 +321,7 @@ function toggleTheme() {
 
       // --- 8. Gestion des labels (tooltips) en fonction du niveau de zoom ---
       const tooltipZoomThreshold = 20; // Seuil de zoom pour afficher les labels
-      const arrowZoomThreshold = 21; // Seuil de zoom pour afficher les flèches
+      const arrowZoomThreshold = 20; // Seuil de zoom pour afficher les flèches
 
       function updateTooltipsVisibility() {
         var currentZoom = map.getZoom();
@@ -365,6 +390,7 @@ function toggleTheme() {
         }
 
         updateArrowsVisibility();
+        updateButtonsVisibility();
       }
 
       function updateArrowsVisibility() {
@@ -423,36 +449,247 @@ function toggleTheme() {
         }
       }
       
+// --- Nouvelle fonctionnalité : Boutons sur les formes GeoJSON ---
+const buttonZoomThreshold = window.innerWidth <= 600 ? 22 : 23; // Seuil de zoom pour afficher les boutons, plus bas pour écrans < 600px
+
+function updateButtonsVisibility() {
+  var currentZoom = map.getZoom();
+
+  function toggleButtons(layerGroup) {
+    layerGroup.eachLayer(function (layer) {
+      var roomName = layer.feature.properties.name || layer.feature.properties.salle;
+      if (currentZoom >= buttonZoomThreshold && roomName && roomName !== "null" && roomName !== "Escalier" && roomName !== "Sanitaire") {
+        if (!layer._customButton) {
+          var center = layer.getBounds().getCenter();
+          var btnMarker = L.marker(center, {
+            icon: L.divIcon({
+              html: '<div style="display: flex; flex-direction: column; align-items: center; line-height: 0;"><button class="custom-geojson-button"><img src="./images/starticon.png" alt="Start Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 40px 80px rgba(0, 0, 0, 1);">Start</button><br><button class="custom-geojson-button"><img src="./images/endicon.png" alt="End Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">End</button></div>',
+              className: '', // Pas de class supplémentaire ici
+              iconSize: [30, 60],
+              iconAnchor: [15, -15], // Adjusted to move the buttons below the labels
+            }),
+            interactive: true
+          }).addTo(map);
+
+          // Gestion du clic sur le bouton "Start"
+          btnMarker.on("click", function (e) {
+            if (e.originalEvent.target.innerText === "Start") {
+              // Supprimer le précédent point de départ s'il existe
+              if (startPoint) {
+                map.removeLayer(startPoint);
+                startPoint = null;
+              }
+              // Récupérer le nom et l'étage de la salle associée
+              var key = layer.feature.properties.name || layer.feature.properties.salle;
+              var floor = layer.feature.properties.floor;
+              
+              // Rechercher dans la couche active toutes les formes correspondant au même nom
+              var matchingFeatures = [];
+              var activeLayer = map.hasLayer(etage0)
+                ? salleLayer0
+                : map.hasLayer(etage1)
+                ? salleLayer1
+                : salleLayer2;
+              activeLayer.eachLayer(function (l) {
+                var lKey = l.feature.properties.name || l.feature.properties.salle;
+                if (lKey === key) {
+                  matchingFeatures.push(l);
+                }
+              });
+              if (matchingFeatures.length > 0) {
+                var group = L.featureGroup(matchingFeatures);
+                map.fitBounds(group.getBounds());
+                matchingFeatures.forEach(function (l) {
+                  highlightFeature(l);
+                });
+              }
+              
+              // Sélectionner le calque chemin correspondant à l'étage
+              var cheminLayer =
+                floor === "0"
+                  ? CheminEtageLayer0
+                  : floor === "1"
+                  ? CheminEtageLayer1
+                  : CheminEtageLayer2;
+              var cheminFeature = null;
+              cheminLayer.eachLayer(function (clayer) {
+                var clayerKey = clayer.feature.properties.name || clayer.feature.properties.salle;
+                if (clayer.feature && clayerKey === key) {
+                  cheminFeature = clayer;
+                }
+              });
+              if (cheminFeature) {
+                var centerChemin = cheminFeature.getBounds().getCenter();
+                startPoint = L.marker(centerChemin, { icon: StartIcon, floor: floor })
+                  .addTo(map)
+                  .bindPopup(
+                    "Point de départ sur le chemin de " + key,
+                    { autoPan: false }
+                  )
+                  .openPopup();
+              }
+              updateMarkersVisibility();
+              checkAndCalculateRoute();
+            }
+          });
+
+          // Gestion du clic sur le bouton "End"
+          btnMarker.on("click", function (e) {
+            if (e.originalEvent.target.innerText === "End") {
+              // Supprimer le précédent point d'arrivée s'il existe
+              if (endPoint) {
+                map.removeLayer(endPoint);
+                endPoint = null;
+              }
+              // Récupérer le nom et l'étage de la salle associée
+              var key = layer.feature.properties.name || layer.feature.properties.salle;
+              var floor = layer.feature.properties.floor;
+              
+              // Rechercher dans la couche active toutes les formes correspondant au même nom
+              var matchingFeatures = [];
+              var activeLayer = map.hasLayer(etage0)
+                ? salleLayer0
+                : map.hasLayer(etage1)
+                ? salleLayer1
+                : salleLayer2;
+              activeLayer.eachLayer(function (l) {
+                var lKey = l.feature.properties.name || l.feature.properties.salle;
+                if (lKey === key) {
+                  matchingFeatures.push(l);
+                }
+              });
+              if (matchingFeatures.length > 0) {
+                var group = L.featureGroup(matchingFeatures);
+                map.fitBounds(group.getBounds());
+                matchingFeatures.forEach(function (l) {
+                  highlightFeature(l);
+                });
+              }
+              
+              // Sélectionner le calque chemin correspondant à l'étage
+              var cheminLayer =
+                floor === "0"
+                  ? CheminEtageLayer0
+                  : floor === "1"
+                  ? CheminEtageLayer1
+                  : CheminEtageLayer2;
+              var cheminFeature = null;
+              cheminLayer.eachLayer(function (clayer) {
+                var clayerKey = clayer.feature.properties.name || clayer.feature.properties.salle;
+                if (clayer.feature && clayerKey === key) {
+                  cheminFeature = clayer;
+                }
+              });
+              if (cheminFeature) {
+                var centerChemin = cheminFeature.getBounds().getCenter();
+                endPoint = L.marker(centerChemin, { icon: EndIcon, floor: floor })
+                  .addTo(map)
+                  .bindPopup(
+                    "Point d'arrivée sur le chemin de " + key,
+                    { autoPan: false }
+                  )
+                  .openPopup();
+              }
+              updateMarkersVisibility();
+              checkAndCalculateRoute();
+            }
+          });
+
+          layer._customButton = btnMarker;
+        }
+      } else if (layer._customButton) {
+        map.removeLayer(layer._customButton);
+        layer._customButton = null;
+      }
+    });
+  }
+
+  // Appliquer selon l'étage actif
+  if (map.hasLayer(etage0)) {
+    toggleButtons(salleLayer0);
+  } else {
+    salleLayer0.eachLayer(function (layer) {
+      if (layer._customButton) {
+        map.removeLayer(layer._customButton);
+        layer._customButton = null;
+      }
+    });
+  }
+
+  if (map.hasLayer(etage1)) {
+    toggleButtons(salleLayer1);
+  } else {
+    salleLayer1.eachLayer(function (layer) {
+      if (layer._customButton) {
+        map.removeLayer(layer._customButton);
+        layer._customButton = null;
+      }
+    });
+  }
+
+  if (map.hasLayer(etage2)) {
+    toggleButtons(salleLayer2);
+  } else {
+    salleLayer2.eachLayer(function (layer) {
+      if (layer._customButton) {
+        map.removeLayer(layer._customButton);
+        layer._customButton = null;
+      }
+    });
+  }
+}
 
       map.on("zoomend", updateTooltipsVisibility);
-      map.on("baselayerchange", updateTooltipsVisibility);
+            // Listen for layer changes and update tooltips
+            map.on("baselayerchange", function (e) {
+        updateTooltipsVisibility();
+        updateMarkersVisibility();
+        updateArrowsVisibility();
+      });
 
+      map.on("zoomend", function () {
+        updateTooltipsVisibility();
+        updateButtonsVisibility();
+      });
 
+      map.on("baselayerchange", function (e) {
+        updateTooltipsVisibility();
+        updateMarkersVisibility();
+        updateArrowsVisibility();
+        updateButtonsVisibility(); // Add this line to update buttons visibility on layer change
+      });
 
       // --- 9. Basculement automatique du calque en fonction de la salle recherchée ---
       // Fonction pour vérifier si une salle existe sur le calque actif
       function salleExistsOnActiveLayer(salleName) {
-        var activeLayer = null;
-        if (map.hasLayer(etage0)) {
-          activeLayer = salleLayer0;
-        } else if (map.hasLayer(etage1)) {
-          activeLayer = salleLayer1;
-        } else if (map.hasLayer(etage2)) {
-          activeLayer = salleLayer2;
-        }
-
-        if (activeLayer) {
-          var exists = false;
-          activeLayer.eachLayer(function (layer) {
-            var layerKey = layer.feature.properties.name || layer.feature.properties.salle;
-            if (layerKey === salleName) {
-              exists = true;
-            }
-          });
-          return exists;
-        }
-        return false;
+  // Si le nom recherché n'est pas valide, retourner false pour forcer le basculement
+  if (!salleName || salleName === "null") {
+    return false;
+  }
+  var activeLayer = null;
+  if (map.hasLayer(etage0)) {
+    activeLayer = salleLayer0;
+  } else if (map.hasLayer(etage1)) {
+    activeLayer = salleLayer1;
+  } else if (map.hasLayer(etage2)) {
+    activeLayer = salleLayer2;
+  }
+  if (activeLayer) {
+    var exists = false;
+    activeLayer.eachLayer(function (layer) {
+      var layerKey = layer.feature.properties.name || layer.feature.properties.salle;
+      // Ne pas tenir compte des noms invalides
+      if (!layerKey || layerKey === "null") {
+        return;
       }
+      if (layerKey === salleName) {
+        exists = true;
+      }
+    });
+    return exists;
+  }
+  return false;
+}
 
       // Modifiez la fonction switchFloor pour utiliser la vérification et effectuer le zoom
       function switchFloor(floor, salleName) {
@@ -520,6 +757,7 @@ function toggleTheme() {
   updateTooltipsVisibility();
   updateMarkersVisibility();
   updateArrowsVisibility();
+  updateButtonsVisibility();
 }
 
       var StartIcon = L.icon({
@@ -528,6 +766,7 @@ function toggleTheme() {
         iconSize: [15, 15], // size of the icon
         iconAnchor: [7.5, 7.5], // point of the icon which will correspond to marker's location
         popupAnchor: [0, -10], // point from which the popup should open relative to the iconAnchor
+        pane: "markerPane", // Ensure the icon is added to the markerPane
       });
 
       var EndIcon = L.icon({
@@ -536,6 +775,7 @@ function toggleTheme() {
         iconSize: [15, 15], // size of the icon
         iconAnchor: [7.5, 7.5], // point of the icon which will correspond to marker's location
         popupAnchor: [0, -10], // point from which the popup should open relative to the iconAnchor
+        pane: "markerPane", // Ensure the icon is added to the markerPane
       });
 
       // --- 10. Variables pour la gestion des marqueurs de départ et d'arrivée ---
@@ -797,49 +1037,59 @@ function toggleTheme() {
                     coord[0],
                   ]),
                   {
+                    pane: "routePane", // Affecte le polyline au pane "routePane"
+                    color: color,
+                    weight: 10,
+                  }
+                );
+
+                var polyline = L.polyline(
+                  step.geometry.coordinates.map(coord => [coord[1], coord[0]]),
+                  {
+                    pane: "routePane",
                     color: color,
                     weight: 10,
                   }
                 );
 
                 var arrow = L.polylineDecorator(polyline, {
-                patterns: [
-                    {
-                        offset: "9s",
-                        repeat: "50%",
-                        symbol: L.Symbol.arrowHead({
-                            pixelSize: 9,
-                            headAngle: 60,
-                            polygon: false,
-                            pathOptions: {
-                                stroke: true,
-                                color: "white",
-                                weight: 3,
-                                fill: false,
-                                fillOpacity: 1,
-                            },
-                        }),
-                    },
-                    {
-                        offset: "0%",
-                        repeat: "50%",
-                        symbol: L.Symbol.dash({
-                            pixelSize: 10,
-                            pathOptions: {
-                                stroke: true,
-                                color: "white",
-                                weight: 3,
-                                fill: false,
-                                fillOpacity: 1,
-                            },
-                        }),
-                    },
-                ],
-            });
-
-            itineraireLayer.addLayer(polyline).addLayer(arrow); // Ajoute les deux au groupe
-
-                itineraireLayer.addLayer(polyline).addLayer(arrow);
+  pane: "arrowPane",
+  patterns: [
+    {
+      offset: "9s",
+      repeat: "50%",
+      symbol: L.Symbol.arrowHead({
+        pixelSize: 9,
+        headAngle: 60,
+        polygon: false,
+        pathOptions: {
+          pane: "arrowPane", // Ajouté ici
+          stroke: true,
+          color: "white",
+          weight: 3,
+          fill: false,
+          fillOpacity: 1,
+        },
+      }),
+    },
+    {
+      offset: "0%",
+      repeat: "50%",
+      symbol: L.Symbol.dash({
+        pixelSize: 10,
+        pathOptions: {
+          pane: "arrowPane", // Ajouté ici
+          stroke: true,
+          color: "white",
+          weight: 3,
+          fill: false,
+          fillOpacity: 1,
+        },
+      }),
+    },
+  ],
+});
+    itineraireLayer.addLayer(polyline).addLayer(arrow); // Ajoute les deux au groupe
               });
 
               var bounds = L.geoJSON(route.geometry).getBounds();
