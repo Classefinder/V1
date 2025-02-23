@@ -800,3 +800,36 @@ body.dark-mode .custom-geojson-button {
 body.dark-mode .custom-geojson-button:hover {
     background-color: #444444;
 }
+
+/* Style du bouton de localisation */
+.leaflet-control-locate a {
+    background-color: white !important;
+    border-radius: 50% !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Animation du marqueur */
+.leaflet-control-locate.active .fa-location-arrow {
+    color: #0078A8 !important;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Boussole d'orientation */
+.leaflet-control-locate-compass {
+    color: #0078A8 !important;
+    font-size: 20px !important;
+}
