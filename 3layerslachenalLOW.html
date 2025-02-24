@@ -7,6 +7,7 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>Classefinder | Lycée Lachenal</title>
+    <link href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.83.1/dist/L.Control.Locate.min.css" rel="stylesheet"> 
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.css"/>
@@ -18,11 +19,8 @@
     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
-
-
-
-    <script src=" https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.83.1/dist/L.Control.Locate.min.js "></script>
-<link href=" https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.83.1/dist/L.Control.Locate.min.css " rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.83.1/dist/L.Control.Locate.min.js"></script>
+   
     <style>
       #map {
         height: 100vh;
@@ -43,7 +41,6 @@
     <div id="map"></div>
     <button id="dark-mode-toggle"></button>
 
-
     <script>
       // --- 1. Initialisation des limites ---
       var sudOuest = L.latLng(45.93818505744445, 6.134245788738398);
@@ -54,11 +51,13 @@
       var map = L.map("map", {
         center: [45.9368, 6.1322],
         zoom: 18,
-        minZoom: 1,
+        minZoom: 3,
         maxZoom: 23,
-
+        //maxBounds: limites,
         maxBoundsViscosity: 1.0,
       });
+      
+
 
       // Créez uniquement une fois les trois panes, dans l'ordre souhaité :
       map.createPane("routePane");
@@ -201,30 +200,24 @@ function toggleTheme() {
         }
         layer.on({
           mouseover: function (e) {
-            if (!e.target.options.isLocateMarker) { // Check if it's not a locate marker
-              e.target.setStyle({
-                fillOpacity: 1,
-                weight: 3,
-              });
-            }
+            e.target.setStyle({
+              fillOpacity: 1,
+              weight: 3,
+            });
           },
           mouseout: function (e) {
-            if (!e.target.options.isLocateMarker) { // Check if it's not a locate marker
-              if (floor === "0") {
-                salleLayer0.resetStyle(e.target);
-              } else if (floor === "1") {
-                salleLayer1.resetStyle(e.target);
-              } else if (floor === "2") {
-                salleLayer2.resetStyle(e.target);
-              }
+            if (floor === "0") {
+              salleLayer0.resetStyle(e.target);
+            } else if (floor === "1") {
+              salleLayer1.resetStyle(e.target);
+            } else if (floor === "2") {
+              salleLayer2.resetStyle(e.target);
             }
           },
           click: function (e) {
-            if (!e.target.options.isLocateMarker) { // Check if it's not a locate marker
-              // Supprimer l'appel à resetHighlight() pour conserver les labels
-              // Zoom sur la feature cliquée
-              map.fitBounds(e.target.getBounds());
-            }
+            // Supprimer l'appel à resetHighlight() pour conserver les labels
+            // Zoom sur la feature cliquée
+            map.fitBounds(e.target.getBounds());
           },
         });
       }
@@ -461,7 +454,7 @@ function toggleTheme() {
       }
       
 // --- Nouvelle fonctionnalité : Boutons sur les formes GeoJSON ---
-const buttonZoomThreshold = 23; // Seuil de zoom pour afficher les boutons, plus bas pour mobile
+const buttonZoomThreshold = window.innerWidth <= 600 ? 22 : 23; // Seuil de zoom pour afficher les boutons, plus bas pour écrans < 600px
 
 function updateButtonsVisibility() {
   var currentZoom = map.getZoom();
@@ -1198,33 +1191,10 @@ function updateButtonsVisibility() {
       // Appeler la fonction lors du chargement du site
       cycleLayers();
 
-      // Initialize the locate control
-      var locateControl = L.control.locate({
-        position: 'topleft',
-        flyTo: true,
-        icon: 'fa fa-location-arrow',
-        iconLoading: 'fa fa-spinner fa-spin',
-        locateOptions: {
-          maxZoom: 18,
-          enableHighAccuracy: true
-        },
-        onLocationFound: function(e) {
-          var radius = e.accuracy / 2;
-          var locationMarker = L.circleMarker(e.latlng, {
-            color: '#136AEC',
-            fillColor: '#2A93EE',
-            fillOpacity: 0.5,
-            radius: 10,
-            isLocateMarker: true // Custom property to identify locate markers
-          }).addTo(map);
-          locationMarker.bindPopup("You are within " + radius + " meters from this point").openPopup();
-        }
-      }).addTo(map);
-
-      // Add event listener to the locate button
-      document.getElementById('locate-control').addEventListener('click', function() {
-        locateControl.start();
-      });
+            // --- Ajout du contrôle LocateControl ---
+            L.control.locate({
+              position: "topright",
+            }).addTo(map);
     </script>
   </body>
 </html>
