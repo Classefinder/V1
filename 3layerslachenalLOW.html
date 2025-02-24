@@ -849,6 +849,56 @@ function updateButtonsVisibility() {
           this._tooltip.id = "search-tooltip-start";
         }
       });
+      
+      // ------ Ajout du bouton pour utiliser la position actuelle ------
+      // Créez et ajoutez le bouton dans le container de searchControlStart
+      (function() {
+        var scContainer = searchControlStart.getContainer();
+        var geoBtn = document.createElement("button");
+        geoBtn.id = "geo-btn-start";
+        geoBtn.textContent = "Utiliser ma position";
+        geoBtn.style.marginTop = "5px";
+        geoBtn.style.padding = "3px 6px";
+        scContainer.appendChild(geoBtn);
+      
+        geoBtn.addEventListener("click", function() {
+          if (navigator.geolocation) {
+            navigator.permissions
+              .query({ name: "geolocation" })
+              .then(function(result) {
+                if (result.state === "granted" || result.state === "prompt") {
+                  navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                      var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
+                      if (startPoint) {
+                        map.removeLayer(startPoint);
+                        startPoint = null;
+                      }
+                      // Ici, on définit l'étage par défaut à "0"
+                      startPoint = L.marker(latlng, { icon: StartIcon, floor: "0" })
+                        .addTo(map)
+                        .bindPopup("Point de départ (position actuelle)")
+                        .openPopup();
+                      map.setView(latlng, map.getZoom());
+                      updateMarkersVisibility();
+                      checkAndCalculateRoute();
+                    },
+                    function(error) {
+                      alert("Erreur lors de la récupération de votre position.");
+                    }
+                  );
+                } else {
+                  alert("La localisation n'est pas autorisée.");
+                }
+              })
+              .catch(function() {
+                alert("Impossible de vérifier les permissions de géolocalisation.");
+              });
+          } else {
+            alert("La géolocalisation n'est pas disponible sur votre navigateur.");
+          }
+        });
+      })();
 
       searchControlStart.on("search:locationfound", function (e) {
         resetHighlight();
@@ -861,13 +911,15 @@ function updateButtonsVisibility() {
         switchFloor(salleFeature.feature.properties.floor, salleName);
         var key = salleName;
         var matchingFeatures = [];
-        var activeLayer = map.hasLayer(etage0) ? salleLayer0 : map.hasLayer(etage1) ? salleLayer1 : salleLayer2;
-        activeLayer.eachLayer(function (layer) {
-          var layerKey = layer.feature.properties.name || layer.feature.properties.salle;
-          if (layerKey === key) {
-            matchingFeatures.push(layer);
-          }
-        });
+        var activeLayer = map.hasLayer(etage0) ? salleLayer0 : map.hasLayer(etage1) ? salleLayer1 : map.hasLayer(etage2) ? salleLayer2 : null;
+        if (activeLayer) {
+          activeLayer.eachLayer(function (layer) {
+            var layerKey = layer.feature.properties.name || layer.feature.properties.salle;
+            if (layerKey === key) {
+              matchingFeatures.push(layer);
+            }
+          });
+        }
         if (matchingFeatures.length > 0) {
           var group = new L.featureGroup(matchingFeatures);
           map.fitBounds(group.getBounds());
@@ -936,14 +988,16 @@ function updateButtonsVisibility() {
         switchFloor(salleFeature.feature.properties.floor, salleName);
         var key = salleName;
         var matchingFeatures = [];
-        var activeLayer = map.hasLayer(etage0) ? salleLayer0 : map.hasLayer(etage1) ? salleLayer1 : salleLayer2;
-        activeLayer.eachLayer(function (layer) {
-          var layerKey =
-            layer.feature.properties.name || layer.feature.properties.salle;
-          if (layerKey === key) {
-            matchingFeatures.push(layer);
-          }
-        });
+        var activeLayer = map.hasLayer(etage0) ? salleLayer0 : map.hasLayer(etage1) ? salleLayer1 : map.hasLayer(etage2) ? salleLayer2 : null;
+        if (activeLayer) {
+          activeLayer.eachLayer(function (layer) {
+            var layerKey =
+              layer.feature.properties.name || layer.feature.properties.salle;
+            if (layerKey === key) {
+              matchingFeatures.push(layer);
+            }
+          });
+        }
         if (matchingFeatures.length > 0) {
           var group = new L.featureGroup(matchingFeatures);
           map.fitBounds(group.getBounds());
@@ -1029,10 +1083,10 @@ function updateButtonsVisibility() {
                 var itineraireLayer = itinéraireLayer0;
                 if (startName.toLowerCase().includes("1")) {
                   color = "#3564FF";
-                  itineraireLayer = itinéraireLayer1;
+                  itineraireLayer = itineraireLayer1;
                 } else if (startName.toLowerCase().includes("2")) {
                   color = "#002499";
-                  itineraireLayer = itinéraireLayer2;
+                  itineraireLayer = itineraireLayer2;
                 }
 
                 var polyline = L.polyline(
