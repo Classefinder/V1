@@ -26,6 +26,9 @@ body {
     bottom: 75px;
 }
 
+
+
+
 /* Supprimer toute bordure ou ombre autour de l'input en cas de focus */
 .leaflet-control-search input:focus {
     outline: none !important;
@@ -41,6 +44,10 @@ body {
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
     font-family: 'Arial', sans-serif;
     color: #000000;
+}
+
+#search-control-start .search-cancel {
+    right: 87px;
 }
 
 /* Style pour la barre de recherche de fin */
@@ -889,4 +896,39 @@ body.dark-mode .custom-geojson-button:hover {
     100% {
         transform: rotate(360deg);
     }
+}
+
+
+#geo-btn-start {
+    /* Removed fixed right offset */
+    right: 0;
+    /* Remove extra margin to avoid aplatissement */
+    margin: 0;
+    /* Use auto left margin to align in flex container if needed */
+    margin-left: auto;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background: url('./images/locate-icon.svg') no-repeat center center;
+    background-size: 60%;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+    /* Added to remove default outline */
+    border: none;
+    /* Added to remove default border */
+}
+
+/* Added hover effect for the geo button */
+#geo-btn-start:hover {
+    background-color: #d9d9d9;
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+/* Dark mode variant for the geo-btn-start button */
+body.dark-mode #geo-btn-start {
+    background: url('./images/location-icon-dark.png') no-repeat center center;
+    background-size: 60%;
 }
