@@ -264,17 +264,17 @@ function toggleTheme() {
       });
 
       // --- 5. Couches d'itinéraire (initialement vides) ---
-      var itinéraireEtage0 = { type: "FeatureCollection", features: [] };
-      var itinéraireEtage1 = { type: "FeatureCollection", features: [] };
-      var itinéraireEtage2 = { type: "FeatureCollection", features: [] };
+      var itineraireEtage0 = { type: "FeatureCollection", features: [] };
+      var itineraireEtage1 = { type: "FeatureCollection", features: [] };
+      var itineraireEtage2 = { type: "FeatureCollection", features: [] };
 
-      var itinéraireLayer0 = L.geoJSON(itinéraireEtage0, {
+      var itineraireLayer0 = L.geoJSON(itineraireEtage0, {
         style: { color: "#3564FF", weight: 10 },
       });
-      var itinéraireLayer1 = L.geoJSON(itinéraireEtage1, {
+      var itineraireLayer1 = L.geoJSON(itineraireEtage1, {
         style: { color: "#3564FF", weight: 10 },
       });
-      var itinéraireLayer2 = L.geoJSON(itinéraireEtage2, {
+      var itineraireLayer2 = L.geoJSON(itineraireEtage2, {
         style: { color: "#FFA500", weight: 5 },
       });
 
@@ -305,19 +305,19 @@ function toggleTheme() {
       var etage0 = L.layerGroup([
         customBackground0,
         salleLayer0,
-        itinéraireLayer0,
+        itineraireLayer0,
         CheminEtageLayer0,
       ]);
       var etage1 = L.layerGroup([
         customBackground1,
         salleLayer1,
-        itinéraireLayer1,
+        itineraireLayer1,
         CheminEtageLayer1,
       ]);
       var etage2 = L.layerGroup([
         customBackground2,
         salleLayer2,
-        itinéraireLayer2,
+        itineraireLayer2,
         CheminEtageLayer2,
       ]);
       // Par défaut, le groupe de l'étage 0 est affiché.
@@ -423,9 +423,9 @@ function toggleTheme() {
         }
       
         if (map.hasLayer(etage0)) {
-          toggleArrows(itinéraireLayer0);
+          toggleArrows(itineraireLayer0);
         } else {
-          itinéraireLayer0.eachLayer(function (layer) {
+          itineraireLayer0.eachLayer(function (layer) {
             if (layer instanceof L.PolylineDecorator && map.hasLayer(layer)) {
               map.removeLayer(layer);
             }
@@ -433,9 +433,9 @@ function toggleTheme() {
         }
       
         if (map.hasLayer(etage1)) {
-          toggleArrows(itinéraireLayer1);
+          toggleArrows(itineraireLayer1);
         } else {
-          itinéraireLayer1.eachLayer(function (layer) {
+          itineraireLayer1.eachLayer(function (layer) {
             if (layer instanceof L.PolylineDecorator && map.hasLayer(layer)) {
               map.removeLayer(layer);
             }
@@ -443,9 +443,9 @@ function toggleTheme() {
         }
       
         if (map.hasLayer(etage2)) {
-          toggleArrows(itinéraireLayer2);
+          toggleArrows(itineraireLayer2);  // Corrected variable name here
         } else {
-          itinéraireLayer2.eachLayer(function (layer) {
+          itineraireLayer2.eachLayer(function (layer) {  // Corrected variable name here
             if (layer instanceof L.PolylineDecorator && map.hasLayer(layer)) {
               map.removeLayer(layer);
             }
@@ -1073,9 +1073,9 @@ function updateButtonsVisibility() {
             if (data.routes && data.routes.length > 0) {
               var route = data.routes[0];
 
-              itinéraireLayer0.clearLayers();
-              itinéraireLayer1.clearLayers();
-              itinéraireLayer2.clearLayers();
+              itineraireLayer0.clearLayers();
+              itineraireLayer1.clearLayers();
+              itineraireLayer2.clearLayers();
 
               route.legs[0].steps.forEach((step, index) => {
                 var startName = step.name || "";
@@ -1089,20 +1089,17 @@ function updateButtonsVisibility() {
                 };
 
                 var color = "#0031D2";
-                var itineraireLayer = itinéraireLayer0;
+                var itinLayer = itineraireLayer0;
                 if (startName.toLowerCase().includes("1")) {
                   color = "#3564FF";
-                  itineraireLayer = itineraireLayer1;
+                  itinLayer = itineraireLayer1;
                 } else if (startName.toLowerCase().includes("2")) {
                   color = "#002499";
-                  itineraireLayer = itineraireLayer2;
+                  itinLayer = itineraireLayer2;
                 }
 
                 var polyline = L.polyline(
-                  step.geometry.coordinates.map((coord) => [
-                    coord[1],
-                    coord[0],
-                  ]),
+                  step.geometry.coordinates.map((coord) => [coord[1], coord[0]]),
                   {
                     pane: "routePane", // Affecte le polyline au pane "routePane"
                     color: color,
@@ -1156,7 +1153,7 @@ function updateButtonsVisibility() {
     },
   ],
 });
-    itineraireLayer.addLayer(polyline).addLayer(arrow); // Ajoute les deux au groupe
+    itinLayer.addLayer(polyline).addLayer(arrow); // Ajoute les deux au groupe
               });
 
               var bounds = L.geoJSON(route.geometry).getBounds();
