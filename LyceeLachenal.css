@@ -387,30 +387,27 @@ body.dark-mode .leaflet-control-zoom {
         /* Taille du texte */
         box-sizing: border-box;
         /* Inclure le padding et la bordure dans la largeur totale */
-        border-radius: 300px;
+        border-radius: 1px;
         /* Coins arrondis */
     }
 
     /* Style du bouton de recherche (loupe) */
     .leaflet-control-search .search-button {
         width: 40px;
-        /* Taille de l'icône de recherche */
         height: 40px;
-        /* Taille de l'icône de recherche */
         background: url('./images/search-icon.svg') no-repeat center center;
-        /* Icône de recherche */
         background-size: 60%;
-        /* Ajuster la taille de l'icône */
         border: none;
         border-radius: 50%;
-        /* Rendre le bouton rond */
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        /* Curseur pointer */
         transition: background-color 0.3s;
-        /* Transition pour l'effet de survol */
+        /* Assurez-vous que le bouton est parfaitement rond */
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
     }
 
     .leaflet-control-search .search-tooltip {
@@ -464,23 +461,18 @@ body.dark-mode .leaflet-control-zoom {
     /* Style du bouton de recherche (loupe) */
     .leaflet-control-search .search-button {
         width: 40px;
-        /* Taille de l'icône de recherche */
         height: 40px;
-        /* Taille de l'icône de recherche */
-        background: url('./images/search-icon.svg') no-repeat center center;
-        /* Icône de recherche */
-        background-size: 60%;
-        /* Ajuster la taille de l'icône */
-        border: none;
         border-radius: 50%;
-        /* Rendre le bouton rond */
+        padding: 0;
+        margin: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
-        /* Curseur pointer */
-        transition: background-color 0.3s;
-        /* Transition pour l'effet de survol */
+        flex: 0 0 auto;
+        align-self: center;
+        -webkit-appearance: none;
+        appearance: none;
+        line-height: 0;
     }
 
     .leaflet-control-search .search-tooltip {
@@ -572,28 +564,20 @@ body.dark-mode .leaflet-control-zoom {
         /* Coins arrondis */
     }
 
-    /* Style du bouton de recherche (loupe) */
     .leaflet-control-search .search-button {
         width: 40px;
-        /* Taille de l'icône de recherche */
         height: 40px;
-        /* Taille de l'icône de recherche */
-        background-color: #ffffff;
-        /* Couleur de fond */
-        background: url('./images/search-icon.svg') no-repeat center center;
-        /* Icône de recherche */
-        background-size: 60%;
-        /* Ajuster la taille de l'icône */
-        border: none;
         border-radius: 50%;
-        /* Rendre le bouton rond */
+        padding: 0;
+        margin: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
-        /* Curseur pointer */
-        transition: background-color 0.3s;
-        /* Transition pour l'effet de survol */
+        flex: 0 0 auto;
+        align-self: center;
+        -webkit-appearance: none;
+        appearance: none;
+        line-height: 0;
     }
 
 
