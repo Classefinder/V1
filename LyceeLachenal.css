@@ -163,8 +163,7 @@ body {
     /* Coins arrondis */
 }
 
-/* Style pour les éléments de la couche lorsqu'ils sont survolés */
-.leaflet-interactive:hover {
+.leaflet-interactive:not(.no-hover):hover {
     fill-opacity: 0.97;
     cursor: pointer;
 }
