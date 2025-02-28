@@ -42,106 +42,132 @@
     <button id="dark-mode-toggle"></button>
 
     <script>
-      // --- Nouvelle protection via géolocalisation ---
-      var requiredCenter = L.latLng(45.9368, 6.1322);
-      var requiredRadius = 100; // en mètres
+      // Coordonnées du lycée (centre du plan)
+      const lyceeCoords = [45.9368, 6.1322];
+      const proximityThreshold = 5000; // Distance en kilomètres (50m)
 
-      function addFullMap() {
-        // Ajoute les couches complètes (plan du lycée et contrôles associés)
-        initFullApp();
+      // Fonction pour calculer la distance entre deux coordonnées
+      function calculateDistance(lat1, lon1, lat2, lon2) {
+        const toRad = x => (x * Math.PI) / 180;
+        const R = 6371; // Rayon de la Terre en kilomètres
+
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // Distance en kilomètres
       }
 
-      function showOnlyBaseMap() {
-        // On ne fait rien : seul le fond de carte (déjà présent) est affiché.
-        // Optionnel : vous pouvez nettoyer tout ajout éventuel.
+      // Initialiser la carte avec un fond OSM
+      function initializeBaseMap() {
+        const map = L.map('map', {
+          center: lyceeCoords,
+          zoom: 16,
+          maxBoundsViscosity: 1.0 // Définir maxBoundsViscosity ici
+        });
+
+        // Ajouter un fond de carte OSM
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        return map;
       }
 
-      // Modification de la gestion du succès de la géolocalisation
-      function handleLocationSuccess(pos) {
-        var lat = pos.coords.latitude, lng = pos.coords.longitude;
-        var userLatLng = L.latLng(lat, lng);
-        var distance = userLatLng.distanceTo(requiredCenter);
-        if (window.requiredZoneCircle) { map.removeLayer(window.requiredZoneCircle); }
-        if (distance <= requiredRadius) {
-          // Authorization OK et dans la zone : on charge tout le reste
-          addFullMap();
-          L.marker(userLatLng).addTo(map).bindPopup("Votre position").openPopup();
-        } else {
-          // Hors zone : ne charge rien de supplémentaire, juste ajouter marqueur et cercle
-          showOnlyBaseMap();
-          L.marker(userLatLng).addTo(map).bindPopup("Vous êtes hors de la zone requise").openPopup();
-          window.requiredZoneCircle = L.circle(requiredCenter, { radius: requiredRadius, color: "red", fillOpacity: 0.2 }).addTo(map);
+      // Gérer la géolocalisation
+      function handleGeolocation(map) {
+        if (!navigator.geolocation) {
+          alert("La géolocalisation n'est pas prise en charge par votre navigateur.");
+          showProximityCircle(map);
+          return;
         }
+
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            const userCoords = [position.coords.latitude, position.coords.longitude];
+            const distance = calculateDistance(
+              userCoords[0], userCoords[1],
+              lyceeCoords[0], lyceeCoords[1]
+            );
+
+            // Ajouter un marqueur pour la position de l'utilisateur
+            const userMarker = L.marker(userCoords).addTo(map).bindPopup("Vous êtes ici").openPopup();
+
+            if (distance <= proximityThreshold) {
+              // Utilisateur dans la zone, afficher le plan
+              initializeSchoolMap(map, userMarker, userCoords);
+            } else {
+              // Ajouter un cercle pour montrer la zone requise
+              showProximityCircle(map);
+              alert("Vous êtes hors de la zone requise. Approchez-vous du lycée pour voir le plan.");
+            }
+          },
+          error => {
+            console.error("Erreur de géolocalisation :", error);
+            alert("Impossible d'obtenir votre localisation. Veuillez autoriser la géolocalisation.");
+            showProximityCircle(map);
+          }
+        );
       }
 
-      // En cas de refus ou d'erreur, ne charge que le fond
-      function handleLocationError(err) {
-        showOnlyBaseMap();
-        window.requiredZoneCircle = L.circle(requiredCenter, { radius: requiredRadius, color: "red", fillOpacity: 0.2 }).addTo(map);
-        alert("La géolocalisation n'est pas autorisée. Seul le fond de carte s'affichera.");
+      // Afficher le cercle de proximité
+      function showProximityCircle(map) {
+        L.circle(lyceeCoords, {
+          radius: proximityThreshold * 1000,
+          color: 'red',
+          fillOpacity: 0.1
+        }).addTo(map);
       }
 
-      // Demande de géolocalisation dès le chargement
-      window.addEventListener("load", function(){
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(handleLocationSuccess, handleLocationError);
-        } else {
-          handleLocationError();
-        }
-      });
+      // Initialiser la carte du lycée (avec les fonctionnalités spécifiques)
+      function initializeSchoolMap(map, userMarker, userCoords) {
+        // --- 1. Initialisation des limites ---
+        var sudOuest = L.latLng(45.93818505744445, 6.134245788738398);
+        var nordEst = L.latLng(45.93640970079779, 6.13115811037474);
+        var limites = L.latLngBounds(sudOuest, nordEst);
 
-      // --- 1. Initialisation des limites ---
-      var sudOuest = L.latLng(45.93818505744445, 6.134245788738398);
-      var nordEst = L.latLng(45.93640970079779, 6.13115811037474);
-      var limites = L.latLngBounds(sudOuest, nordEst);
+        // --- 2. Création de la carte ---
+        map.setView(lyceeCoords, 18);
+        map.setMaxBounds(limites);
 
-      // --- 2. Création de la carte ---
-      var map = L.map("map", {
-        center: [45.9368, 6.1322],
-        zoom: 18,
-        minZoom: 3,
-        maxZoom: 23,
-        //maxBounds: limites,
-        maxBoundsViscosity: 1.0,
-      });
-      
+        // Créez uniquement une fois les trois panes, dans l'ordre souhaité :
+        map.createPane("routePane");
+        map.getPane("routePane").style.zIndex = 600; // Pane pour les itinéraires
 
+        map.createPane("arrowPane");
+        map.getPane("arrowPane").style.zIndex = 650; // Pane pour les flèches
 
-      // Créez uniquement une fois les trois panes, dans l'ordre souhaité :
-      map.createPane("routePane");
-      map.getPane("routePane").style.zIndex = 600; // Pane pour les itinéraires
+        map.createPane("markerPane");
+        map.getPane("markerPane").style.zIndex = 700; // Pane for markers
 
-      map.createPane("arrowPane");
-      map.getPane("arrowPane").style.zIndex = 650; // Pane pour les flèches
+        // Assurez-vous que le pane "arrowPane" est le dernier enfant dans le conteneur
+        map.getPane("arrowPane").parentNode.appendChild(map.getPane("arrowPane"));
 
-      map.createPane("markerPane");
-      map.getPane("markerPane").style.zIndex = 700; // Pane for markers
+        // --- 3. Tuiles vectorielles MapTiler ---
+        // Calque clair
+        var lightMap = L.maplibreGL({
+          style:
+            "https://api.maptiler.com/maps/3b544fc3-420c-4a93-a594-a99b71d941bb/style.json?key=BiyHHi8FTQZ233ADqskZ",
+          attribution:
+            '&copy; <a href="https://www.maptiler.com/copyright/" target="_blank">MapTiler</a> contributors',
+        });
 
-      // Assurez-vous que le pane "arrowPane" est le dernier enfant dans le conteneur
-      map.getPane("arrowPane").parentNode.appendChild(map.getPane("arrowPane"));
+        // Calque sombre
+        var darkMap = L.maplibreGL({
+          style:
+            "https://api.maptiler.com/maps/04c03a5d-804b-4c6f-9736-b7103fdb530b/style.json?key=BiyHHi8FTQZ233ADqskZ",
+          attribution:
+            '&copy; <a href="https://www.maptiler.com/copyright/" target="_blank">MapTiler</a> contributors',
+        });
 
-      // --- 3. Tuiles vectorielles MapTiler ---
-      // Calque clair
-      var lightMap = L.maplibreGL({
-        style:
-          "https://api.maptiler.com/maps/3b544fc3-420c-4a93-a594-a99b71d941bb/style.json?key=BiyHHi8FTQZ233ADqskZ",
-        attribution:
-          '&copy; <a href="https://www.maptiler.com/copyright/" target="_blank">MapTiler</a> contributors',
-      });
+        // --- 4. Ajout du fond clair par défaut ---
+        lightMap.addTo(map);
 
-      // Calque sombre
-      var darkMap = L.maplibreGL({
-        style:
-          "https://api.maptiler.com/maps/04c03a5d-804b-4c6f-9736-b7103fdb530b/style.json?key=BiyHHi8FTQZ233ADqskZ",
-        attribution:
-          '&copy; <a href="https://www.maptiler.com/copyright/" target="_blank">MapTiler</a> contributors',
-      });
-
-      // --- 4. Ajout du fond clair par défaut ---
-      lightMap.addTo(map);
-
-
-    // --- 2. Données GeoJSON pour les salles et les chemins ---
+        // --- 5. Ajout des autres fonctionnalités ---
+        // --- 2. Données GeoJSON pour les salles et les chemins ---
     var salleEtage0 = {
         "type": "FeatureCollection",
         "features": [
@@ -369,7 +395,7 @@ function toggleTheme() {
         CheminEtageLayer2,
       ]);
       // Par défaut, le groupe de l'étage 0 est affiché.
-      // etage0.addTo(map);
+      etage0.addTo(map);
 
       // --- 8. Gestion des labels (tooltips) en fonction du niveau de zoom ---
       const tooltipZoomThreshold = 20; // Seuil de zoom pour afficher les labels
@@ -1296,71 +1322,30 @@ function updateButtonsVisibility() {
         }, 1);
       }
 
-      // Appeler la fonction lors du chargement du site
-      // cycleLayers();
-
+      // ----- Appeler la fonction lors du chargement du site -----
+      // Remplacer l'appel immédiat par une demande de géolocalisation
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          // Géolocalisation autorisée : on affiche le reste du site
+          cycleLayers();
+        },
+        function(error) {
+          // Géolocalisation refusée ou indisponible : afficher un message d'erreur
+          document.getElementById("map").innerHTML = "<div style='position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);background:rgba(255,255,255,0.9);padding:20px;border:1px solid #ccc;'>La géolocalisation est nécessaire pour charger le site.</div>";
+        }
+      );
+      
             // --- Ajout du contrôle LocateControl ---
             L.control.locate({
               position: "topright",
-              drawCircle: false,
             }).addTo(map);
-
-      function initFullApp() {
-        // Placez ici TOUS les éléments supplémentaires que vous ne voulez
-        // charger qu'en cas d'autorisation : 
-        // - Ajout des calques complets (etage0, cycleLayers, etc.)
-        // - Initialisation des groupes de recherche et des contrôles
-        // - Écouteurs sur zoomend, baselayerchange et tout le reste
-
-        map.addLayer(etage0);
-        cycleLayers();
-        
-        // Exemple : initialisation des Search Controls
-        var searchGroup = L.featureGroup();
-        salleLayer0.eachLayer(function (layer) { searchGroup.addLayer(layer); });
-        salleLayer1.eachLayer(function (layer) { searchGroup.addLayer(layer); });
-        salleLayer2.eachLayer(function (layer) { searchGroup.addLayer(layer); });
-        
-        var searchControlStart = new L.Control.Search({
-          layer: searchGroup,
-          propertyName: "name",
-          marker: false,
-          collapsed: false,
-          moveToLocation: function (latlng, title, map) { /* ... */ },
-          position: "topleft",
-          textPlaceholder: "Point de départ",
-        });
-        map.addControl(searchControlStart);
-        
-        var searchControlEnd = new L.Control.Search({
-          layer: searchGroup,
-          propertyName: "name",
-          marker: false,
-          collapsed: false,
-          moveToLocation: function (latlng, title, map) { /* ... */ },
-          position: "topleft",
-          textPlaceholder: "Point d'arrivée",
-        });
-        map.addControl(searchControlEnd);
-        
-        // Déclarez ici aussi tous les écouteurs (zoomend, baselayerchange, etc.)
-        map.on("zoomend", updateTooltipsVisibility);
-        map.on("baselayerchange", function (e) {
-          updateTooltipsVisibility();
-          updateMarkersVisibility();
-          updateArrowsVisibility();
-        });
-        map.on("zoomend", updateButtonsVisibility);
-        map.on("baselayerchange", function (e) {
-          updateTooltipsVisibility();
-          updateMarkersVisibility();
-          updateArrowsVisibility();
-          updateButtonsVisibility();
-        });
-        
-        // Ajouter les écouteurs concernant le switch des calques et les boutons sur les GeoJSON, etc.
-        /* ... Autres initialisations full app ... */
       }
+
+      // Initialisation au chargement
+      document.addEventListener("DOMContentLoaded", () => {
+        const map = initializeBaseMap();
+        handleGeolocation(map);
+      });
     </script>
   </body>
 </html>
