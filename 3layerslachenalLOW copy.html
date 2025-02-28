@@ -268,42 +268,44 @@ function toggleTheme() {
       // --- 3. Création des couches GeoJSON pour les salles ---
       // On n'utilise plus bindTooltip ici afin d'éviter que le label s'affiche automatiquement au survol.
       function onEachSalleFeature(feature, layer, floor) {
-        feature.properties.floor = floor;
-        // Pour l'étage 1, si la propriété "name" est absente, on la copie depuis "salle"
-        if (
-          floor === "1" &&
-          !feature.properties.name &&
-          feature.properties.salle
-        ) {
-          feature.properties.name = feature.properties.salle;
-        }
-        layer.on({
-          mouseover: function (e) {
-            e.target.setStyle({
-              fillOpacity: 1,
-              weight: 3,
-            });
-          },
-          mouseout: function (e) {
-            if (floor === "0") {
-              salleLayer0.resetStyle(e.target);
-            } else if (floor === "1") {
-              salleLayer1.resetStyle(e.target);
-            } else if (floor === "2") {
-              salleLayer2.resetStyle(e.target);
-            }
-          },
-          click: function (e) {
-            // Supprimer l'appel à resetHighlight() pour conserver les labels
-            // Zoom sur la feature cliquée
-            map.fitBounds(e.target.getBounds());
-          },
+  feature.properties.floor = floor;
+  // Pour l'étage 1, si la propriété "name" est absente, on la copie depuis "salle"
+  if (floor === "1" && !feature.properties.name && feature.properties.salle) {
+    feature.properties.name = feature.properties.salle;
+  }
+  layer.on({
+    mouseover: function (e) {
+      // Si ce n'est pas un rond (Circle ou CircleMarker), on applique le style highlight
+      if (!(e.target instanceof L.Circle) && !(e.target instanceof L.CircleMarker)) {
+        e.target.setStyle({
+          fillOpacity: 1,
+          weight: 3,
         });
       }
+    },
+    mouseout: function (e) {
+      // Pour les non-ronds, on réinitialise le style en fonction de l'étage
+      if (!(e.target instanceof L.Circle) && !(e.target instanceof L.CircleMarker)) {
+        if (floor === "0") {
+          salleLayer0.resetStyle(e.target);
+        } else if (floor === "1") {
+          salleLayer1.resetStyle(e.target);
+        } else if (floor === "2") {
+          salleLayer2.resetStyle(e.target);
+        }
+      }
+    },
+    click: function (e) {
+      // Zoom sur la feature cliquée
+      map.fitBounds(e.target.getBounds());
+    },
+  });
+}
+
 
       var salleLayer0 = L.geoJSON(salleEtage0, {
         style: function (feature) {
-          return { color: "#146414", weight: 2, fillOpacity: 0.9, className: 'no-hover' };
+          return { color: "#146414", weight: 2, fillOpacity: 0.9 };
         },
         onEachFeature: function (feature, layer) {
           onEachSalleFeature(feature, layer, "0");
@@ -312,7 +314,7 @@ function toggleTheme() {
 
       var salleLayer1 = L.geoJSON(salleEtage1, {
         style: function (feature) {
-          return { color: "#2B942B", weight: 2, fillOpacity: 0.9, className: 'no-hover' };
+          return { color: "#2B942B", weight: 2, fillOpacity: 0.9 };
         },
         onEachFeature: function (feature, layer) {
           onEachSalleFeature(feature, layer, "1");
@@ -321,7 +323,7 @@ function toggleTheme() {
 
       var salleLayer2 = L.geoJSON(salleEtage2, {
         style: function (feature) {
-          return { color: "#093209", weight: 2, fillOpacity: 0.9, className: 'no-hover' }; // modifiez la couleur au besoin
+          return { color: "#093209", weight: 2, fillOpacity: 0.9 }; // modifiez la couleur au besoin
         },
         onEachFeature: function (feature, layer) {
           onEachSalleFeature(feature, layer, "2");

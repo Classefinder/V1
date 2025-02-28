@@ -43,6 +43,10 @@ body {
     color: #000000;
 }
 
+#search-control-start .search-cancel {
+    right: 87px;
+}
+
 /* Style pour la barre de recherche de fin */
 #search-control-end {
     background-color: #ffffff;
@@ -56,7 +60,7 @@ body {
 
 /* Bouton pour effacer la recherche (croix) */
 .leaflet-control-search .search-cancel {
-    background: url('./images/cancel-icon.png') no-repeat center center;
+    background: url('./images/cancel-icon.svg') no-repeat center center;
     /* Chemin relatif vers votre icône personnalisée */
     background-size: 56%;
     /* Ajuster la taille de l'icône */
@@ -159,8 +163,7 @@ body {
     /* Coins arrondis */
 }
 
-/* Style pour les éléments de la couche lorsqu'ils sont survolés */
-.leaflet-interactive:hover {
+.leaflet-interactive:not(.no-hover):hover {
     fill-opacity: 0.97;
     cursor: pointer;
 }
@@ -220,7 +223,7 @@ body {
 }
 
 .leaflet-control-search .search-button:hover {
-    background: url('./images/search-icon.png') no-repeat center center;
+    background: url('./images/search-icon.svg') no-repeat center center;
     background-color: #D9D9D9;
     /* Changer la couleur au survol */
     background-size: 60%;
@@ -383,30 +386,27 @@ body.dark-mode .leaflet-control-zoom {
         /* Taille du texte */
         box-sizing: border-box;
         /* Inclure le padding et la bordure dans la largeur totale */
-        border-radius: 300px;
+        border-radius: 1px;
         /* Coins arrondis */
     }
 
     /* Style du bouton de recherche (loupe) */
     .leaflet-control-search .search-button {
         width: 40px;
-        /* Taille de l'icône de recherche */
         height: 40px;
-        /* Taille de l'icône de recherche */
-        background: url('./images/search-icon.png') no-repeat center center;
-        /* Icône de recherche */
+        background: url('./images/search-icon.svg') no-repeat center center;
         background-size: 60%;
-        /* Ajuster la taille de l'icône */
         border: none;
         border-radius: 50%;
-        /* Rendre le bouton rond */
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        /* Curseur pointer */
         transition: background-color 0.3s;
-        /* Transition pour l'effet de survol */
+        /* Assurez-vous que le bouton est parfaitement rond */
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
     }
 
     .leaflet-control-search .search-tooltip {
@@ -460,23 +460,18 @@ body.dark-mode .leaflet-control-zoom {
     /* Style du bouton de recherche (loupe) */
     .leaflet-control-search .search-button {
         width: 40px;
-        /* Taille de l'icône de recherche */
         height: 40px;
-        /* Taille de l'icône de recherche */
-        background: url('./images/search-icon.png') no-repeat center center;
-        /* Icône de recherche */
-        background-size: 60%;
-        /* Ajuster la taille de l'icône */
-        border: none;
         border-radius: 50%;
-        /* Rendre le bouton rond */
+        padding: 0;
+        margin: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
-        /* Curseur pointer */
-        transition: background-color 0.3s;
-        /* Transition pour l'effet de survol */
+        flex: 0 0 auto;
+        align-self: center;
+        -webkit-appearance: none;
+        appearance: none;
+        line-height: 0;
     }
 
     .leaflet-control-search .search-tooltip {
@@ -568,28 +563,20 @@ body.dark-mode .leaflet-control-zoom {
         /* Coins arrondis */
     }
 
-    /* Style du bouton de recherche (loupe) */
     .leaflet-control-search .search-button {
         width: 40px;
-        /* Taille de l'icône de recherche */
         height: 40px;
-        /* Taille de l'icône de recherche */
-        background-color: #ffffff;
-        /* Couleur de fond */
-        background: url('./images/search-icon.png') no-repeat center center;
-        /* Icône de recherche */
-        background-size: 60%;
-        /* Ajuster la taille de l'icône */
-        border: none;
         border-radius: 50%;
-        /* Rendre le bouton rond */
+        padding: 0;
+        margin: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
-        /* Curseur pointer */
-        transition: background-color 0.3s;
-        /* Transition pour l'effet de survol */
+        flex: 0 0 auto;
+        align-self: center;
+        -webkit-appearance: none;
+        appearance: none;
+        line-height: 0;
     }
 
 
@@ -641,7 +628,7 @@ body.dark-mode #search-control-end {
 
 /* Mode sombre pour le bouton d'effacement de la recherche */
 body.dark-mode .leaflet-control-search .search-cancel {
-    background: url('./images/cancel-icon-dark.png') no-repeat center center;
+    background: url('./images/cancel-icon-dark.svg') no-repeat center center;
     background-size: 56%;
     /* Assurez-vous d'avoir une icône adaptée au mode sombre */
     border: none;
@@ -649,12 +636,12 @@ body.dark-mode .leaflet-control-search .search-cancel {
 }
 
 body.dark-mode .leaflet-control-search .search-button:hover {
-    background: url('./images/search-icon-dark.png') no-repeat center center;
+    background: url('./images/search-icon-dark.svg') no-repeat center center;
     background-size: 60%;
 }
 
 body.dark-mode .leaflet-control-search .search-button {
-    background: url('./images/search-icon-dark.png') no-repeat center center;
+    background: url('./images/search-icon-dark.svg') no-repeat center center;
     background-size: 60%;
 }
 
@@ -798,5 +785,134 @@ body.dark-mode .custom-geojson-button {
 }
 
 body.dark-mode .custom-geojson-button:hover {
+    background-color: #444444;
+}
+
+
+
+
+
+/* Voici le css pour le bouton de localisation. C'est un copié collé du code source.*/
+
+.leaflet-control-locate {
+    border: none !important;
+    box-shadow: none !important;
+    position: relative;
+    top: 65px;
+    z-index: 1000;
+}
+
+.leaflet-control-locate a {
+    cursor: pointer;
+    border-radius: 15px !important;
+    width: 47px !important;
+    height: 47px !important;
+    border: #d9d9d9 solid 2px !important;
+    background-color: #ffffff !important;
+}
+
+.leaflet-control-locate a .leaflet-control-locate-location-arrow {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin: 7px;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
+}
+
+.leaflet-control-locate a .leaflet-control-locate-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin: 7px;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M304 48a48 48 0 1 1-96 0 48 48 0 0 1 96 0zm-48 368a48 48 0 1 0 0 96 48 48 0 0 0 0-96zm208-208a48 48 0 1 0 0 96 48 48 0 0 0 0-96zM96 256a48 48 0 1 0-96 0 48 48 0 0 0 96 0zm13 99a48 48 0 1 0 0 96 48 48 0 0 0 0-96zm294 0a48 48 0 1 0 0 96 48 48 0 0 0 0-96zM109 61a48 48 0 1 0 0 96 48 48 0 0 0 0-96z"/></svg>');
+    animation: leaflet-control-locate-spin 2s linear infinite;
+}
+
+.leaflet-control-locate.active a .leaflet-control-locate-location-arrow {
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="rgb(32, 116, 182)" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
+}
+
+.leaflet-control-locate.following a .leaflet-control-locate-location-arrow {
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="rgb(252, 132, 40)" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
+}
+
+.leaflet-touch .leaflet-bar .leaflet-locate-text-active {
+    width: 100%;
+    max-width: 200px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 0 10px;
+}
+
+.leaflet-touch .leaflet-bar .leaflet-locate-text-active .leaflet-locate-icon {
+    padding: 0 5px 0 0;
+}
+
+.leaflet-control-locate-location circle {
+    animation: leaflet-control-locate-throb 4s ease infinite;
+}
+
+@keyframes leaflet-control-locate-throb {
+    0% {
+        stroke-width: 1;
+    }
+
+    50% {
+        stroke-width: 3;
+        transform: scale(0.8, 0.8);
+    }
+
+    100% {
+        stroke-width: 1;
+    }
+}
+
+@keyframes leaflet-control-locate-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+#geo-btn-start {
+    /* Removed fixed right offset */
+    right: 0;
+    /* Remove extra margin to avoid aplatissement */
+    margin: 0;
+    /* Use auto left margin to align in flex container if needed */
+    margin-left: auto;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background: url('./images/locate-icon.svg') no-repeat center center;
+    background-size: 60%;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+    /* Added to remove default outline */
+    border: none;
+    /* Added to remove default border */
+}
+
+/* Added hover effect for the geo button */
+#geo-btn-start:hover {
+    background-color: #d9d9d9;
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+/* Dark mode variant for the geo-btn-start button */
+body.dark-mode #geo-btn-start {
+    background: url('./images/locate-icon-dark.svg') no-repeat center center;
+    background-size: 60%;
+}
+
+body.dark-mode #geo-btn-start:hover {
     background-color: #444444;
 }
