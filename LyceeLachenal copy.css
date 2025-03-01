@@ -193,10 +193,9 @@ body {
     }
 
     #search-control-start .search-tooltip {
-        top: 120px;
+        top: 65px;
         width: calc(100% - 110px);
     }
-
 
     .leaflet-control-locate {
         border: none !important;
