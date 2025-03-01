@@ -8,6 +8,8 @@ body {
     display: block;
 }
 
+
+
 /* Style général de la barre de recherche */
 .leaflet-control-search {
     background-color: #ffffff;
@@ -353,6 +355,17 @@ body.dark-mode .leaflet-control-zoom {
         /* Contrôle des couches au deuxième plan */
     }
 
+
+    .leaflet-control-locate {
+        border: none !important;
+        box-shadow: none !important;
+        position: relative;
+        top: 180px;
+        z-index: 1000;
+    }
+
+
+
     /* Style général de la barre de recherche */
     .leaflet-control-search {
         position: relative;
@@ -580,6 +593,17 @@ body.dark-mode .leaflet-control-zoom {
     }
 
 
+
+    .leaflet-control-locate {
+        border: none !important;
+        box-shadow: none !important;
+        position: relative;
+        top: 60px;
+        z-index: 1000;
+    }
+
+
+
 }
 
 /* mode sombre */
@@ -794,13 +818,7 @@ body.dark-mode .custom-geojson-button:hover {
 
 /* Voici le css pour le bouton de localisation. C'est un copié collé du code source.*/
 
-.leaflet-control-locate {
-    border: none !important;
-    box-shadow: none !important;
-    position: relative;
-    top: 65px;
-    z-index: 1000;
-}
+
 
 .leaflet-control-locate a {
     cursor: pointer;
