@@ -192,6 +192,37 @@ body {
 
 
 
+.custom-geojson-button {
+    background-color: #ffffff;
+    border: 2px solid #d9d9d9;
+    border-radius: 15px !important;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+    color: #000000;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    /* Ensure no margin between buttons */
+}
+
+.custom-geojson-button:hover {
+    background-color: #d9d9d9;
+}
+
+
+
+
+
+
+
+
+
+
+
 /* Ajustements pour les petits écrans */
 @media (max-width: 600px),
 (hover: none) and (pointer: coarse) {
@@ -220,22 +251,11 @@ body {
         align-items: center;
         justify-content: space-between;
         padding: 5px;
+        box-sizing: border-box;
         bottom: 75px;
     }
 
-    /* Largeur du champ de texte */
-    .leaflet-control-search input {
-        width: calc(100% - 60px);
-        /* Réduire la largeur pour tenir compte de l'icône */
-        padding: 10px;
-        /* Ajouter un peu de padding */
-        font-size: 14px;
-        /* Taille du texte */
-        box-sizing: border-box;
-        /* Inclure le padding et la bordure dans la largeur totale */
-        border-radius: 1px;
-        /* Coins arrondis */
-    }
+
 
     /* Style du bouton de recherche (loupe) */
     .leaflet-control-search .search-button {
@@ -245,48 +265,11 @@ body {
         background-size: 60%;
         border: none;
         border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        /* Assurez-vous que le bouton est parfaitement rond */
-        box-sizing: border-box;
-        padding: 0;
-        margin: 0;
     }
 
-    .leaflet-control-search .search-tooltip {
-        width: calc(100% - 110px);
-        /* Prendre toute la largeur de la barre de recherche */
-        top: 65px;
-    }
 
-    /* Style général de la barre de recherche  de start!*/
-    #search-control-start .leaflet-control-search {
-        position: relative;
-        /* Position absolue pour placer la barre de recherche */
-        display: flex;
-        /* Utilisation de flexbox pour aligner le champ et l'icône */
-        align-items: center;
-        /* Aligner verticalement l'élément */
-        justify-content: space-between;
-        /* Espacement entre le champ de texte et l'icône */
-        padding: 5px;
-        /* Ajouter un peu de padding */
-        box-sizing: border-box;
-        /* Inclure padding et bordures dans la largeur totale */
-        width: calc(100vw);
-        /* Prendre toute la largeur de l'écran */
-        z-index: 1010;
-        /* Barre de recherche au premier plan */
-        bottom: 75px;
-        border-radius: 3000px;
-    }
 
     #search-control-start .search-tooltip {
-        width: calc(100% - 110px);
-        /* Prendre toute la largeur de la barre de recherche */
         top: 120px;
     }
 
@@ -306,26 +289,21 @@ body {
 
     /* Style du bouton de recherche (loupe) */
     .leaflet-control-search .search-button {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         flex: 0 0 auto;
-        align-self: center;
-        -webkit-appearance: none;
-        appearance: none;
-        line-height: 0;
     }
 
     .leaflet-control-search .search-tooltip {
         width: calc(100% - 110px);
         /* Prendre toute la largeur de la barre de recherche */
-        top: 65px;
+        top: 165px;
     }
+
+
+
+
+
+
+
 
     #dark-mode-toggle {
         position: absolute;
@@ -343,30 +321,7 @@ body {
         right: 10px;
     }
 
-    .leaflet-control-search {
-        position: absolute;
-        /* Position absolue pour placer la barre de recherche */
-        top: 0px;
-        /* Aligner en haut */
-        left: calc(0px);
-        /* Aligner à gauche */
-        width: 500px;
-        /* Largeur de 300px */
-        display: flex;
-        /* Utilisation de flexbox pour aligner le champ et l'icône */
-        align-items: center;
-        /* Aligner verticalement l'élément */
-        justify-content: space-between;
-        /* Espacement entre le champ de texte et l'icône */
-        padding: 10px;
-        /* Ajouter un peu de padding */
-        box-sizing: border-box;
-        /* Inclure padding et bordures dans la largeur totale */
-        z-index: 1010;
-        /* Barre de recherche au premier plan */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        /* Ombre portée */
-    }
+
 
     #search-tooltip-start {
         background-color: #ff0000 !important;
@@ -441,6 +396,153 @@ body {
 
 
 }
+
+
+
+/* Classe pour cibler l'icône dans le bouton */
+.theme-icon {
+    width: 30px;
+    /* Modifiez la largeur selon votre besoin */
+    height: 30px;
+    /* Modifiez la hauteur selon votre besoin */
+    /* Vous pouvez aussi utiliser des valeurs comme "em", "%" ou "rem" pour la taille */
+}
+
+.room-label {
+    font-weight: bold;
+    color: black;
+    background: rgba(255, 255, 255, 0.7);
+    border: 2px solid #d9d9d9d9;
+    opacity: 1;
+    border-radius: 15px;
+    padding: 2px 4px;
+}
+
+
+
+
+
+
+/* Voici le css pour le bouton de localisation. C'est un copié collé du code source.*/
+
+
+
+.leaflet-control-locate a {
+    cursor: pointer;
+    border-radius: 15px !important;
+    width: 47px !important;
+    height: 47px !important;
+    border: #d9d9d9 solid 2px !important;
+    background-color: #ffffff !important;
+}
+
+.leaflet-control-locate a .leaflet-control-locate-location-arrow {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin: 7px;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
+}
+
+.leaflet-control-locate a .leaflet-control-locate-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin: 7px;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M304 48a48 48 0 1 1-96 0 48 48 0 0 1 96 0zm-48 368a48 48 0 1 0 0 96 48 48 0 0 0 0-96zm208-208a48 48 0 1 0 0 96 48 48 0 0 0 0-96zM96 256a48 48 0 1 0-96 0 48 48 0 0 0 96 0zm13 99a48 48 0 1 0 0 96 48 48 0 0 0 0-96zm294 0a48 48 0 1 0 0 96 48 48 0 0 0 0-96zM109 61a48 48 0 1 0 0 96 48 48 0 0 0 0-96z"/></svg>');
+    animation: leaflet-control-locate-spin 2s linear infinite;
+}
+
+.leaflet-control-locate.active a .leaflet-control-locate-location-arrow {
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="rgb(32, 116, 182)" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
+}
+
+.leaflet-control-locate.following a .leaflet-control-locate-location-arrow {
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="rgb(252, 132, 40)" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
+}
+
+.leaflet-touch .leaflet-bar .leaflet-locate-text-active {
+    width: 100%;
+    max-width: 200px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 0 10px;
+}
+
+.leaflet-touch .leaflet-bar .leaflet-locate-text-active .leaflet-locate-icon {
+    padding: 0 5px 0 0;
+}
+
+.leaflet-control-locate-location circle {
+    animation: leaflet-control-locate-throb 4s ease infinite;
+}
+
+@keyframes leaflet-control-locate-throb {
+    0% {
+        stroke-width: 1;
+    }
+
+    50% {
+        stroke-width: 3;
+        transform: scale(0.8, 0.8);
+    }
+
+    100% {
+        stroke-width: 1;
+    }
+}
+
+@keyframes leaflet-control-locate-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+#geo-btn-start {
+    /* Removed fixed right offset */
+    right: 0;
+    /* Remove extra margin to avoid aplatissement */
+    margin: 0;
+    /* Use auto left margin to align in flex container if needed */
+    margin-left: auto;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background: url('./images/locate-icon.svg') no-repeat center center;
+    background-size: 60%;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+    /* Added to remove default outline */
+    border: none;
+    /* Added to remove default border */
+}
+
+/* Added hover effect for the geo button */
+#geo-btn-start:hover {
+    background-color: #d9d9d9;
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* mode sombre */
 
@@ -596,185 +698,6 @@ body.dark-mode #dark-mode-toggle {
     border: 2px solid #444444 !important;
 }
 
-/* Classe pour cibler l'icône dans le bouton */
-.theme-icon {
-    width: 30px;
-    /* Modifiez la largeur selon votre besoin */
-    height: 30px;
-    /* Modifiez la hauteur selon votre besoin */
-    /* Vous pouvez aussi utiliser des valeurs comme "em", "%" ou "rem" pour la taille */
-}
-
-.room-label {
-    font-weight: bold;
-    color: black;
-    background: rgba(255, 255, 255, 0.7);
-    border: 2px solid #d9d9d9d9;
-    opacity: 1;
-    border-radius: 15px;
-    padding: 2px 4px;
-}
-
-.custom-geojson-button {
-    background-color: #ffffff;
-    border: 2px solid #d9d9d9;
-    border-radius: 15px !important;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-    font-family: 'Arial', sans-serif;
-    color: #000000;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-    /* Ensure no margin between buttons */
-}
-
-.custom-geojson-button:hover {
-    background-color: #d9d9d9;
-}
-
-/* Dark mode styles for custom GeoJSON buttons */
-body.dark-mode .custom-geojson-button {
-    background-color: #1e1e1e;
-    border: 2px solid #444444;
-    color: #ffffff;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
-}
-
-body.dark-mode .custom-geojson-button:hover {
-    background-color: #444444;
-}
-
-
-
-
-
-/* Voici le css pour le bouton de localisation. C'est un copié collé du code source.*/
-
-
-
-.leaflet-control-locate a {
-    cursor: pointer;
-    border-radius: 15px !important;
-    width: 47px !important;
-    height: 47px !important;
-    border: #d9d9d9 solid 2px !important;
-    background-color: #ffffff !important;
-}
-
-.leaflet-control-locate a .leaflet-control-locate-location-arrow {
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    margin: 7px;
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
-}
-
-.leaflet-control-locate a .leaflet-control-locate-spinner {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin: 7px;
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M304 48a48 48 0 1 1-96 0 48 48 0 0 1 96 0zm-48 368a48 48 0 1 0 0 96 48 48 0 0 0 0-96zm208-208a48 48 0 1 0 0 96 48 48 0 0 0 0-96zM96 256a48 48 0 1 0-96 0 48 48 0 0 0 96 0zm13 99a48 48 0 1 0 0 96 48 48 0 0 0 0-96zm294 0a48 48 0 1 0 0 96 48 48 0 0 0 0-96zM109 61a48 48 0 1 0 0 96 48 48 0 0 0 0-96z"/></svg>');
-    animation: leaflet-control-locate-spin 2s linear infinite;
-}
-
-.leaflet-control-locate.active a .leaflet-control-locate-location-arrow {
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="rgb(32, 116, 182)" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
-}
-
-.leaflet-control-locate.following a .leaflet-control-locate-location-arrow {
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="rgb(252, 132, 40)" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
-}
-
-.leaflet-touch .leaflet-bar .leaflet-locate-text-active {
-    width: 100%;
-    max-width: 200px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    padding: 0 10px;
-}
-
-.leaflet-touch .leaflet-bar .leaflet-locate-text-active .leaflet-locate-icon {
-    padding: 0 5px 0 0;
-}
-
-.leaflet-control-locate-location circle {
-    animation: leaflet-control-locate-throb 4s ease infinite;
-}
-
-@keyframes leaflet-control-locate-throb {
-    0% {
-        stroke-width: 1;
-    }
-
-    50% {
-        stroke-width: 3;
-        transform: scale(0.8, 0.8);
-    }
-
-    100% {
-        stroke-width: 1;
-    }
-}
-
-@keyframes leaflet-control-locate-spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-
-#geo-btn-start {
-    /* Removed fixed right offset */
-    right: 0;
-    /* Remove extra margin to avoid aplatissement */
-    margin: 0;
-    /* Use auto left margin to align in flex container if needed */
-    margin-left: auto;
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
-    background: url('./images/locate-icon.svg') no-repeat center center;
-    background-size: 60%;
-    border-radius: 50%;
-    cursor: pointer;
-    padding: 0;
-    outline: none;
-    /* Added to remove default outline */
-    border: none;
-    /* Added to remove default border */
-}
-
-/* Added hover effect for the geo button */
-#geo-btn-start:hover {
-    background-color: #d9d9d9;
-    transform: scale(1.1);
-    transition: transform 0.2s ease;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Dark mode variant for the geo-btn-start button */
 body.dark-mode #geo-btn-start {
     background: url('./images/locate-icon-dark.svg') no-repeat center center;
@@ -820,4 +743,16 @@ body.dark-mode .leaflet-control-zoom a:hover {
 
 body.dark-mode .leaflet-control-zoom {
     border: none !important;
+}
+
+/* Dark mode styles for custom GeoJSON buttons */
+body.dark-mode .custom-geojson-button {
+    background-color: #1e1e1e;
+    border: 2px solid #444444;
+    color: #ffffff;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .custom-geojson-button:hover {
+    background-color: #444444;
 }

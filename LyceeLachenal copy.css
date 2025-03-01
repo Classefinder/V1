@@ -46,6 +46,15 @@ body {
     border-radius: 300px !important;
 }
 
+.leaflet-control-search .search-button {
+    width: 40px;
+    height: 40px;
+    background: url('./images/search-icon.svg') no-repeat center center;
+    background-size: 60%;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
 .leaflet-control-search .search-cancel {
     position: absolute;
     right: 50px;
@@ -162,19 +171,31 @@ body {
         top: 120px;
     }
 
+    .leaflet-control-search {
+        position: relative;
+        top: 0px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 5px;
+        box-sizing: border-box;
+        bottom: 75px;
+    }
 
+    .leaflet-control-search .search-button {
+        width: 40px;
+        height: 40px;
+        background: url('./images/search-icon.svg') no-repeat center center;
+        background-size: 60%;
+        border: none;
+        border-radius: 50%;
+        flex: 0 0 auto;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
+    #search-control-start .search-tooltip {
+        top: 120px;
+        width: calc(100% - 110px);
+    }
 
 
     .leaflet-control-locate {
