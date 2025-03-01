@@ -577,6 +577,8 @@ body.dark-mode .leaflet-control-zoom {
     }
 
     .leaflet-control-search .search-button {
+        background-image: url('./images/search-icon.svg') center center;
+        background-size: 60%;
         width: 40px;
         height: 40px;
         border-radius: 50%;

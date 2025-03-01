@@ -66,6 +66,8 @@
         const map = L.map('map', {
           center: lyceeCoords,
           zoom: 16,
+          zoomSnap: 0,
+          zoomDelta: 0.25,
           //maxBoundsViscosity: 1.0 // Définir maxBoundsViscosity ici
         });
 
@@ -604,13 +606,13 @@ function toggleTheme() {
         map.addLayer(darkMap);
         
         // Changer l'icône à partir de l'image dans le dossier ./images
-        toggleButton.innerHTML = '<img src="./images/light-icon.png" alt="Mode clair" class="theme-icon"/>'; // Remplacez par votre icône de soleil
+        toggleButton.innerHTML = '<img src="./images/light-icon.svg" alt="Mode clair" class="theme-icon"/>'; // Remplacez par votre icône de soleil
     } else {
         map.removeLayer(darkMap);
         map.addLayer(lightMap);
         
         // Changer l'icône à partir de l'image dans le dossier ./images
-        toggleButton.innerHTML = '<img src="./images/dark-icon.png" alt="Mode sombre" class="theme-icon"/>'; // Remplacez par votre icône de lune
+        toggleButton.innerHTML = '<img src="./images/dark-icon.svg" alt="Mode sombre" class="theme-icon"/>'; // Remplacez par votre icône de lune
     }
 }
 
@@ -621,13 +623,13 @@ function toggleTheme() {
       if (prefersDarkScheme.matches) {
           document.body.classList.add('dark-mode');
           const toggleButton = document.getElementById('dark-mode-toggle');
-          toggleButton.innerHTML = '<img src="./images/light-icon.png" alt="Mode clair" class="theme-icon"/>'; // Icône du soleil
+          toggleButton.innerHTML = '<img src="./images/light-icon.svg" alt="Mode clair" class="theme-icon"/>'; // Icône du soleil
           map.removeLayer(lightMap);
           map.addLayer(darkMap);
       } else {
           document.body.classList.remove('dark-mode');
           const toggleButton = document.getElementById('dark-mode-toggle');
-          toggleButton.innerHTML = '<img src="./images/dark-icon.png" alt="Mode sombre" class="theme-icon"/>'; // Icône de la lune
+          toggleButton.innerHTML = '<img src="./images/dark-icon.svg" alt="Mode sombre" class="theme-icon"/>'; // Icône de la lune
           map.removeLayer(darkMap);
           map.addLayer(lightMap);
       }
@@ -917,7 +919,7 @@ function updateButtonsVisibility() {
           var center = layer.getBounds().getCenter();
           var btnMarker = L.marker(center, {
             icon: L.divIcon({
-              html: '<div style="display: flex; flex-direction: column; align-items: center; line-height: 0;"><button class="custom-geojson-button"><img src="./images/starticon.png" alt="Start Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 40px 80px rgba(0, 0, 0, 1);">Start</button><br><button class="custom-geojson-button"><img src="./images/endicon.png" alt="End Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">End</button></div>',
+              html: '<div style="display: flex; flex-direction: column; align-items: center; line-height: 0;"><button class="custom-geojson-button"><img src="./images/starticon.svg" alt="Start Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 40px 80px rgba(0, 0, 0, 1);">Start</button><br><button class="custom-geojson-button"><img src="./images/endicon.svg" alt="End Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">End</button></div>',
               className: '', // Pas de class supplémentaire ici
               iconSize: [30, 60],
               iconAnchor: [15, -15], // Adjusted to move the buttons below the labels
@@ -1215,7 +1217,7 @@ function updateButtonsVisibility() {
 }
 
       var StartIcon = L.icon({
-        iconUrl: "images/starticon.png",
+        iconUrl: "images/starticon.svg",
 
         iconSize: [15, 15], // size of the icon
         iconAnchor: [7.5, 7.5], // point of the icon which will correspond to marker's location
@@ -1224,7 +1226,7 @@ function updateButtonsVisibility() {
       });
 
       var EndIcon = L.icon({
-        iconUrl: "images/endicon.png",
+        iconUrl: "images/endicon.svg",
 
         iconSize: [15, 15], // size of the icon
         iconAnchor: [7.5, 7.5], // point of the icon which will correspond to marker's location
