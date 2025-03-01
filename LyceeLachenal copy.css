@@ -1,207 +1,280 @@
-/* STYLE GENERAL */
+/* ================================================== */
+/* VARIABLES GLOBALES & PARAMETRES FONDAMENTAUX */
+/* ================================================== */
+:root {
+    /* Palette de couleurs */
+    --primary-bg: #ffffff;
+    --secondary-bg: #f8f9fa;
+    --border-color: #d9d9d9;
+    --hover-bg: #e9ecef;
+    --text-color: #000000;
 
+    /* Dimensions */
+    --control-height: 40px;
+    --control-radius: 15px;
+    --search-width: 500px;
+
+    /* Positionnements absolus */
+    --top-margin: 20px;
+    --side-margin: 15px;
+    --bottom-margin: 25px;
+
+    /* Ombres */
+    --shadow-main: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ================================================== */
+/* STYLES DE BASE */
+/* ================================================== */
 body {
     margin: 0;
+    height: 100vh;
+    font-family: 'Arial', sans-serif;
 }
 
 #map {
-    height: 100vh;
+    height: 100%;
     width: 100%;
-    display: block;
+    position: relative;
 }
 
-
-/* BARRE DE RECHERCHE | DEBUT */
-
-/* Paramètres */
-
-.leaflet-control-search,
-.leaflet-control-search .search-tooltip,
-.leaflet-control-layers,
-.leaflet-control-zoom .leaflet-control-zoom-in,
-.leaflet-control-zoom .leaflet-control-zoom-out {
-    background-color: #ffffff !important;
-    border: 2px solid #d9d9d9 !important;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2) !important;
-    color: #000000 !important;
-}
-
-.leaflet-control-search .search-cancel:hover,
-.leaflet-control-search .search-tooltip li:hover,
-.leaflet-control-search .search-button:hover,
-.leaflet-control-zoom a:hover {
-    background-color: #d9d9d9 !important;
-}
-
-
-/* Style de la barre de recherche */
-
+/* ================================================== */
+/* COMPOSANT PRINCIPAL : BARRE DE RECHERCHE */
+/* ================================================== */
 .leaflet-control-search {
-    width: calc(100vw - 20px);
-    z-index: 1010;
-    bottom: 75px;
+    position: absolute;
+    top: var(--top-margin);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: var(--search-width);
+    max-width: 90%;
+    height: var(--control-height);
+    background: var(--primary-bg);
+    border: 2px solid var(--border-color) !important;
+    border-radius: 300px !important;
+    box-shadow: var(--shadow-main);
     display: flex;
     align-items: center;
-    font-family: 'Arial', sans-serif;
-    border-radius: 300px !important;
+    transition: all 0.3s ease;
 }
 
+/* État hover de la barre */
+.leaflet-control-search:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+/* Input principal */
+.leaflet-control-search input {
+    flex: 1;
+    border: none !important;
+    outline: none !important;
+    padding: 0 20px;
+    font-size: 14px;
+    background: transparent;
+    color: var(--text-color);
+    height: 100%;
+}
+
+/* Bouton de recherche */
 .leaflet-control-search .search-button {
-    width: 40px;
-    height: 40px;
+    width: var(--control-height) !important;
+    height: var(--control-height) !important;
     background: url('./images/search-icon.svg') no-repeat center center;
-    background-size: 60%;
+    background-size: 55%;
+    border: none;
+    margin: 0 10px;
+    transition: background-color 0.2s;
     border-radius: 50%;
-    cursor: pointer;
 }
 
+/* Bouton d'annulation */
 .leaflet-control-search .search-cancel {
-    position: absolute;
-    right: 50px;
-    width: 40px;
-    height: 40px;
+    width: var(--control-height) !important;
+    height: var(--control-height) !important;
     background: url('./images/cancel-icon.svg') no-repeat center center;
-    background-size: 56%;
-    border-radius: 50%;
-    cursor: pointer;
+    background-size: 45%;
+    position: absolute;
+    right: 15px;
+    opacity: 0.8;
+    transition: all 0.2s ease;
 }
 
+/* Tooltip des résultats */
 .leaflet-control-search .search-tooltip {
     position: absolute;
-    top: 120%;
+    top: calc(100% + 10px);
     left: 0;
     right: 0;
-    box-sizing: border-box;
-    padding: 5px;
-    border-radius: 15px;
-    color: #000000;
-    font-size: 14px;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1010;
+    background: var(--primary-bg);
+    border: 2px solid var(--border-color);
+    border-radius: var(--control-radius);
+    box-shadow: var(--shadow-main);
+    padding: 8px 0;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
-.leaflet-control-search input {
-    outline: none;
-    border: none !important;
-    font-size: 14px;
+/* Items des résultats */
+.leaflet-control-search .search-tooltip li {
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.15s;
 }
 
 .leaflet-control-search .search-tooltip li:hover {
-    border-radius: 15px;
+    background-color: var(--hover-bg);
 }
 
-.leaflet-control-search .search-button:hover {
-    background: url('./images/search-icon.svg') no-repeat center center;
-    background-size: 60%;
+/* ================================================== */
+/* CONTROLES SECONDARES (Zoom, Layers, Geoloc) */
+/* ================================================== */
+
+/* Conteneur Zoom */
+.leaflet-control-zoom {
+    position: fixed;
+    bottom: var(--bottom-margin);
+    right: var(--side-margin);
+    border: none !important;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-#search-control-start .search-cancel {
-    right: 87px;
+/* Boutons Zoom */
+.leaflet-control-zoom a {
+    width: var(--control-height) !important;
+    height: var(--control-height) !important;
+    background: var(--primary-bg) !important;
+    border: 2px solid var(--border-color) !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: all 0.2s ease;
 }
 
-/* BARRE DE RECHERCHE | FIN */
+.leaflet-control-zoom-in {
+    border-radius: var(--control-radius) var(--control-radius) 0 0 !important;
+}
 
+.leaflet-control-zoom-out {
+    border-radius: 0 0 var(--control-radius) var(--control-radius) !important;
+}
 
+/* Contrôle des Layers */
+.leaflet-control-layers {
+    position: absolute;
+    top: var(--top-margin);
+    right: var(--side-margin);
+    background: var(--primary-bg) !important;
+    border: 2px solid var(--border-color) !important;
+    border-radius: var(--control-radius) !important;
+    box-shadow: var(--shadow-main);
+    padding: 12px;
+}
 
-/* STYLE ELEMENTS GEOJSON | DEBUT */
+/* Bouton Géolocalisation */
+.leaflet-control-locate {
+    position: absolute !important;
+    bottom: calc(var(--bottom-margin) + 50px);
+    right: var(--side-margin);
+    border: none !important;
+}
+
+.leaflet-control-locate a {
+    width: var(--control-height) !important;
+    height: var(--control-height) !important;
+    background: var(--primary-bg) !important;
+    border: 2px solid var(--border-color) !important;
+    border-radius: var(--control-radius) !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ================================================== */
+/* ELEMENTS SPECIFIQUES (GeoJSON, Tooltips) */
+/* ================================================== */
+.leaflet-interactive {
+    transition: fill-opacity 0.2s;
+}
 
 .leaflet-interactive:hover {
-    fill-opacity: 0.97;
+    fill-opacity: 0.7 !important;
     cursor: pointer;
 }
 
-/* STYLE ELEMENTS GEOJSON | FIN */
-
-
-
-/* STYLE CONTROL ZOOM | DEBUT */
-
-.leaflet-control-zoom {
-    position: relative;
-    bottom: 25px;
-    right: 10px;
-    border: none !important;
+.leaflet-tooltip-custom {
+    background: var(--primary-bg);
+    border: 2px solid var(--border-color);
+    border-radius: var(--control-radius);
+    padding: 6px 12px;
+    font-size: 13px;
+    box-shadow: var(--shadow-main);
 }
 
-.leaflet-control-layers {
-    border-radius: 15px;
-    padding: 10px;
-    padding-right: 15px;
-}
-
-.leaflet-control-zoom .leaflet-control-zoom-in {
-    border-radius: 15px 15px 0px 0px !important;
-    width: 40px !important;
-    height: 40px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.leaflet-control-zoom .leaflet-control-zoom-out {
-    border-radius: 0px 0px 15px 15px !important;
-    width: 40px !important;
-    height: 40px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.leaflet-control-zoom a:hover {
-    background-color: #d9d9d9;
-}
-
-.leaflet-control-zoom {
-    border: none !important;
-}
-
-/* STYLE CONTROL ZOOM | FIN */
-
-
-
-/* STYLE TELEPHONE | DEBUT */
-
+/* ================================================== */
+/* VERSION MOBILE (Mobile First Approach) */
+/* ================================================== */
 @media (max-width: 600px),
-(hover: none) and (pointer: coarse) {
-
-    .leaflet-control-layers {
-        position: relative;
-        top: 120px;
+(pointer: coarse) {
+    :root {
+        --top-margin: 10px;
+        --side-margin: 10px;
+        --control-height: 45px;
+        --search-width: 90%;
     }
 
+    /* Ajustement barre de recherche */
     .leaflet-control-search {
-        position: relative;
-        top: 0px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 5px;
-        box-sizing: border-box;
-        bottom: 75px;
+        left: 100%;
+        transform: translateX(-50%);
+        height: 45px;
     }
 
-    .leaflet-control-search .search-button {
-        width: 40px;
-        height: 40px;
-        background: url('./images/search-icon.svg') no-repeat center center;
-        background-size: 60%;
-        border: none;
-        border-radius: 50%;
-        flex: 0 0 auto;
-    }
-
-    #search-control-start .search-tooltip {
-        top: 65px;
-        width: calc(100% - 110px);
+    /* Réorganisation des contrôles */
+    .leaflet-control-layers {
+        top: 70px;
+        right: var(--side-margin);
     }
 
     .leaflet-control-locate {
-        border: none !important;
-        box-shadow: none !important;
-        position: relative;
-        top: 180px;
-        z-index: 1000;
+        bottom: calc(var(--bottom-margin) + 60px);
+    }
+
+    /* Ajustement tooltip */
+    .leaflet-control-search .search-tooltip {
+        top: calc(100% + 5px);
+        max-height: 200px;
+    }
+}
+
+/* ================================================== */
+/* VERSION DESKTOP (Enhancements) */
+/* ================================================== */
+@media (min-width: 601px) {
+    :root {
+        --top-margin: 10px;
+        --side-margin: 10px;
+    }
+
+    /* Positionnement précis desktop */
+    .leaflet-control-search {
+        left: var(--side-margin);
+        transform: none;
+        width: 450px;
+    }
+
+    .leaflet-control-layers {
+        top: var(--top-margin);
+        right: var(--side-margin);
+    }
+
+    /* Optimisation de l'espace */
+    .leaflet-control-zoom {
+        bottom: 30px;
+        right: 25px;
     }
 }
