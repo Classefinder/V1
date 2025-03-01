@@ -29,13 +29,14 @@
 /* ================================================== */
 body {
     margin: 0;
-    height: 98vh;
     font-family: 'Arial', sans-serif;
 }
 
+/* Mise à jour de #map */
 #map {
-    height: 100vw;
-    width: 100vw;
+    height: 100vh;
+    width: 100%;
+    display: block;
     position: relative;
 }
 
@@ -44,11 +45,9 @@ body {
 /* ================================================== */
 .leaflet-control-search {
     position: absolute;
-    top: var(--top-margin);
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    width: var(--search-width);
+    bottom: 75px;
+    width: calc(100vw - 20px);
+    z-index: 1010;
     max-width: 90%;
     height: var(--control-height);
     background: var(--primary-bg);
@@ -172,7 +171,8 @@ body {
     border: 2px solid var(--border-color) !important;
     border-radius: var(--control-radius) !important;
     box-shadow: var(--shadow-main);
-    padding: 12px;
+    padding: 12px 15px;
+    z-index: 1020;
 }
 
 /* Bouton Géolocalisation */
@@ -195,15 +195,18 @@ body {
 }
 
 .custom-geojson-button {
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 2px 5px;
+    background-color: var(--primary-bg);
+    border: 2px solid var(--border-color);
+    border-radius: var(--control-radius);
+    padding: 8px 12px;
+    font-family: 'Arial', sans-serif;
+    color: var(--text-color);
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .custom-geojson-button:hover {
-    background: #eee;
+    background-color: var(--hover-bg);
 }
 
 /* ================================================== */
@@ -353,4 +356,33 @@ body {
     .leaflet-control-locate {
         bottom: calc(var(--bottom-margin) + 100px);
     }
+}
+
+/* ===== MODIFICATIONS POUR AMÉLIORER LE STYLE ===== */
+
+/* 1. Labels améliorés */
+.room-label {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid var(--border-color);
+    border-radius: var(--control-radius);
+    padding: 4px 8px;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+/* 3. Style spécifique pour la barre de recherche de départ */
+#search-control-start {
+    position: absolute;
+    top: 200px;
+    left: var(--side-margin);
+    width: 500px;
+    height: var(--control-height);
+    background-color: var(--primary-bg);
+    border: 2px solid var(--border-color) !important;
+    border-radius: 300px !important;
+    box-shadow: var(--shadow-main);
+    display: flex;
+    align-items: center;
+    padding: 0 0px;
+    z-index: 1010;
 }
