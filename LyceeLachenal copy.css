@@ -346,12 +346,12 @@ body.dark-mode .leaflet-control-zoom a:hover {
 
     .leaflet-control-layers {
         position: relative;
-        top: 120px;
+        top: 130px;
     }
 
     .leaflet-control-locate {
         position: relative;
-        top: 180px;
+        top: 190px;
     }
 
     .leaflet-control-search {
@@ -366,7 +366,7 @@ body.dark-mode .leaflet-control-zoom a:hover {
     }
 
     #search-control-start .search-tooltip {
-        top: 120px;
+        top: 130px;
     }
 
     .leaflet-control-search .search-tooltip {
@@ -376,7 +376,7 @@ body.dark-mode .leaflet-control-zoom a:hover {
 
     #dark-mode-toggle {
         position: absolute;
-        top: 225px;
+        top: 235px;
         right: 10px;
     }
 
@@ -396,7 +396,7 @@ body.dark-mode .leaflet-control-zoom a:hover {
     }
 
     #search-control-start .search-tooltip {
-        top: 140px;
+        top: 147px;
     }
 
     .leaflet-control-layers {
