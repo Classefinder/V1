@@ -15,20 +15,28 @@ body {
 /* COMPOSANT REGLAGES */
 /* ================================================== */
 
+/* mode clair */
+
 .leaflet-control-search,
-.leaflet-control-search .search-tooltip {
-    background-color: #ffffff;
+.leaflet-control-search .search-tooltip,
+.leaflet-tooltip-custom,
+.leaflet-control-layers {
+    background-color: #ffffff !important;
     border: 2px solid #d9d9d9 !important;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-    color: #000000;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2) !important;
+    color: #000000 !important;
 }
 
+.leaflet-control-search .search-button:hover,
+.leaflet-control-search .search-cancel:hover,
+.leaflet-control-search .search-tooltip li:hover {
+    background-color: #d9d9d9 !important;
+}
 
 /* ================================================== */
 /* COMPOSANT PRINCIPAL : BARRE DE RECHERCHE */
 /* ================================================== */
 
-/* Style général de la barre de recherche */
 .leaflet-control-search {
     border-radius: 300px !important;
     font-family: 'Arial', sans-serif;
@@ -69,89 +77,23 @@ body {
     padding-left: 20px;
 }
 
-/* Bouton croix survolé */
-.leaflet-control-search .search-cancel:hover {
-    background-color: #d9d9d9;
-    /* Couleur au survol */
-}
-
 .leaflet-control-search input {
     outline: none;
     border: none !important;
     box-shadow: none !important;
     width: calc(100% - 60px);
-    /* Réduire la largeur pour tenir compte de l'icône */
     padding: 10px;
-    /* Ajouter un peu de padding */
     font-size: 14px;
-    /* Taille du texte */
-    border-radius: 300px;
-    /* Coins arrondis */
 }
 
-.leaflet-interactive:not(.no-hover):hover {
-    fill-opacity: 0.97;
-    cursor: pointer;
-}
-
-/* Style de l'élément actif (lorsque sélectionné sur la carte) */
-.leaflet-interactive.selected {
-    fill-opacity: 1;
-    stroke: #017732;
-    /* Couleur verte pour l'élément sélectionné */
-}
-
-/* label pour afficher les salle */
-.leaflet-tooltip-custom {
-    font-size: 14px;
-    color: rgb(0, 0, 0);
-    background-color: rgb(255, 255, 255);
-    border: 1px solid #d9d9d9;
-    border-radius: 15px;
-    padding: 2px 5px;
-}
-
-
-/* Personnalisation du popup */
-.leaflet-popup-content {
-    font-size: 14px;
-    color: #333;
-    font-weight: bold;
-}
-
-/* Résultat survolé */
 .leaflet-control-search .search-tooltip li {
     padding: 0px;
-    /* Espacement des items */
     cursor: pointer;
-    /* Curseur pointeur */
-}
-
-.leaflet-control-search .search-tooltip li:hover {
-    background-color: #d9d9d9;
-    /* Couleur de fond au survol */
-    color: #495057;
-    /* Couleur du texte */
-    border-radius: 100px;
-}
-
-/* Texte des résultats */
-.leaflet-control-search .search-tooltip li span {
-    font-weight: normal;
-    /* Texte en gras */
-}
-
-.leaflet-control-search .search-tooltip {
-    list-style-type: none;
-    /* Supprime les puces de la liste */
-    padding-left: 20px;
-    /* Supprime le padding gauche */
 }
 
 .leaflet-control-search .search-button:hover {
     background: url('./images/search-icon.svg') no-repeat center center;
-    background-color: #D9D9D9;
-    /* Changer la couleur au survol */
+
     background-size: 60%;
 }
 
@@ -159,47 +101,43 @@ body {
     right: 87px;
 }
 
-/* Style pour les cercles créés par Leaflet (s'ils ont une classe spécifique, par exemple) */
-.leaflet-interactive {
-    border-radius: 50%;
-    /* Optionnel : si tu veux des cercles parfaitement ronds */
+/* ================================================== */
+/* COMPOSANTS SECONDAIRES */
+/* ================================================== */
+
+.leaflet-interactive:hover {
+    fill-opacity: 0.97;
+    cursor: pointer;
 }
 
-/* Pour personnaliser la couleur et l'apparence du cercle */
-.leaflet-circle {
-    stroke: #d9d9d9;
-    /* La couleur du bord du cercle */
-    fill: #ffffff;
-    /* La couleur de remplissage du cercle */
-    fill-opacity: 0.4;
+.leaflet-tooltip-custom {
+    font-size: 14px;
+    border-radius: 15px;
+    padding: 2px 5px;
+}
+
+.leaflet-popup-content {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.leaflet-interactive {
+    border-radius: 50%;
 }
 
 .leaflet-control-zoom {
     position: fixed;
     bottom: 25px;
-    /* Distance depuis le bas */
     right: 10px;
-    /* Distance depuis la droite */
     border: none !important;
 }
 
 .leaflet-control-layers {
-    background-color: #ffffff;
-    /* Fond semi-transparent pour le contrôle des couches */
     border-radius: 15px;
-    /* Coins arrondis */
-    border: 2px solid #d9d9d9 !important;
-    /* Utilisation de la couleur RGBA pour la bordure avec !important */
     padding: 10px;
-    /* Espacement autour du contrôle */
     padding-right: 15px;
-    position: relative;
-    /* Position absolue */
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2) !important;
-    /* Ombre */
 }
 
-/* Style pour les boutons de zoom et dézoom */
 .leaflet-control-zoom .leaflet-control-zoom-in {
     background-color: #ffffff;
     border: 2px solid #d9d9d9 !important;
@@ -226,7 +164,6 @@ body {
     cursor: pointer;
 }
 
-/* Style pour les boutons de zoom et dézoom au survol */
 .leaflet-control-zoom a:hover {
     background-color: #d9d9d9;
 }
@@ -235,42 +172,140 @@ body {
     border: none !important;
 }
 
-/* Style pour les boutons de zoom et dézoom */
-body.dark-mode .leaflet-control-zoom .leaflet-control-zoom-in {
-    background-color: #000000;
-    color: #ffffff;
-    border: 2px solid #444444 !important;
-    border-radius: 15px 15px 0px 0px !important;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2) !important;
-    width: 40px;
-    height: 40px;
+#dark-mode-toggle {
+    z-index: 1000;
+    background-color: #ffffff;
+    border: 2px solid #d9d9d9 !important;
+    border-radius: 15px;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
+    font-size: 24px;
+    /* taille de l'icône */
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-body.dark-mode .leaflet-control-zoom .leaflet-control-zoom-out {
-    background-color: #000000;
-    color: #ffffff;
-    border: 2px solid #444444 !important;
-    border-radius: 0px 0px 15px 15px !important;
+/* Classe pour cibler l'icône dans le bouton */
+.theme-icon {
+    width: 30px;
+    /* Modifiez la largeur selon votre besoin */
+    height: 30px;
+    /* Modifiez la hauteur selon votre besoin */
+    /* Vous pouvez aussi utiliser des valeurs comme "em", "%" ou "rem" pour la taille */
+}
+
+.room-label {
+    font-weight: bold;
+    color: black;
+    background: rgba(255, 255, 255, 0.7);
+    border: 2px solid #d9d9d9d9;
+    opacity: 1;
+    border-radius: 15px;
+    padding: 2px 4px;
+}
+
+.custom-geojson-button {
+    background-color: #ffffff;
+    border: 2px solid #d9d9d9;
+    border-radius: 15px !important;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-    width: 40px;
-    height: 40px;
+    font-family: 'Arial', sans-serif;
+    color: #000000;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0;
+    /* Ensure no margin between buttons */
+}
+
+.custom-geojson-button:hover {
+    background-color: #d9d9d9;
+}
+
+
+.leaflet-control-locate a {
     cursor: pointer;
+    border-radius: 15px !important;
+    width: 47px !important;
+    height: 47px !important;
+    border: #d9d9d9 solid 2px !important;
+    background-color: #ffffff !important;
 }
 
-body.dark-mode .leaflet-control-zoom a:hover {
-    background-color: #444444;
+.leaflet-control-locate a .leaflet-control-locate-location-arrow {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin: 7px;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
 }
 
-body.dark-mode .leaflet-control-zoom {
-    border: none !important;
+.leaflet-control-locate a .leaflet-control-locate-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin: 7px;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M304 48a48 48 0 1 1-96 0 48 48 0 0 1 96 0zm-48 368a48 48 0 1 0 0 96 48 48 0 0 0 0-96zm208-208a48 48 0 1 0 0 96 48 48 0 0 0 0-96zM96 256a48 48 0 1 0-96 0 48 48 0 0 0 96 0zm13 99a48 48 0 1 0 0 96 48 48 0 0 0 0-96zm294 0a48 48 0 1 0 0 96 48 48 0 0 0 0-96zM109 61a48 48 0 1 0 0 96 48 48 0 0 0 0-96z"/></svg>');
+    animation: leaflet-control-locate-spin 2s linear infinite;
 }
+
+.leaflet-control-locate.active a .leaflet-control-locate-location-arrow {
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="rgb(32, 116, 182)" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
+}
+
+.leaflet-control-locate.following a .leaflet-control-locate-location-arrow {
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="rgb(252, 132, 40)" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
+}
+
+.leaflet-touch .leaflet-bar .leaflet-locate-text-active {
+    width: 100%;
+    max-width: 200px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 0 10px;
+}
+
+.leaflet-touch .leaflet-bar .leaflet-locate-text-active .leaflet-locate-icon {
+    padding: 0 5px 0 0;
+}
+
+
+#geo-btn-start {
+    /* Removed fixed right offset */
+    right: 0;
+    /* Remove extra margin to avoid aplatissement */
+    margin: 0;
+    /* Use auto left margin to align in flex container if needed */
+    margin-left: auto;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background: url('./images/locate-icon.svg') no-repeat center center;
+    background-size: 60%;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+    /* Added to remove default outline */
+    border: none;
+    /* Added to remove default border */
+}
+
+/* Added hover effect for the geo button */
+#geo-btn-start:hover {
+    background-color: #d9d9d9;
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
 
 /* Ajustements pour les petits écrans */
 @media (max-width: 600px),
@@ -649,22 +684,6 @@ body.dark-mode #map {
     /* Gris très sombre */
 }
 
-#dark-mode-toggle {
-    z-index: 1000;
-    background-color: #ffffff;
-    border: 2px solid #d9d9d9 !important;
-    border-radius: 15px;
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    /* taille de l'icône */
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
 
 body.dark-mode #dark-mode-toggle {
     background-color: #1a1a1a;
@@ -672,45 +691,6 @@ body.dark-mode #dark-mode-toggle {
     border: 2px solid #444444 !important;
 }
 
-/* Classe pour cibler l'icône dans le bouton */
-.theme-icon {
-    width: 30px;
-    /* Modifiez la largeur selon votre besoin */
-    height: 30px;
-    /* Modifiez la hauteur selon votre besoin */
-    /* Vous pouvez aussi utiliser des valeurs comme "em", "%" ou "rem" pour la taille */
-}
-
-.room-label {
-    font-weight: bold;
-    color: black;
-    background: rgba(255, 255, 255, 0.7);
-    border: 2px solid #d9d9d9d9;
-    opacity: 1;
-    border-radius: 15px;
-    padding: 2px 4px;
-}
-
-.custom-geojson-button {
-    background-color: #ffffff;
-    border: 2px solid #d9d9d9;
-    border-radius: 15px !important;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-    font-family: 'Arial', sans-serif;
-    color: #000000;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-    /* Ensure no margin between buttons */
-}
-
-.custom-geojson-button:hover {
-    background-color: #d9d9d9;
-}
 
 /* Dark mode styles for custom GeoJSON buttons */
 body.dark-mode .custom-geojson-button {
@@ -732,110 +712,7 @@ body.dark-mode .custom-geojson-button:hover {
 
 
 
-.leaflet-control-locate a {
-    cursor: pointer;
-    border-radius: 15px !important;
-    width: 47px !important;
-    height: 47px !important;
-    border: #d9d9d9 solid 2px !important;
-    background-color: #ffffff !important;
-}
 
-.leaflet-control-locate a .leaflet-control-locate-location-arrow {
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    margin: 7px;
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
-}
-
-.leaflet-control-locate a .leaflet-control-locate-spinner {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin: 7px;
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M304 48a48 48 0 1 1-96 0 48 48 0 0 1 96 0zm-48 368a48 48 0 1 0 0 96 48 48 0 0 0 0-96zm208-208a48 48 0 1 0 0 96 48 48 0 0 0 0-96zM96 256a48 48 0 1 0-96 0 48 48 0 0 0 96 0zm13 99a48 48 0 1 0 0 96 48 48 0 0 0 0-96zm294 0a48 48 0 1 0 0 96 48 48 0 0 0 0-96zM109 61a48 48 0 1 0 0 96 48 48 0 0 0 0-96z"/></svg>');
-    animation: leaflet-control-locate-spin 2s linear infinite;
-}
-
-.leaflet-control-locate.active a .leaflet-control-locate-location-arrow {
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="rgb(32, 116, 182)" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
-}
-
-.leaflet-control-locate.following a .leaflet-control-locate-location-arrow {
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="rgb(252, 132, 40)" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
-}
-
-.leaflet-touch .leaflet-bar .leaflet-locate-text-active {
-    width: 100%;
-    max-width: 200px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    padding: 0 10px;
-}
-
-.leaflet-touch .leaflet-bar .leaflet-locate-text-active .leaflet-locate-icon {
-    padding: 0 5px 0 0;
-}
-
-.leaflet-control-locate-location circle {
-    animation: leaflet-control-locate-throb 4s ease infinite;
-}
-
-@keyframes leaflet-control-locate-throb {
-    0% {
-        stroke-width: 1;
-    }
-
-    50% {
-        stroke-width: 3;
-        transform: scale(0.8, 0.8);
-    }
-
-    100% {
-        stroke-width: 1;
-    }
-}
-
-@keyframes leaflet-control-locate-spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-
-#geo-btn-start {
-    /* Removed fixed right offset */
-    right: 0;
-    /* Remove extra margin to avoid aplatissement */
-    margin: 0;
-    /* Use auto left margin to align in flex container if needed */
-    margin-left: auto;
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
-    background: url('./images/locate-icon.svg') no-repeat center center;
-    background-size: 60%;
-    border-radius: 50%;
-    cursor: pointer;
-    padding: 0;
-    outline: none;
-    /* Added to remove default outline */
-    border: none;
-    /* Added to remove default border */
-}
-
-/* Added hover effect for the geo button */
-#geo-btn-start:hover {
-    background-color: #d9d9d9;
-    transform: scale(1.1);
-    transition: transform 0.2s ease;
-}
 
 /* Dark mode variant for the geo-btn-start button */
 body.dark-mode #geo-btn-start {
@@ -845,4 +722,41 @@ body.dark-mode #geo-btn-start {
 
 body.dark-mode #geo-btn-start:hover {
     background-color: #444444;
+}
+
+
+body.dark-mode .leaflet-control-zoom .leaflet-control-zoom-in {
+    background-color: #000000;
+    color: #ffffff;
+    border: 2px solid #444444 !important;
+    border-radius: 15px 15px 0px 0px !important;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2) !important;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+body.dark-mode .leaflet-control-zoom .leaflet-control-zoom-out {
+    background-color: #000000;
+    color: #ffffff;
+    border: 2px solid #444444 !important;
+    border-radius: 0px 0px 15px 15px !important;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+body.dark-mode .leaflet-control-zoom a:hover {
+    background-color: #444444;
+}
+
+body.dark-mode .leaflet-control-zoom {
+    border: none !important;
 }
