@@ -8,9 +8,6 @@ body {
     display: block;
 }
 
-
-
-
 /* ================================================== */
 /* COMPOSANT REGLAGES */
 /* ================================================== */
@@ -20,7 +17,11 @@ body {
 .leaflet-control-search,
 .leaflet-control-search .search-tooltip,
 .leaflet-tooltip-custom,
-.leaflet-control-layers {
+.leaflet-control-layers,
+#dark-mode-toggle,
+.room-label,
+.custom-geojson-button,
+.leaflet-control-locate a {
     background-color: #ffffff !important;
     border: 2px solid #d9d9d9 !important;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2) !important;
@@ -29,7 +30,9 @@ body {
 
 .leaflet-control-search .search-button:hover,
 .leaflet-control-search .search-cancel:hover,
-.leaflet-control-search .search-tooltip li:hover {
+.leaflet-control-search .search-tooltip li:hover,
+.custom-geojson-button:hover,
+#geo-btn-start:hover {
     background-color: #d9d9d9 !important;
 }
 
@@ -174,47 +177,32 @@ body {
 
 #dark-mode-toggle {
     z-index: 1000;
-    background-color: #ffffff;
-    border: 2px solid #d9d9d9 !important;
     border-radius: 15px;
     width: 50px;
     height: 50px;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 24px;
-    /* taille de l'icône */
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Classe pour cibler l'icône dans le bouton */
 .theme-icon {
     width: 30px;
-    /* Modifiez la largeur selon votre besoin */
     height: 30px;
-    /* Modifiez la hauteur selon votre besoin */
-    /* Vous pouvez aussi utiliser des valeurs comme "em", "%" ou "rem" pour la taille */
 }
 
 .room-label {
     font-weight: bold;
-    color: black;
-    background: rgba(255, 255, 255, 0.7);
-    border: 2px solid #d9d9d9d9;
     opacity: 1;
     border-radius: 15px;
     padding: 2px 4px;
 }
 
 .custom-geojson-button {
-    background-color: #ffffff;
-    border: 2px solid #d9d9d9;
     border-radius: 15px !important;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
     font-family: 'Arial', sans-serif;
-    color: #000000;
     padding: 5px 10px;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -222,21 +210,15 @@ body {
     align-items: center;
     justify-content: center;
     margin: 0;
-    /* Ensure no margin between buttons */
 }
 
-.custom-geojson-button:hover {
-    background-color: #d9d9d9;
-}
-
+/*style de du bouton de loclaisation*/
 
 .leaflet-control-locate a {
     cursor: pointer;
     border-radius: 15px !important;
     width: 47px !important;
     height: 47px !important;
-    border: #d9d9d9 solid 2px !important;
-    background-color: #ffffff !important;
 }
 
 .leaflet-control-locate a .leaflet-control-locate-location-arrow {
@@ -277,13 +259,11 @@ body {
     padding: 0 5px 0 0;
 }
 
+/* fin du bouton de localisation*/
 
 #geo-btn-start {
-    /* Removed fixed right offset */
     right: 0;
-    /* Remove extra margin to avoid aplatissement */
     margin: 0;
-    /* Use auto left margin to align in flex container if needed */
     margin-left: auto;
     width: 40px;
     height: 40px;
@@ -294,14 +274,10 @@ body {
     cursor: pointer;
     padding: 0;
     outline: none;
-    /* Added to remove default outline */
     border: none;
-    /* Added to remove default border */
 }
 
-/* Added hover effect for the geo button */
 #geo-btn-start:hover {
-    background-color: #d9d9d9;
     transform: scale(1.1);
     transition: transform 0.2s ease;
 }
