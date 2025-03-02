@@ -532,7 +532,7 @@ function updateButtonsVisibility() {
           var center = layer.getBounds().getCenter();
           var btnMarker = L.marker(center, {
             icon: L.divIcon({
-              html: '<div style="display: flex; flex-direction: column; align-items: center; line-height: 0;"><button class="custom-geojson-button"><img src="./images/starticon.svg" alt="Start Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 40px 80px rgba(0, 0, 0, 1);">Start</button><br><button class="custom-geojson-button"><img src="./images/endicon.svg" alt="End Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">End</button></div>',
+              html: '<div style="display: flex; flex-direction: column; align-items: center; line-height: 0;"><button class="custom-geojson-button"><img src="./images/start-icon.svg" alt="Start Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 40px 80px rgba(0, 0, 0, 1);">Départ</button><br><button class="custom-geojson-button"><img src="./images/end-icon.svg" alt="End Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">Arrivée</button></div>',
               className: '', // Pas de class supplémentaire ici
               iconSize: [30, 60],
               iconAnchor: [15, -15], // Adjusted to move the buttons below the labels
@@ -542,7 +542,7 @@ function updateButtonsVisibility() {
 
           // Gestion du clic sur le bouton "Start"
           btnMarker.on("click", function (e) {
-            if (e.originalEvent.target.innerText === "Start") {
+            if (e.originalEvent.target.innerText === "Départ") {
               // Supprimer le précédent point de départ s'il existe
               if (startPoint) {
                 map.removeLayer(startPoint);
@@ -604,7 +604,7 @@ function updateButtonsVisibility() {
 
           // Gestion du clic sur le bouton "End"
           btnMarker.on("click", function (e) {
-            if (e.originalEvent.target.innerText === "End") {
+            if (e.originalEvent.target.innerText === "Arrivée") {
               // Supprimer le précédent point d'arrivée s'il existe
               if (endPoint) {
                 map.removeLayer(endPoint);
@@ -830,7 +830,7 @@ function updateButtonsVisibility() {
 }
 
       var StartIcon = L.icon({
-        iconUrl: "images/starticon.svg",
+        iconUrl: "images/start-icon.svg",
 
         iconSize: [15, 15], // size of the icon
         iconAnchor: [7.5, 7.5], // point of the icon which will correspond to marker's location
@@ -839,7 +839,7 @@ function updateButtonsVisibility() {
       });
 
       var EndIcon = L.icon({
-        iconUrl: "images/endicon.svg",
+        iconUrl: "images/end-icon.svg",
 
         iconSize: [15, 15], // size of the icon
         iconAnchor: [7.5, 7.5], // point of the icon which will correspond to marker's location
