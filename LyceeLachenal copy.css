@@ -15,7 +15,8 @@ body {
 /* COMPOSANT REGLAGES */
 /* ================================================== */
 
-.leaflet-control-search {
+.leaflet-control-search,
+.leaflet-control-search .search-tooltip {
     background-color: #ffffff;
     border: 2px solid #d9d9d9 !important;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
@@ -41,95 +42,31 @@ body {
     bottom: 75px;
 }
 
-#search-control-start .search-cancel {
-    right: 87px;
-}
-
-
-
-/* Bouton pour effacer la recherche (croix) */
 .leaflet-control-search .search-cancel {
     background: url('./images/cancel-icon.svg') no-repeat center center;
-    /* Chemin relatif vers votre icône personnalisée */
     background-size: 56%;
-    /* Ajuster la taille de l'icône */
-    border: none;
-    /* Pas de bordure */
     border-radius: 50%;
-    /* Rond */
     width: 40px;
-    /* Taille */
     height: 40px;
-    /* Taille */
+    border: none;
     display: flex;
-    /* Utilisation de flexbox pour centrer l'icône */
     cursor: pointer;
-    /* Curseur pointeur */
-    position: absolute;
-    /* Position absolue pour ajustement */
     right: 50px;
-    /* Alignement à droite */
-    color: #ffffff;
-    /* Rendre la couleur de l'icône de base transparente */
-    font-size: 0;
-    /* Taille de l'icône à 0 pour masquer l'icône de base */
 }
 
-/* Tooltip de recherche */
 .leaflet-control-search .search-tooltip {
     box-sizing: border-box;
     padding: 10px;
     border-radius: 15px;
-    background-color: #ffffff;
-    border: 2px solid #d9d9d9;
-    /* Contour en couleur rouge */
-    color: #000000;
     font-size: 14px;
     position: absolute;
     top: 120%;
     left: 0;
     right: 0;
     margin: 0;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-    /* Ombre */
     z-index: 1010;
-    /* Tooltip de recherche au premier plan */
     list-style-type: none;
-    /* Supprime les puces de la liste */
     padding-left: 20px;
-    /* Supprime le padding gauche */
-}
-
-/* Style pour le tooltip de la barre de recherche de départ */
-#search-tooltip-start {
-    box-sizing: border-box;
-    padding: 10px;
-    border-radius: 15px;
-    color: #000000 !important;
-    font-size: 14px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1010;
-    position: absolute;
-    /* Assurez-vous que le tooltip est en position absolue */
-    top: 50px;
-    /* Ajustez la valeur pour changer la distance par rapport au haut */
-    left: 10px;
-    /* Par exemple, à 10px du côté gauche */
-    /* Vous pouvez ajouter d'autres propriétés pour affiner le style si besoin */
-}
-
-/* Style pour le tooltip de la barre de recherche de fin */
-#search-tooltip-end {
-    box-sizing: border-box;
-    padding: 10px;
-    border-radius: 15px;
-    background-color: #f9f9f9;
-    /* Exemple : couleur différente */
-    border: 2px solid #cccccc;
-    color: #000000;
-    font-size: 14px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1010;
 }
 
 /* Bouton croix survolé */
@@ -216,6 +153,10 @@ body {
     background-color: #D9D9D9;
     /* Changer la couleur au survol */
     background-size: 60%;
+}
+
+#search-control-start .search-cancel {
+    right: 87px;
 }
 
 /* Style pour les cercles créés par Leaflet (s'ils ont une classe spécifique, par exemple) */
