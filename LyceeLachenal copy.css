@@ -39,6 +39,38 @@ body {
     background-color: #d9d9d9 !important;
 }
 
+/* mode sombre */
+
+body.dark-mode .leaflet-control-search,
+body.dark-mode .leaflet-control-search .search-tooltip,
+body.dark-mode .leaflet-tooltip-custom,
+body.dark-mode .leaflet-control-layers,
+body.dark-mode #dark-mode-toggle,
+body.dark-mode .room-label,
+body.dark-mode .custom-geojson-button,
+body.dark-mode .leaflet-control-locate a,
+body.dark-mode .leaflet-control-zoom .leaflet-control-zoom-out,
+body.dark-mode .leaflet-control-zoom .leaflet-control-zoom-in {
+    background-color: #1e1e1e !important;
+    border: 2px solid #444444 !important;
+    box-shadow: 0 10px 10px rgba(199, 199, 199, 0.2) !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .leaflet-control-search input {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+body.dark-mode .leaflet-control-search .search-button:hover,
+body.dark-mode .leaflet-control-search .search-cancel:hover,
+body.dark-mode .leaflet-control-search .search-tooltip li:hover,
+body.dark-mode .custom-geojson-button:hover,
+body.dark-mode #geo-btn-start:hover,
+body.dark-mode .leaflet-control-zoom a:hover {
+    background-color: #444444 !important;
+}
+
 /* ================================================== */
 /* COMPOSANT PRINCIPAL : BARRE DE RECHERCHE */
 /* ================================================== */
@@ -399,57 +431,9 @@ body {
 
 
 
-/* mode sombre */
-
-body.dark-mode {
-    background-color: #121212;
-    color: #ffffff;
-}
-
-body.dark-mode .room-label {
-    background: rgba(0, 0, 0, 0.7);
-    border-color: #444444;
-    color: #ffffff;
-}
-
-/* Mode sombre pour la barre de recherche générale */
-body.dark-mode .leaflet-control-search {
-    background-color: #1e1e1e;
-    border: 2px solid #444444 !important;
-    color: #ffffff;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
-}
-
-/* Mode sombre pour l'input de la barre de recherche */
-body.dark-mode .leaflet-control-search input:focus {
-    outline: none !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-/* Mode sombre pour la barre de recherche de départ */
-body.dark-mode #search-control-start {
-    background-color: #1e1e1e;
-    border: none !important;
-    color: #ffffff;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
-}
-
-/* Mode sombre pour la barre de recherche de fin */
-body.dark-mode #search-control-end {
-    background-color: #1e1e1e;
-    border: none !important;
-    color: #ffffff;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
-}
-
-/* Mode sombre pour le bouton d'effacement de la recherche */
 body.dark-mode .leaflet-control-search .search-cancel {
     background: url('./images/cancel-icon-dark.svg') no-repeat center center;
     background-size: 56%;
-    /* Assurez-vous d'avoir une icône adaptée au mode sombre */
-    border: none;
-    color: #ffffff;
 }
 
 body.dark-mode .leaflet-control-search .search-button:hover {
@@ -462,21 +446,8 @@ body.dark-mode .leaflet-control-search .search-button {
     background-size: 60%;
 }
 
-/* Mode sombre pour la tooltip de recherche */
-body.dark-mode .leaflet-control-search .search-tooltip {
-    background-color: #1e1e1e;
-    border: 2px solid #444444;
-    color: #ffffff;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
-}
-
 /* Mode sombre pour l'input de la barre de recherche */
-body.dark-mode .leaflet-control-search input {
-    background-color: #1e1e1e;
-    color: #ffffff;
-    border: none !important;
-    box-shadow: none !important;
-}
+
 
 /* Mode sombre pour le contrôle des calques */
 body.dark-mode .leaflet-control-layers {
@@ -564,7 +535,7 @@ body.dark-mode #geo-btn-start:hover {
 body.dark-mode .leaflet-control-zoom .leaflet-control-zoom-in {
     background-color: #000000;
     color: #ffffff;
-    border: 2px solid #444444 !important;
+
     border-radius: 15px 15px 0px 0px !important;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2) !important;
     width: 40px;
