@@ -53,6 +53,28 @@ body {
     bottom: 75px;
 }
 
+.leaflet-control-search .search-button {
+    width: 40px;
+    height: 40px;
+    background: url('./images/search-icon.svg') no-repeat center center;
+    background-size: 60%;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    flex: 0 0 auto;
+    align-self: center;
+    -webkit-appearance: none;
+    appearance: none;
+    line-height: 0;
+}
+
 .leaflet-control-search .search-cancel {
     background: url('./images/cancel-icon.svg') no-repeat center center;
     background-size: 56%;
@@ -139,6 +161,7 @@ body {
     border-radius: 15px;
     padding: 10px;
     padding-right: 15px;
+    z-index: 100;
 }
 
 .leaflet-control-zoom .leaflet-control-zoom-in {
@@ -213,6 +236,12 @@ body {
 }
 
 /*style de du bouton de loclaisation*/
+
+.leaflet-control-locate {
+    border: none !important;
+    box-shadow: none !important;
+    z-index: 1000;
+}
 
 .leaflet-control-locate a {
     cursor: pointer;
@@ -290,129 +319,30 @@ body {
     .leaflet-control-layers {
         position: relative;
         top: 120px;
-        z-index: 100;
-        /* Contrôle des couches au deuxième plan */
     }
-
 
     .leaflet-control-locate {
-        border: none !important;
-        box-shadow: none !important;
         position: relative;
         top: 180px;
-        z-index: 1000;
     }
 
-
-
-    /* Style général de la barre de recherche */
     .leaflet-control-search {
         position: relative;
         top: 0px;
         width: calc(100vw - 20px);
     }
 
-    /* Largeur du champ de texte */
-    .leaflet-control-search input {
-        width: calc(100% - 60px);
-        /* Réduire la largeur pour tenir compte de l'icône */
-        padding: 10px;
-        /* Ajouter un peu de padding */
-        font-size: 14px;
-        /* Taille du texte */
-        box-sizing: border-box;
-        /* Inclure le padding et la bordure dans la largeur totale */
-        border-radius: 1px;
-        /* Coins arrondis */
-    }
-
-    /* Style du bouton de recherche (loupe) */
-    .leaflet-control-search .search-button {
-        width: 40px;
-        height: 40px;
-        background: url('./images/search-icon.svg') no-repeat center center;
-        background-size: 60%;
-        border: none;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        /* Assurez-vous que le bouton est parfaitement rond */
-        box-sizing: border-box;
-        padding: 0;
-        margin: 0;
-    }
-
     .leaflet-control-search .search-tooltip {
         width: calc(100% - 110px);
-        /* Prendre toute la largeur de la barre de recherche */
         top: 65px;
     }
 
-    /* Style général de la barre de recherche  de start!*/
-    #search-control-start .leaflet-control-search {
-        position: relative;
-        /* Position absolue pour placer la barre de recherche */
-        display: flex;
-        /* Utilisation de flexbox pour aligner le champ et l'icône */
-        align-items: center;
-        /* Aligner verticalement l'élément */
-        justify-content: space-between;
-        /* Espacement entre le champ de texte et l'icône */
-        padding: 5px;
-        /* Ajouter un peu de padding */
-        box-sizing: border-box;
-        /* Inclure padding et bordures dans la largeur totale */
-        width: calc(100vw);
-        /* Prendre toute la largeur de l'écran */
-        z-index: 1010;
-        /* Barre de recherche au premier plan */
-        bottom: 75px;
-        border-radius: 3000px;
-    }
-
     #search-control-start .search-tooltip {
-        width: calc(100% - 110px);
-        /* Prendre toute la largeur de la barre de recherche */
         top: 120px;
-    }
-
-    /* Largeur du champ de texte */
-    .leaflet-control-search input {
-        width: calc(100% - 60px);
-        /* Réduire la largeur pour tenir compte de l'icône */
-        padding: 10px;
-        /* Ajouter un peu de padding */
-        font-size: 14px;
-        /* Taille du texte */
-        box-sizing: border-box;
-        /* Inclure le padding et la bordure dans la largeur totale */
-        border-radius: 300px;
-        /* Coins arrondis */
-    }
-
-    /* Style du bouton de recherche (loupe) */
-    .leaflet-control-search .search-button {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex: 0 0 auto;
-        align-self: center;
-        -webkit-appearance: none;
-        appearance: none;
-        line-height: 0;
     }
 
     .leaflet-control-search .search-tooltip {
         width: calc(100% - 110px);
-        /* Prendre toute la largeur de la barre de recherche */
         top: 65px;
     }
 
