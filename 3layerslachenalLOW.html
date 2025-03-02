@@ -390,6 +390,8 @@ function toggleTheme() {
       const tooltipZoomThreshold = 20; // Seuil de zoom pour afficher les labels
       const arrowZoomThreshold = 20; // Seuil de zoom pour afficher les flèches
 
+      const buttonZoomThreshold = window.innerWidth <= 600 ? 21 : 23;
+
       function updateTooltipsVisibility() {
         var currentZoom = map.getZoom();
 
@@ -517,7 +519,7 @@ function toggleTheme() {
       }
       
 // --- Nouvelle fonctionnalité : Boutons sur les formes GeoJSON ---
-const buttonZoomThreshold = window.innerWidth <= 600 ? 22 : 23; // Seuil de zoom pour afficher les boutons, plus bas pour écrans < 600px
+
 
 function updateButtonsVisibility() {
   var currentZoom = map.getZoom();
