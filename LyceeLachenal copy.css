@@ -162,6 +162,7 @@ body {
     padding: 10px;
     padding-right: 15px;
     z-index: 100;
+    display: flex;
 }
 
 .leaflet-control-zoom .leaflet-control-zoom-in {
@@ -311,8 +312,16 @@ body {
     transition: transform 0.2s ease;
 }
 
+#dark-mode-toggle {
+    position: absolute;
+    top: 105px;
+    right: 10px;
+}
 
-/* Ajustements pour les petits écrans */
+/* ================================================== */
+/* AFFICHAGE TELEPHONE */
+/* ================================================== */
+
 @media (max-width: 600px),
 (hover: none) and (pointer: coarse) {
 
@@ -354,108 +363,32 @@ body {
 
 }
 
-@media(min-width: 600px) {
+/* ================================================== */
+/* AFFICHAGE PC */
+/* ================================================== */
 
-    #dark-mode-toggle {
-        position: absolute;
-        top: 105px;
-        right: 10px;
-    }
+@media(min-width: 601px) {
 
     .leaflet-control-search {
         position: absolute;
-        /* Position absolue pour placer la barre de recherche */
         top: 0px;
-        /* Aligner en haut */
-        left: calc(0px);
-        /* Aligner à gauche */
         width: 500px;
-        /* Largeur de 300px */
-        display: flex;
-        /* Utilisation de flexbox pour aligner le champ et l'icône */
-        align-items: center;
-        /* Aligner verticalement l'élément */
-        justify-content: space-between;
-        /* Espacement entre le champ de texte et l'icône */
         padding: 10px;
-        /* Ajouter un peu de padding */
-        box-sizing: border-box;
-        /* Inclure padding et bordures dans la largeur totale */
-        z-index: 1010;
-        /* Barre de recherche au premier plan */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        /* Ombre portée */
-    }
-
-    #search-tooltip-start {
-        background-color: #ff0000 !important;
-        color: #ff0000 !important;
-        /* Autres styles pour la tooltip de départ */
     }
 
     #search-control-start .search-tooltip {
-        width: 100%;
-        /* Prendre toute la largeur de la barre de recherche */
         top: 140px;
     }
 
-    #search-tooltip-end {
-        background-color: #ff0808;
-        color: #af1414;
-        /* Autres styles pour la tooltip de fin */
-    }
-
-
     .leaflet-control-layers {
         position: relative;
-        display: flex;
         top: 0px;
-        background-color: #ffffff;
-        z-index: 100;
-        /* Contrôle des couches au deuxième plan */
     }
-
-    /* Largeur du champ de texte */
-    .leaflet-control-search input {
-        width: calc(100% - 60px);
-        /* Réduire la largeur pour tenir compte de l'icône */
-        padding: 10px;
-        /* Ajouter un peu de padding */
-        font-size: 14px;
-        /* Taille du texte */
-        box-sizing: border-box;
-        /* Inclure le padding et la bordure dans la largeur totale */
-        border-radius: 300px;
-        /* Coins arrondis */
-    }
-
-    .leaflet-control-search .search-button {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex: 0 0 auto;
-        align-self: center;
-        -webkit-appearance: none;
-        appearance: none;
-        line-height: 0;
-    }
-
-
 
     .leaflet-control-locate {
-        border: none !important;
-        box-shadow: none !important;
         position: relative;
         top: 60px;
-        z-index: 1000;
     }
-
-
 
 }
 
@@ -611,16 +544,6 @@ body.dark-mode .custom-geojson-button:hover {
 }
 
 
-
-
-
-/* Voici le css pour le bouton de localisation. C'est un copié collé du code source.*/
-
-
-
-
-
-/* Dark mode variant for the geo-btn-start button */
 body.dark-mode #geo-btn-start {
     background: url('./images/locate-icon-dark.svg') no-repeat center center;
     background-size: 60%;
