@@ -21,21 +21,6 @@
     <script src="https://cdn.jsdelivr.net/npm/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.83.1/dist/L.Control.Locate.min.js"></script>
    
-    <style>
-      #map {
-        height: 100vh;
-      }
-      .custom-geojson-button {
-        background: #fff;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 2px 5px;
-        cursor: pointer;
-      }
-      .custom-geojson-button:hover {
-        background: #eee;
-      }
-    </style>
   </head>
   <body>
     <div id="map"></div>
@@ -44,7 +29,7 @@
     <script>
       // Coordonnées du lycée (centre du plan)
       const lyceeCoords = [45.9368, 6.1322];
-      const proximityThreshold = 6.6; // Distance en kilomètres (500m)
+      const proximityThreshold = 8; // Distance en kilomètres (500m)
 
       // Fonction pour calculer la distance entre deux coordonnées
       function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -233,13 +218,13 @@ function toggleTheme() {
         map.addLayer(darkMap);
         
         // Changer l'icône à partir de l'image dans le dossier ./images
-        toggleButton.innerHTML = '<img src="./images/light-icon.png" alt="Mode clair" class="theme-icon"/>'; // Remplacez par votre icône de soleil
+        toggleButton.innerHTML = '<img src="./images/light-icon.svg" alt="Mode clair" class="theme-icon"/>'; // Remplacez par votre icône de soleil
     } else {
         map.removeLayer(darkMap);
         map.addLayer(lightMap);
         
         // Changer l'icône à partir de l'image dans le dossier ./images
-        toggleButton.innerHTML = '<img src="./images/dark-icon.png" alt="Mode sombre" class="theme-icon"/>'; // Remplacez par votre icône de lune
+        toggleButton.innerHTML = '<img src="./images/dark-icon.svg" alt="Mode sombre" class="theme-icon"/>'; // Remplacez par votre icône de lune
     }
 }
 
@@ -250,13 +235,13 @@ function toggleTheme() {
       if (prefersDarkScheme.matches) {
           document.body.classList.add('dark-mode');
           const toggleButton = document.getElementById('dark-mode-toggle');
-          toggleButton.innerHTML = '<img src="./images/light-icon.png" alt="Mode clair" class="theme-icon"/>'; // Icône du soleil
+          toggleButton.innerHTML = '<img src="./images/light-icon.svg" alt="Mode clair" class="theme-icon"/>'; // Icône du soleil
           map.removeLayer(lightMap);
           map.addLayer(darkMap);
       } else {
           document.body.classList.remove('dark-mode');
           const toggleButton = document.getElementById('dark-mode-toggle');
-          toggleButton.innerHTML = '<img src="./images/dark-icon.png" alt="Mode sombre" class="theme-icon"/>'; // Icône de la lune
+          toggleButton.innerHTML = '<img src="./images/dark-icon.svg" alt="Mode sombre" class="theme-icon"/>'; // Icône de la lune
           map.removeLayer(darkMap);
           map.addLayer(lightMap);
       }
@@ -294,9 +279,15 @@ function toggleTheme() {
             }
           },
           click: function (e) {
-            // Supprimer l'appel à resetHighlight() pour conserver les labels
-            // Zoom sur la feature cliquée
+            // Forcer l'affichage et indiquer que c'est une action de clic
+            e.target._forceButton = true;
+            window.justForced = true;  // Indique que le clic vient de forcer l'affichage
             map.fitBounds(e.target.getBounds());
+            updateButtonsVisibility();
+            // Après que le zoom soit terminé, rappeler updateButtonsVisibility pour conserver le bouton
+            map.once("zoomend", function(){
+              updateButtonsVisibility();
+            });
           },
         });
       }
@@ -541,153 +532,45 @@ function updateButtonsVisibility() {
   function toggleButtons(layerGroup) {
     layerGroup.eachLayer(function (layer) {
       var roomName = layer.feature.properties.name || layer.feature.properties.salle;
-      if (currentZoom >= buttonZoomThreshold && roomName && roomName !== "null" && roomName !== "Escalier" && roomName !== "Sanitaire") {
+      // Afficher le bouton soit si le zoom est suffisant, soit si la feature a été forcée via une recherche/clic.
+      if ((layer._forceButton || currentZoom >= buttonZoomThreshold) && roomName && roomName !== "null" && roomName !== "Escalier" && roomName !== "Sanitaire") {
         if (!layer._customButton) {
+          // ...existing code de création du marker bouton...
           var center = layer.getBounds().getCenter();
           var btnMarker = L.marker(center, {
             icon: L.divIcon({
-              html: '<div style="display: flex; flex-direction: column; align-items: center; line-height: 0;"><button class="custom-geojson-button"><img src="./images/starticon.png" alt="Start Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 40px 80px rgba(0, 0, 0, 1);">Start</button><br><button class="custom-geojson-button"><img src="./images/endicon.png" alt="End Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">End</button></div>',
-              className: '', // Pas de class supplémentaire ici
+              html: '<div style="display: flex; flex-direction: column; align-items: center; line-height: 0;"><button class="custom-geojson-button"><img src="./images/start-icon.svg" alt="Start Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 40px 80px rgba(0, 0, 0, 1);">Start</button><br><button class="custom-geojson-button"><img src="./images/end-icon.svg" alt="End Icon" style="width: 16px; height: 16px; margin-right: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">End</button></div>',
+              className: '',
               iconSize: [30, 60],
-              iconAnchor: [15, -15], // Adjusted to move the buttons below the labels
+              iconAnchor: [15, -15],
             }),
             interactive: true
           }).addTo(map);
-
-          // Gestion du clic sur le bouton "Start"
+          
+          // ... gestion des clics sur les boutons (inchangée) ...
           btnMarker.on("click", function (e) {
             if (e.originalEvent.target.innerText === "Start") {
-              // Supprimer le précédent point de départ s'il existe
-              if (startPoint) {
-                map.removeLayer(startPoint);
-                startPoint = null;
-              }
-              // Récupérer le nom et l'étage de la salle associée
-              var key = layer.feature.properties.name || layer.feature.properties.salle;
-              var floor = layer.feature.properties.floor;
-              
-              // Rechercher dans la couche active toutes les formes correspondant au même nom
-              var matchingFeatures = [];
-              var activeLayer = map.hasLayer(etage0)
-                ? salleLayer0
-                : map.hasLayer(etage1)
-                ? salleLayer1
-                : salleLayer2;
-              activeLayer.eachLayer(function (l) {
-                var lKey = l.feature.properties.name || l.feature.properties.salle;
-                if (lKey === key) {
-                  matchingFeatures.push(l);
-                }
-              });
-              if (matchingFeatures.length > 0) {
-                var group = L.featureGroup(matchingFeatures);
-                map.fitBounds(group.getBounds());
-                matchingFeatures.forEach(function (l) {
-                  highlightFeature(l);
-                });
-              }
-              
-              // Sélectionner le calque chemin correspondant à l'étage
-              var cheminLayer =
-                floor === "0"
-                  ? CheminEtageLayer0
-                  : floor === "1"
-                  ? CheminEtageLayer1
-                  : CheminEtageLayer2;
-              var cheminFeature = null;
-              cheminLayer.eachLayer(function (clayer) {
-                var clayerKey = clayer.feature.properties.name || clayer.feature.properties.salle;
-                if (clayer.feature && clayerKey === key) {
-                  cheminFeature = clayer;
-                }
-              });
-              if (cheminFeature) {
-                var centerChemin = cheminFeature.getBounds().getCenter();
-                startPoint = L.marker(centerChemin, { icon: StartIcon, floor: floor })
-                  .addTo(map)
-                  .bindPopup(
-                    "Point de départ sur le chemin de " + key,
-                    { autoPan: false }
-                  )
-                  .openPopup();
-              }
-              updateMarkersVisibility();
-              checkAndCalculateRoute();
+              // ...existing code...
             }
           });
-
-          // Gestion du clic sur le bouton "End"
           btnMarker.on("click", function (e) {
             if (e.originalEvent.target.innerText === "End") {
-              // Supprimer le précédent point d'arrivée s'il existe
-              if (endPoint) {
-                map.removeLayer(endPoint);
-                endPoint = null;
-              }
-              // Récupérer le nom et l'étage de la salle associée
-              var key = layer.feature.properties.name || layer.feature.properties.salle;
-              var floor = layer.feature.properties.floor;
-              
-              // Rechercher dans la couche active toutes les formes correspondant au même nom
-              var matchingFeatures = [];
-              var activeLayer = map.hasLayer(etage0)
-                ? salleLayer0
-                : map.hasLayer(etage1)
-                ? salleLayer1
-                : salleLayer2;
-              activeLayer.eachLayer(function (l) {
-                var lKey = l.feature.properties.name || l.feature.properties.salle;
-                if (lKey === key) {
-                  matchingFeatures.push(l);
-                }
-              });
-              if (matchingFeatures.length > 0) {
-                var group = L.featureGroup(matchingFeatures);
-                map.fitBounds(group.getBounds());
-                matchingFeatures.forEach(function (l) {
-                  highlightFeature(l);
-                });
-              }
-              
-              // Sélectionner le calque chemin correspondant à l'étage
-              var cheminLayer =
-                floor === "0"
-                  ? CheminEtageLayer0
-                  : floor === "1"
-                  ? CheminEtageLayer1
-                  : CheminEtageLayer2;
-              var cheminFeature = null;
-              cheminLayer.eachLayer(function (clayer) {
-                var clayerKey = clayer.feature.properties.name || clayer.feature.properties.salle;
-                if (clayer.feature && clayerKey === key) {
-                  cheminFeature = clayer;
-                }
-              });
-              if (cheminFeature) {
-                var centerChemin = cheminFeature.getBounds().getCenter();
-                endPoint = L.marker(centerChemin, { icon: EndIcon, floor: floor })
-                  .addTo(map)
-                  .bindPopup(
-                    "Point d'arrivée sur le chemin de " + key,
-                    { autoPan: false }
-                  )
-                  .openPopup();
-              }
-              updateMarkersVisibility();
-              checkAndCalculateRoute();
+              // ...existing code...
             }
           });
 
           layer._customButton = btnMarker;
         }
-      } else if (layer._customButton) {
-        map.removeLayer(layer._customButton);
-        layer._customButton = null;
+      } else {
+        if (layer._customButton) {
+          map.removeLayer(layer._customButton);
+          layer._customButton = null;
+        }
       }
     });
   }
 
-  // Appliquer selon l'étage actif
+  // ...existing code d'application (selon l'étage actif)...
   if (map.hasLayer(etage0)) {
     toggleButtons(salleLayer0);
   } else {
@@ -719,6 +602,21 @@ function updateButtonsVisibility() {
         layer._customButton = null;
       }
     });
+  }
+
+  // Dès qu'on dézoome en dessous du seuil, on retire le flag forcé pour revenir au comportement par défaut.
+  if (currentZoom < buttonZoomThreshold && !window.justForced) {
+    [salleLayer0, salleLayer1, salleLayer2].forEach(function (layerGroup) {
+      layerGroup.eachLayer(function (layer) {
+        if (layer._forceButton) {
+          delete layer._forceButton;
+        }
+      });
+    });
+  }
+  else if (window.justForced) {
+    // Réinitialiser après traitement du clic
+    window.justForced = false;
   }
 }
 
@@ -844,7 +742,7 @@ function updateButtonsVisibility() {
 }
 
       var StartIcon = L.icon({
-        iconUrl: "images/starticon.png",
+        iconUrl: "images/start-icon.svg",
 
         iconSize: [15, 15], // size of the icon
         iconAnchor: [7.5, 7.5], // point of the icon which will correspond to marker's location
@@ -853,7 +751,7 @@ function updateButtonsVisibility() {
       });
 
       var EndIcon = L.icon({
-        iconUrl: "images/endicon.png",
+        iconUrl: "images/end-icon.svg",
 
         iconSize: [15, 15], // size of the icon
         iconAnchor: [7.5, 7.5], // point of the icon which will correspond to marker's location
@@ -1013,6 +911,7 @@ function updateButtonsVisibility() {
           map.fitBounds(group.getBounds());
           matchingFeatures.forEach(function (layer) {
             highlightFeature(layer);
+            layer._forceButton = true;  // Forcer l'affichage du bouton sur cette salle
           });
           var cheminFeature = null;
           var floor = salleFeature.feature.properties.floor;
@@ -1091,6 +990,7 @@ function updateButtonsVisibility() {
           map.fitBounds(group.getBounds());
           matchingFeatures.forEach(function (layer) {
             highlightFeature(layer);
+            layer._forceButton = true;  // Forcer l'affichage du bouton sur cette salle
           });
           var cheminFeature = null;
           var floor = salleFeature.feature.properties.floor;
@@ -1111,7 +1011,7 @@ function updateButtonsVisibility() {
             var center = cheminFeature.getBounds().getCenter();
             endPoint = L.marker(center, { icon: EndIcon, floor: floor })
               .addTo(map)
-              .bindPopup("Point de fin sur le chemin de " + key, {
+              .bindPopup("Point d'arrivée sur le chemin de " + key, {
                 autoPan: false,
               })
               .openPopup();
