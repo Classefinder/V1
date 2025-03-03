@@ -29,7 +29,7 @@
     <script>
       // Coordonnées du lycée (centre du plan)
       const lyceeCoords = [45.9368, 6.1322];
-      const proximityThreshold = 8; // Distance en kilomètres (500m)
+      const proximityThreshold = 10; // Distance en kilomètres (500m)
 
       // Fonction pour calculer la distance entre deux coordonnées
       function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -51,7 +51,9 @@
         const map = L.map('map', {
           center: lyceeCoords,
           zoom: 16,
-          maxBoundsViscosity: 1.0 // Définir maxBoundsViscosity ici
+          //maxBoundsViscosity: 1.0 // Définir maxBoundsViscosity ici
+          zoomDelta: 0.25,
+          zoomSnap: 0
         });
 
         // Ajouter un fond de carte OSM

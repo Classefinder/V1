@@ -332,11 +332,6 @@ body.dark-mode .leaflet-control-zoom a:hover {
     border: none;
 }
 
-#geo-btn-start:hover {
-    transform: scale(1.1);
-    transition: transform 0.2s ease;
-}
-
 /* ================================================== */
 /* AFFICHAGE TELEPHONE */
 /* ================================================== */
