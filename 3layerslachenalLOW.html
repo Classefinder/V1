@@ -62,46 +62,7 @@
         return map;
       }
 
-      // Gérer la géolocalisation
-      function handleGeolocation(map) {
-        if (!navigator.geolocation) {
-          alert("La géolocalisation n'est pas prise en charge par votre navigateur.");
-          showProximityCircle(map);
-          return;
-        }
 
-        navigator.geolocation.getCurrentPosition(
-          position => {
-            const userCoords = [position.coords.latitude, position.coords.longitude];
-            const distance = calculateDistance(
-              userCoords[0], userCoords[1],
-              lyceeCoords[0], lyceeCoords[1]
-            );
-
-            // Ajouter un marqueur pour la position de l'utilisateur
-            const userMarker = L.marker(userCoords).addTo(map).bindPopup("Vous êtes ici").openPopup();
-
-            if (distance <= proximityThreshold) {
-              // Utilisateur dans la zone, afficher le plan
-              map.eachLayer(layer => {
-                if (layer instanceof L.TileLayer) {
-                  map.removeLayer(layer);
-                }
-              });
-              initializeSchoolMap(map, userMarker, userCoords);
-            } else {
-              // Ajouter un cercle pour montrer la zone requise
-              showProximityCircle(map);
-              alert("Vous êtes hors de la zone requise. Approchez-vous du lycée pour voir le plan.");
-            }
-          },
-          error => {
-            console.error("Erreur de géolocalisation :", error);
-            alert("Impossible d'obtenir votre localisation. Veuillez autoriser la géolocalisation.");
-            showProximityCircle(map);
-          }
-        );
-      }
 
       // Afficher le cercle de proximité
       function showProximityCircle(map) {
@@ -1329,27 +1290,55 @@ function updateButtonsVisibility() {
         }
       );
       
-            // --- Ajout du contrôle LocateControl ---
-            L.control.locate({
-              position: "topright",
-            }).addTo(map);
       }
 
       // Initialisation au chargement
       document.addEventListener("DOMContentLoaded", () => {
         const map = initializeBaseMap();
-        handleGeolocation(map);
+        // Configuration du contrôle de localisation
+        var lc = L.control.locate({
+            position: "topright",
+            strings: { title: "Localisez-moi" },
+            locateOptions: { enableHighAccuracy: true },
+            setView: "untilPanOrZoom",
+            keepCurrentZoomLevel: true,
+            initialZoomLevel: 18,
+            showPopup: false
+        }).addTo(map);
 
-        // Ajouter l'événement pour appliquer un ID aux cercles de localisation
-        map.on('locationfound', function () {
-          setTimeout(() => {
-            document.querySelectorAll('.leaflet-control-locate-circle').forEach(el => {
-              el.id = 'nohover';
-            });
-          }, 100);
+        // Déclencher la géolocalisation automatiquement
+        lc.start();
+
+        // Masquer le bouton après localisation réussie
+        lc.on('locationfound', function() {
+            document.querySelector('.leaflet-control-locate').style.display = 'none';
         });
-      });
 
+        lc.on('locationfound', function(e) {
+            const userCoords = [e.latitude, e.longitude];
+            const distance = calculateDistance(userCoords[0], userCoords[1], lyceeCoords[0], lyceeCoords[1]);
+            
+            // Supprimer les autres couches de localisation
+            map.eachLayer(layer => {
+                if (layer instanceof L.TileLayer) {
+                    map.removeLayer(layer);
+                }
+            });
+
+            if (distance <= proximityThreshold) {
+                const userMarker = L.marker(userCoords).addTo(map).bindPopup("Vous êtes ici").openPopup();
+                initializeSchoolMap(map, userMarker, userCoords);
+            } else {
+                showProximityCircle(map);
+                alert("Hors zone - Approchez-vous du lycée");
+            }
+        });
+        lc.on('locationerror', function(e) {
+    alert("La géolocalisation est requise !");
+    showProximityCircle(map);
+    lc.stop();
+});
+      });
     </script>
     <style>
       /* Désactiver l'effet de hover pour les éléments avec l'ID nohover */
@@ -1357,6 +1346,7 @@ function updateButtonsVisibility() {
         fill-opacity: 0.15 !important;
         stroke-opacity: 1 !important;
       }
+
     </style>
   </body>
 </html>
