@@ -77,7 +77,7 @@
       }
 
       // Initialiser la carte du lycée (avec les fonctionnalités spécifiques)
-      function initializeSchoolMap(map, userMarker, userCoords) {
+      function initializeSchoolMap(map, userCoords) {
         // --- 1. Initialisation des limites ---
         var sudOuest = L.latLng(45.93818505744445, 6.134245788738398);
         var nordEst = L.latLng(45.93640970079779, 6.13115811037474);
@@ -1292,53 +1292,60 @@ function updateButtonsVisibility() {
       
       }
 
-      // Initialisation au chargement
-      document.addEventListener("DOMContentLoaded", () => {
-        const map = initializeBaseMap();
-        // Configuration du contrôle de localisation
-        var lc = L.control.locate({
-            position: "topright",
-            strings: { title: "Localisez-moi" },
-            locateOptions: { enableHighAccuracy: true },
-            setView: "untilPanOrZoom",
-            keepCurrentZoomLevel: true,
-            initialZoomLevel: 18,
-            showPopup: false
-        }).addTo(map);
+  // ... (le reste de vos constantes et fonctions reste inchangé)
 
-        // Déclencher la géolocalisation automatiquement
-        lc.start();
+  // Modifier la partie d'initialisation
+  document.addEventListener("DOMContentLoaded", () => {
+    const map = initializeBaseMap();
+    let locationGranted = false;
 
-        // Masquer le bouton après localisation réussie
-        lc.on('locationfound', function() {
-            document.querySelector('.leaflet-control-locate').style.display = 'none';
+    // Configuration du contrôle de localisation
+    const lc = L.control.locate({
+      position: "topright",
+      strings: {
+        title: "Mettre à jour ma position",
+        popup: "Position actuelle"
+      },
+      locateOptions: {
+        enableHighAccuracy: true,
+        maxZoom: 18
+      },
+      showPopup: true,
+      showCompass: false,
+      keepCurrentZoomLevel: true,
+      setView: 'once'
+    }).addTo(map);
+
+    // Gestion des mises à jour de position
+    map.on('locationfound', e => {
+      if (!locationGranted) {
+        locationGranted = true;
+        const userCoords = [e.latitude, e.longitude];
+        const distance = calculateDistance(...userCoords, ...lyceeCoords);
+
+        map.eachLayer(layer => {
+          if (layer instanceof L.TileLayer) map.removeLayer(layer);
         });
 
-        lc.on('locationfound', function(e) {
-            const userCoords = [e.latitude, e.longitude];
-            const distance = calculateDistance(userCoords[0], userCoords[1], lyceeCoords[0], lyceeCoords[1]);
-            
-            // Supprimer les autres couches de localisation
-            map.eachLayer(layer => {
-                if (layer instanceof L.TileLayer) {
-                    map.removeLayer(layer);
-                }
-            });
+        if (distance <= proximityThreshold) {
+          initializeSchoolMap(map, userCoords);
+        } else {
+          showProximityCircle(map);
+          alert("Vous êtes hors de la zone autorisée.");
+        }
+      }
+    });
 
-            if (distance <= proximityThreshold) {
-                const userMarker = L.marker(userCoords).addTo(map).bindPopup("Vous êtes ici").openPopup();
-                initializeSchoolMap(map, userMarker, userCoords);
-            } else {
-                showProximityCircle(map);
-                alert("Hors zone - Approchez-vous du lycée");
-            }
-        });
-        lc.on('locationerror', function(e) {
-    alert("La géolocalisation est requise !");
-    showProximityCircle(map);
-    lc.stop();
-});
-      });
+    map.on('locationerror', e => {
+      if (!locationGranted) {
+        showProximityCircle(map);
+        alert("La géolocalisation est requise pour utiliser cette application.");
+      }
+    });
+
+    // Démarrer la localisation dès le chargement de la page
+    lc.start();
+  });
     </script>
     <style>
       /* Désactiver l'effet de hover pour les éléments avec l'ID nohover */
