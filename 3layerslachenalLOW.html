@@ -29,7 +29,7 @@
     <script>
       // Coordonnées du lycée (centre du plan)
       const lyceeCoords = [45.9368, 6.1322];
-      const proximityThreshold = 8; // Distance en kilomètres (500m)
+      const proximityThreshold = 10; // Distance en kilomètres (500m)
 
       // Fonction pour calculer la distance entre deux coordonnées
       function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -105,11 +105,14 @@
 
       // Afficher le cercle de proximité
       function showProximityCircle(map) {
-        L.circle(lyceeCoords, {
+        const proximityCircle = L.circle(lyceeCoords, {
           radius: proximityThreshold * 1000, // Convertir les kilomètres en mètres pour le cercle
           color: 'red',
           fillOpacity: 0.1
         }).addTo(map);
+
+        // Ajouter un ID au cercle
+        proximityCircle._path.id = 'nohover';
       }
 
       // Initialiser la carte du lycée (avec les fonctionnalités spécifiques)
@@ -121,7 +124,7 @@
 
         // --- 2. Création de la carte ---
         map.setView(lyceeCoords, 18);
-        map.setMaxBounds(limites);
+        //map.setMaxBounds(limites);
 
         // Créez uniquement une fois les trois panes, dans l'ordre souhaité :
         map.createPane("routePane");
@@ -1338,5 +1341,12 @@ function updateButtonsVisibility() {
         handleGeolocation(map);
       });
     </script>
+    <style>
+      /* Désactiver l'effet de hover pour les éléments avec l'ID nohover */
+      #nohover:hover {
+        fill-opacity: 0.1 !important;
+        stroke-opacity: 1 !important;
+      }
+    </style>
   </body>
 </html>
