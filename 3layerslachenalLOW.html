@@ -29,7 +29,7 @@
     <script>
       // Coordonnées du lycée (centre du plan)
       const lyceeCoords = [45.9368, 6.1322];
-      const proximityThreshold = 10; // Distance en kilomètres (500m)
+      const proximityThreshold = 1000; // Distance en kilomètres (500m)
 
       // Fonction pour calculer la distance entre deux coordonnées
       function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -1342,6 +1342,14 @@ function updateButtonsVisibility() {
         alert("La géolocalisation est requise pour utiliser cette application.");
       }
     });
+            // Ajouter l'événement pour appliquer un ID aux cercles de localisation
+        map.on('locationfound', function () {
+          setTimeout(() => {
+            document.querySelectorAll('.leaflet-control-locate-circle').forEach(el => {
+              el.id = 'nohover';
+            });
+          }, 100);
+        });
 
     // Démarrer la localisation dès le chargement de la page
     lc.start();
