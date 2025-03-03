@@ -108,7 +108,7 @@
         const proximityCircle = L.circle(lyceeCoords, {
           radius: proximityThreshold * 1000, // Convertir les kilomètres en mètres pour le cercle
           color: 'red',
-          fillOpacity: 0.1
+          fillOpacity: 0.15
         }).addTo(map);
 
         // Ajouter un ID au cercle
@@ -1339,12 +1339,22 @@ function updateButtonsVisibility() {
       document.addEventListener("DOMContentLoaded", () => {
         const map = initializeBaseMap();
         handleGeolocation(map);
+
+        // Ajouter l'événement pour appliquer un ID aux cercles de localisation
+        map.on('locationfound', function () {
+          setTimeout(() => {
+            document.querySelectorAll('.leaflet-control-locate-circle').forEach(el => {
+              el.id = 'nohover';
+            });
+          }, 100);
+        });
       });
+
     </script>
     <style>
       /* Désactiver l'effet de hover pour les éléments avec l'ID nohover */
       #nohover:hover {
-        fill-opacity: 0.1 !important;
+        fill-opacity: 0.15 !important;
         stroke-opacity: 1 !important;
       }
     </style>
