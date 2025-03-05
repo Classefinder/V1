@@ -22,17 +22,6 @@
     <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.83.1/dist/L.Control.Locate.min.js"></script>
    
   </head>
-  <style>
-    /* Correction du bug de géolocalisation sous Firefox */
-@-moz-document url-prefix() {
-  .leaflet-control-locate a {
-    transition: none !important;
-  }
-  .leaflet-control-locate.requesting .leaflet-control-locate-icon {
-    animation: none !important;
-  }
-}
-  </style>
   <body>
     <div id="map"></div>
     <button id="dark-mode-toggle"></button>
@@ -41,6 +30,26 @@
       // Coordonnées du lycée (centre du plan)
       const lyceeCoords = [45.9368, 6.1322];
       const proximityThreshold = 1000; // Distance en kilomètres (500m)
+
+      // Définir locateControl globalement
+      let locateControl;
+
+      // Définir StartIcon globalement
+      const StartIcon = L.icon({
+        iconUrl: "images/start-icon.svg",
+        iconSize: [15, 15], // size of the icon
+        iconAnchor: [7.5, 7.5], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -10], // point from which the popup should open relative to the iconAnchor
+        pane: "markerPane", // Ensure the icon is added to the markerPane
+      });
+
+      const EndIcon = L.icon({
+        iconUrl: "images/end-icon.svg",
+        iconSize: [15, 15], // size of the icon
+        iconAnchor: [7.5, 7.5], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -10], // point from which the popup should open relative to the iconAnchor
+        pane: "markerPane", // Ensure the icon is added to the markerPane
+      });
 
       // Fonction pour calculer la distance entre deux coordonnées
       function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -73,7 +82,46 @@
         return map;
       }
 
+      // Gérer la géolocalisation
+      function handleGeolocation(map) {
+        if (!navigator.geolocation) {
+          alert("La géolocalisation n'est pas prise en charge par votre navigateur.");
+          showProximityCircle(map);
+          return;
+        }
 
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            const userCoords = [position.coords.latitude, position.coords.longitude];
+            const distance = calculateDistance(
+              userCoords[0], userCoords[1],
+              lyceeCoords[0], lyceeCoords[1]
+            );
+
+            // Ajouter un marqueur pour la position de l'utilisateur
+            const userMarker = L.marker(userCoords).addTo(map).bindPopup("Vous êtes ici").openPopup();
+
+            if (distance <= proximityThreshold) {
+              // Utilisateur dans la zone, afficher le plan
+              map.eachLayer(layer => {
+                if (layer instanceof L.TileLayer) {
+                  map.removeLayer(layer);
+                }
+              });
+              initializeSchoolMap(map, userMarker, userCoords);
+            } else {
+              // Ajouter un cercle pour montrer la zone requise
+              showProximityCircle(map);
+              alert("Vous êtes hors de la zone requise. Approchez-vous du lycée pour voir le plan.");
+            }
+          },
+          error => {
+            console.error("Erreur de géolocalisation :", error);
+            alert("Impossible d'obtenir votre localisation. Veuillez autoriser la géolocalisation.");
+            showProximityCircle(map);
+          }
+        );
+      }
 
       // Afficher le cercle de proximité
       function showProximityCircle(map) {
@@ -88,7 +136,7 @@
       }
 
       // Initialiser la carte du lycée (avec les fonctionnalités spécifiques)
-      function initializeSchoolMap(map, userCoords) {
+      function initializeSchoolMap(map, userMarker, userCoords) {
         // --- 1. Initialisation des limites ---
         var sudOuest = L.latLng(45.93818505744445, 6.134245788738398);
         var nordEst = L.latLng(45.93640970079779, 6.13115811037474);
@@ -804,28 +852,9 @@ function updateButtonsVisibility() {
   updateButtonsVisibility();
 }
 
-      var StartIcon = L.icon({
-        iconUrl: "images/start-icon.svg",
-
-        iconSize: [15, 15], // size of the icon
-        iconAnchor: [7.5, 7.5], // point of the icon which will correspond to marker's location
-        popupAnchor: [0, -10], // point from which the popup should open relative to the iconAnchor
-        pane: "markerPane", // Ensure the icon is added to the markerPane
-      });
-
-      var EndIcon = L.icon({
-        iconUrl: "images/end-icon.svg",
-
-        iconSize: [15, 15], // size of the icon
-        iconAnchor: [7.5, 7.5], // point of the icon which will correspond to marker's location
-        popupAnchor: [0, -10], // point from which the popup should open relative to the iconAnchor
-        pane: "markerPane", // Ensure the icon is added to the markerPane
-      });
-
       // --- 10. Variables pour la gestion des marqueurs de départ et d'arrivée ---
       var startPoint = null;
       var endPoint = null;
-
       // --- 11. Fonctions de surlignage (pour les recherches) ---
       function highlightFeature(layer) {
         layer.setStyle({ weight: 3, fillOpacity: 0.97 });
@@ -890,7 +919,6 @@ function updateButtonsVisibility() {
         }
       });
       
-<!-- ------ Mise à jour du bouton géo pour intervertir l'ordre ------ -->
 (function() {
     var scContainer = searchControlStart.getContainer();
     var geoBtn = document.createElement("button");
@@ -911,39 +939,27 @@ function updateButtonsVisibility() {
         searchBtn.style.order = "2";
     }
     
-    // Modifier la partie du bouton géo comme suit :
     geoBtn.addEventListener("click", function() {
-        if (navigator.geolocation) {
-            const options = {
-                enableHighAccuracy: true,
-                timeout: 15000, // 45 secondes
-                maximumAge: 0 // Pas de cache
-            };
-
-            navigator.geolocation.getCurrentPosition(
-                position => {
-                    const latlng = L.latLng(position.coords.latitude, position.coords.longitude);
-                    // Déterminer l'étage actif
-                    const currentFloor = map.hasLayer(etage2) ? "2" : 
-                                      map.hasLayer(etage1) ? "1" : "0";
-                    
-                    if (startPoint) map.removeLayer(startPoint);
-                    startPoint = L.marker(latlng, { 
-                        icon: StartIcon, 
-                        floor: currentFloor 
-                    }).addTo(map);
-                    
-                    checkAndCalculateRoute();
-                },
-                error => {
-                    console.error('Erreur géoloc:', error);
-                    alert(`Erreur : ${error.message}`);
-                },
-                options
-            );
-        } else {
-            alert("Géolocalisation non supportée");
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          var latlng = [position.coords.latitude, position.coords.longitude];
+          if (startPoint) {
+            startPoint.setLatLng(latlng).update();
+          } else {
+            startPoint = L.marker(latlng, { icon: StartIcon, floor: "0" })
+              .addTo(map)
+              .bindPopup("Point de départ (position actuelle)")
+              .openPopup();
+          }
+          map.setView(latlng, map.getZoom());
+          updateMarkersVisibility();
+          checkAndCalculateRoute();
+        },
+        error => {
+          console.error("Erreur de géolocalisation :", error);
+          alert("Impossible d'obtenir votre localisation. Veuillez autoriser la géolocalisation.");
         }
+      );
     });
 })();
 
@@ -1227,26 +1243,47 @@ function updateButtonsVisibility() {
       map.removeLayer(etage1);
 
       function updateMarkersVisibility() {
-    const currentFloor = map.hasLayer(etage2) ? "2" : 
-                       map.hasLayer(etage1) ? "1" : "0";
-
-    [startPoint, endPoint].forEach(marker => {
-        if (!marker) return;
-        
-        // Firefox a besoin d'une synchronisation explicite
-        if (marker.options.floor === currentFloor) {
-            if (!map.hasLayer(marker)) {
-                marker.addTo(map);
-                marker.getElement().style.display = 'block'; // Force le rendu
-            }
-        } else {
-            if (map.hasLayer(marker)) {
-                marker.getElement().style.display = 'none'; // Évite les recalculs de layout
-                map.removeLayer(marker);
-            }
+        if (map.hasLayer(etage0)) {
+          if (startPoint && startPoint.options.floor !== "0") {
+            map.removeLayer(startPoint);
+          }
+          if (endPoint && endPoint.options.floor !== "0") {
+            map.removeLayer(endPoint);
+          }
+          if (startPoint && startPoint.options.floor === "0") {
+            map.addLayer(startPoint);
+          }
+          if (endPoint && endPoint.options.floor === "0") {
+            map.addLayer(endPoint);
+          }
+        } else if (map.hasLayer(etage1)) {
+          if (startPoint && startPoint.options.floor !== "1") {
+            map.removeLayer(startPoint);
+          }
+          if (endPoint && endPoint.options.floor !== "1") {
+            map.removeLayer(endPoint);
+          }
+          if (startPoint && startPoint.options.floor === "1") {
+            map.addLayer(startPoint);
+          }
+          if (endPoint && endPoint.options.floor === "1") {
+            map.addLayer(endPoint);
+          }
+        } else if (map.hasLayer(etage2)) {
+          if (startPoint && startPoint.options.floor !== "2") {
+            map.removeLayer(startPoint);
+          }
+          if (endPoint && endPoint.options.floor !== "2") {
+            map.removeLayer(endPoint);
+          }
+          if (startPoint && startPoint.options.floor === "2") {
+            map.addLayer(startPoint);
+          }
+          if (endPoint && endPoint.options.floor === "2") {
+            map.addLayer(endPoint);
+          }
         }
-    });
-}
+      }
 
       // Fonction de cycle des calques au démarrage
       function cycleLayers() {
@@ -1278,72 +1315,36 @@ function updateButtonsVisibility() {
         }
       );
       
+            // --- Ajout du contrôle LocateControl ---
+            L.control.locate({
+              position: "topright",
+            }).addTo(map);
       }
 
-  // ... (le reste de vos constantes et fonctions reste inchangé)
+      // Initialisation au chargement
+      document.addEventListener("DOMContentLoaded", () => {
+        const map = initializeBaseMap();
 
-  // Modifier la partie d'initialisation
-  document.addEventListener("DOMContentLoaded", () => {
-    const map = initializeBaseMap();
-    let locationGranted = false;
+        // Ajouter le contrôle LocateControl
+        locateControl = L.control.locate({
+          position: "topright",
+          setView: 'once',
+          keepCurrentZoomLevel: true,
+          drawCircle: true,
+          drawMarker: true,
+          showPopup: true,
+          strings: {
+            title: "Afficher ma position",
+            popup: "Vous êtes ici",
+            outsideMapBoundsMsg: "Vous semblez être en dehors des limites de la carte"
+          }
+        }).addTo(map);
 
-    const lc = L.control.locate({
-    position: "topright",
-    strings: {
-        title: "Utiliser ma position actuelle",
-        popup: "Vous êtes ici"
-    },
-    locateOptions: {
-        enableHighAccuracy: true,
-        maxZoom: 18,
-        watch: true,
-        timeout: 30000,
-        maximumAge: 0,
-        setView: 'untilPanOrZoom' // Ajout critique pour Firefox
-    },
-    onLocationError: function(e) {
-        if(e.code === 3) { 
-            console.log("Timeout Firefox - Réessai automatique");
-            this._retry();
-        }
-    },
-    showPopup: false // Nécessaire pour éviter les conflits CSS
-}).addTo(map);
+        // Forcer la demande de localisation au chargement
+        locateControl.start();
 
-    // Gestion des mises à jour de position
-    map.on('locationfound', e => {
-      if (!locationGranted) {
-        locationGranted = true;
-        const userCoords = [e.latitude, e.longitude];
-        const distance = calculateDistance(...userCoords, ...lyceeCoords);
-
-        map.eachLayer(layer => {
-          if (layer instanceof L.TileLayer) map.removeLayer(layer);
-        });
-
-        if (distance <= proximityThreshold) {
-          initializeSchoolMap(map, userCoords);
-        } else {
-          showProximityCircle(map);
-          alert("Vous êtes hors de la zone autorisée.");
-        }
-      }
-    });
-
-          // Remplacer la section de gestion d'erreur existante par :
-          map.on('locationerror', e => {
-            if (e.code === 1) {
-                // Firefox garde en cache les refus précédents
-                lc.stop();
-                alert("Firefox a bloqué la géolocalisation. Vérifiez :\n1. Les permissions du site (icône cadenas)\n2. Les paramètres système");
-                window.location.reload(); // Force le reset des permissions
-            } else {
-                lc.stop();
-                setTimeout(() => lc.start(), 5000); // Réessai après 5s
-            }
-        });
-            // Ajouter l'événement pour appliquer un ID aux cercles de localisation
-        map.on('locationfound', function () {
+        // Ajouter l'événement pour appliquer un ID aux cercles de localisation
+        map.on('locationfound', function (e) {
           setTimeout(() => {
             document.querySelectorAll('.leaflet-control-locate-circle').forEach(el => {
               el.id = 'nohover';
@@ -1351,31 +1352,54 @@ function updateButtonsVisibility() {
           }, 100);
         });
 
-    // Démarrer la localisation dès le chargement de la page
-    lc.start();
-  });
+        // Vérifier l'existence de l'élément avant d'ajouter l'événement
+        const geoBtnStart = document.getElementById('geo-btn-start');
+        if (geoBtnStart) {
+          geoBtnStart.addEventListener('click', function() {
+            navigator.geolocation.getCurrentPosition(
+              position => {
+                var latlng = [position.coords.latitude, position.coords.longitude];
+                if (startPoint) {
+                  startPoint.setLatLng(latlng).update();
+                } else {
+                  startPoint = L.marker(latlng, { icon: StartIcon, floor: "0" })
+                    .addTo(map)
+                    .bindPopup("Point de départ (position actuelle)")
+                    .openPopup();
+                }
+                map.setView(latlng, map.getZoom());
+                updateMarkersVisibility();
+                checkAndCalculateRoute();
+              },
+              error => {
+                console.error("Erreur de géolocalisation :", error);
+                alert("Impossible d'obtenir votre localisation. Veuillez autoriser la géolocalisation.");
+              }
+            );
+          });
+        }
 
+        // Ajouter un événement pour déplacer le marqueur de départ lors de la localisation
+        map.on('locationfound', function(e) {
+          if (document.activeElement && document.activeElement.id === 'geo-btn-start') {
+            var latlng = e.latlng;
+            if (startPoint) {
+              startPoint.setLatLng(latlng).update();
+            } else {
+              startPoint = L.marker(latlng, { icon: StartIcon, floor: "0" })
+                .addTo(map)
+                .bindPopup("Point de départ (position actuelle)")
+                .openPopup();
+            }
+            map.setView(latlng, map.getZoom());
+            updateMarkersVisibility();
+            checkAndCalculateRoute();
+          }
+        });
 
-  let errorCount = 0;
-
-map.on('locationerror', e => {
-    errorCount++;
-    console.groupCollapsed(`Erreur #${errorCount}`);
-    console.log('Code:', e.code);
-    console.log('Message:', e.message);
-    console.log('Zoom actuel:', map.getZoom());
-    console.log('Couches actives:', map._layers);
-    console.groupEnd();
-    
-    if(errorCount > 3) {
-        lc.stop();
-        alert("Réinitialisation des paramètres de géoloc...");
-        setTimeout(() => {
-            lc.start();
-            errorCount = 0;
-        }, 5000);
-    }
-});
+        // Gérer la géolocalisation avec la logique existante
+        handleGeolocation(map);
+      });
 
     </script>
     <style>
@@ -1383,8 +1407,8 @@ map.on('locationerror', e => {
       #nohover:hover {
         fill-opacity: 0.15 !important;
         stroke-opacity: 1 !important;
+        cursor: grab !important;
       }
-
     </style>
   </body>
 </html>
