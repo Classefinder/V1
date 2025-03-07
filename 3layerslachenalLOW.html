@@ -1410,58 +1410,8 @@ function updateButtonsVisibility() {
 
         // Gérer la géolocalisation avec la logique existante
         handleGeolocation(map);
-        addGeoBtnToSearchControl(); // Add this line to call the function
       });
 
-      // Function to add the geo-btn-start button to the search control
-      function addGeoBtnToSearchControl() {
-        var scContainer = searchControlStart.getContainer();
-        var geoBtn = document.createElement("button");
-        geoBtn.id = "geo-btn-start";
-        geoBtn.textContent = "";
-        geoBtn.style.width = "40px";
-        geoBtn.style.height = "40px";
-        geoBtn.style.margin = "0";
-        geoBtn.style.order = "1";
-        scContainer.appendChild(geoBtn);
-
-        var searchBtn = scContainer.querySelector('.search-button');
-        if (searchBtn) {
-          searchBtn.style.order = "2";
-        }
-
-        geoBtn.addEventListener("click", function() {
-          if (!navigator.geolocation) {
-            alert("La géolocalisation n'est pas supportée par votre navigateur");
-            return;
-          }
-
-          navigator.geolocation.getCurrentPosition(
-            position => {
-              const latlng = [position.coords.latitude, position.coords.longitude];
-              if (!startPoint) {
-                startPoint = L.marker(latlng, { 
-                  icon: StartIcon, 
-                  floor: "0",
-                  draggable: true
-                }).addTo(map).bindPopup("Position actuelle").openPopup();
-              } else {
-                startPoint.setLatLng(latlng);
-              }
-              map.setView(latlng, map.getZoom());
-              checkAndCalculateRoute();
-              if (locateControl) {
-                locateControl._updateMarkerPosition(latlng);
-                locateControl._updateCircleRadius(position.coords.accuracy);
-              }
-            },
-            error => {
-              console.error("Erreur de géolocalisation :", error);
-              alert("Impossible d'obtenir votre position. Vérifiez les permissions.");
-            }
-          );
-        });
-      }
     </script>
     <style>
       /* Désactiver l'effet de hover pour les éléments avec l'ID nohover */
