@@ -20,6 +20,8 @@
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.83.1/dist/L.Control.Locate.min.js"></script>
+    <link href=" https://cdn.jsdelivr.net/npm/leaflet-notifications@1.0.7/css/leaflet-notifications.min.css " rel="stylesheet">
+    <script src=" https://cdn.jsdelivr.net/npm/leaflet-notifications@1.0.7/js/leaflet-notifications.min.js "></script>
    
   </head>
   <body>
@@ -29,7 +31,7 @@
     <script>
       // Coordonnées du lycée (centre du plan)
       const lyceeCoords = [45.9368, 6.1322];
-      const proximityThreshold = 10; // Distance en kilomètres (500m)
+      const proximityThreshold = 1000; // Distance en kilomètres (500m)
 
       // Fonction pour calculer la distance entre deux coordonnées
       function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -251,6 +253,14 @@ function toggleTheme() {
 
       // Ajouter l'événement de clic pour le bouton de basculement
       document.getElementById('dark-mode-toggle').addEventListener('click', toggleTheme);
+
+      var notification= L.control.notifications({
+          timeout:  10000,
+          position:  "bottomright",
+          closable: true,
+          dismissable: true,
+          className: 'pastel',
+      }).addTo(map);
 
       // --- 3. Création des couches GeoJSON pour les salles ---
       // On n'utilise plus bindTooltip ici afin d'éviter que le label s'affiche automatiquement au survol.
@@ -940,30 +950,55 @@ function updateButtonsVisibility() {
     }
     
     geoBtn.addEventListener("click", function() {
-      if (navigator.geolocation) {
-        navigator.permissions
-          .query({ name: "geolocation" })
-          .then(function(result) {
-            if (result.state === "granted" || result.state === "prompt") {
-              navigator.geolocation.getCurrentPosition(
-                function(position) {
-                  var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
-                  if (startPoint) {
-                    map.removeLayer(startPoint);
-                    startPoint = null;
-                  }
-                  startPoint = L.marker(latlng, { icon: StartIcon, floor: "0" })
-                    .addTo(map)
-                    .bindPopup("Point de départ (position actuelle)")
-                    .openPopup();
-                  map.setView(latlng, map.getZoom());
-                  updateMarkersVisibility();
-                  checkAndCalculateRoute();
-                },
-                function(error) {
-                  alert("Erreur lors de la récupération de votre position.");
-                }
-              );
+      if(!localStorage.getItem('geoFirstClick')) {
+        notification.alert("Attention!",
+      "L'app ne peut pas savoir à quel étage tu es, elle peut donc se tromper!", 
+          { type: 'warning' }
+        );
+        localStorage.setItem('geoFirstClick', 'true');
+      }
+  if (navigator.geolocation) {
+    navigator.permissions
+      .query({ name: "geolocation" })
+      .then(function(result) {
+        if (result.state === "granted" || result.state === "prompt") {
+          navigator.geolocation.getCurrentPosition(
+            function(position) {
+              var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
+              
+              // Déterminer l'étage actif
+              var currentFloor;
+              if (map.hasLayer(etage0)) {
+                currentFloor = "0";
+              } else if (map.hasLayer(etage1)) {
+                currentFloor = "1";
+              } else if (map.hasLayer(etage2)) {
+                currentFloor = "2";
+              } else {
+                currentFloor = "0"; // Par défaut
+              }
+
+              if (startPoint) {
+                map.removeLayer(startPoint);
+                startPoint = null;
+              }
+              startPoint = L.marker(latlng, { 
+                icon: StartIcon, 
+                floor: currentFloor // Utiliser l'étage détecté
+              })
+              .addTo(map)
+              .bindPopup("Point de départ (position actuelle)")
+              .openPopup();
+              
+              map.setView(latlng, map.getZoom());
+              updateMarkersVisibility();
+              checkAndCalculateRoute();
+            },
+            function(error) {
+              alert("Erreur lors de la récupération de votre position.");
+            }
+          );
+        // ... le reste du code reste inchangé ...
             } else {
               alert("La localisation n'est pas autorisée.");
             }
