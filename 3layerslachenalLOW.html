@@ -31,6 +31,10 @@
       const lyceeCoords = [45.9368, 6.1322];
       const proximityThreshold = 1000; // Distance en kilomètres (500m)
 
+      // Au début du script, AVANT initializeSchoolMap
+      let startPoint = null;
+      let endPoint = null;
+
       // Définir locateControl globalement
       let locateControl;
 
@@ -852,9 +856,6 @@ function updateButtonsVisibility() {
   updateButtonsVisibility();
 }
 
-      // --- 10. Variables pour la gestion des marqueurs de départ et d'arrivée ---
-      var startPoint = null;
-      var endPoint = null;
       // --- 11. Fonctions de surlignage (pour les recherches) ---
       function highlightFeature(layer) {
         layer.setStyle({ weight: 3, fillOpacity: 0.97 });
@@ -940,28 +941,46 @@ function updateButtonsVisibility() {
     }
     
     geoBtn.addEventListener("click", function() {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          var latlng = [position.coords.latitude, position.coords.longitude];
-          if (startPoint) {
-            startPoint.setLatLng(latlng).update();
-          } else {
-            startPoint = L.marker(latlng, { icon: StartIcon, floor: "0" })
-              .addTo(map)
-              .bindPopup("Point de départ (position actuelle)")
-              .openPopup();
-          }
-          map.setView(latlng, map.getZoom());
-          updateMarkersVisibility();
-          checkAndCalculateRoute();
-        },
-        error => {
-          console.error("Erreur de géolocalisation :", error);
-          alert("Impossible d'obtenir votre localisation. Veuillez autoriser la géolocalisation.");
-        }
-      );
-    });
-})();
+  if (!navigator.geolocation) {
+    alert("La géolocalisation n'est pas supportée par votre navigateur");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      const latlng = [position.coords.latitude, position.coords.longitude];
+      
+      // Créer le marqueur s'il n'existe pas
+      if (!startPoint) {
+        startPoint = L.marker(latlng, { 
+          icon: StartIcon, 
+          floor: "0",
+          draggable: true // Optionnel : permet de déplacer le marqueur
+        })
+        .addTo(map)
+        .bindPopup("Position actuelle")
+        .openPopup();
+      } else {
+        startPoint.setLatLng(latlng);
+      }
+
+      // Centrer la carte et mettre à jour
+      map.setView(latlng, map.getZoom());
+      checkAndCalculateRoute();
+      
+      // Mettre à jour le contrôle locate
+      if (locateControl) {
+        locateControl._updateMarkerPosition(latlng);
+        locateControl._updateCircleRadius(position.coords.accuracy);
+      }
+    },
+    error => {
+      console.error("Erreur de géolocalisation :", error);
+      alert("Impossible d'obtenir votre position. Vérifiez les permissions.");
+    }
+  );
+});
+});
 
       searchControlStart.on("search:locationfound", function (e) {
         resetHighlight();
@@ -1314,42 +1333,34 @@ function updateButtonsVisibility() {
           document.getElementById("map").innerHTML = "<div style='position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);background:rgba(255,255,255,0.9);padding:20px;border:1px solid #ccc;'>La géolocalisation est nécessaire pour charger le site.</div>";
         }
       );
-      
-            // --- Ajout du contrôle LocateControl ---
-            L.control.locate({
-              position: "topright",
-            }).addTo(map);
       }
 
       // Initialisation au chargement
       document.addEventListener("DOMContentLoaded", () => {
         const map = initializeBaseMap();
 
-        // Ajouter le contrôle LocateControl
         locateControl = L.control.locate({
           position: "topright",
-          setView: 'once',
+          setView: 'untilPanOrZoom',
           keepCurrentZoomLevel: true,
           drawCircle: true,
-          drawMarker: true,
-          showPopup: true,
+          drawMarker: false, // Désactiver le marqueur par défaut
+          showPopup: false,
           strings: {
-            title: "Afficher ma position",
-            popup: "Vous êtes ici",
-            outsideMapBoundsMsg: "Vous semblez être en dehors des limites de la carte"
+            title: "Centrer sur ma position",
+            popup: "Vous êtes dans un rayon de {distance} mètres de ce point"
           }
         }).addTo(map);
 
         // Forcer la demande de localisation au chargement
         locateControl.start();
 
-        // Ajouter l'événement pour appliquer un ID aux cercles de localisation
-        map.on('locationfound', function (e) {
-          setTimeout(() => {
-            document.querySelectorAll('.leaflet-control-locate-circle').forEach(el => {
-              el.id = 'nohover';
-            });
-          }, 100);
+        map.on('locationfound', function(e) {
+          if (startPoint) {
+            startPoint.setLatLng(e.latlng);
+            map.setView(e.latlng, map.getZoom());
+            checkAndCalculateRoute();
+          }
         });
 
         // Vérifier l'existence de l'élément avant d'ajouter l'événement
@@ -1399,8 +1410,58 @@ function updateButtonsVisibility() {
 
         // Gérer la géolocalisation avec la logique existante
         handleGeolocation(map);
+        addGeoBtnToSearchControl(); // Add this line to call the function
       });
 
+      // Function to add the geo-btn-start button to the search control
+      function addGeoBtnToSearchControl() {
+        var scContainer = searchControlStart.getContainer();
+        var geoBtn = document.createElement("button");
+        geoBtn.id = "geo-btn-start";
+        geoBtn.textContent = "";
+        geoBtn.style.width = "40px";
+        geoBtn.style.height = "40px";
+        geoBtn.style.margin = "0";
+        geoBtn.style.order = "1";
+        scContainer.appendChild(geoBtn);
+
+        var searchBtn = scContainer.querySelector('.search-button');
+        if (searchBtn) {
+          searchBtn.style.order = "2";
+        }
+
+        geoBtn.addEventListener("click", function() {
+          if (!navigator.geolocation) {
+            alert("La géolocalisation n'est pas supportée par votre navigateur");
+            return;
+          }
+
+          navigator.geolocation.getCurrentPosition(
+            position => {
+              const latlng = [position.coords.latitude, position.coords.longitude];
+              if (!startPoint) {
+                startPoint = L.marker(latlng, { 
+                  icon: StartIcon, 
+                  floor: "0",
+                  draggable: true
+                }).addTo(map).bindPopup("Position actuelle").openPopup();
+              } else {
+                startPoint.setLatLng(latlng);
+              }
+              map.setView(latlng, map.getZoom());
+              checkAndCalculateRoute();
+              if (locateControl) {
+                locateControl._updateMarkerPosition(latlng);
+                locateControl._updateCircleRadius(position.coords.accuracy);
+              }
+            },
+            error => {
+              console.error("Erreur de géolocalisation :", error);
+              alert("Impossible d'obtenir votre position. Vérifiez les permissions.");
+            }
+          );
+        });
+      }
     </script>
     <style>
       /* Désactiver l'effet de hover pour les éléments avec l'ID nohover */
