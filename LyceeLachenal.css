@@ -375,6 +375,10 @@ body.dark-mode .leaflet-control-zoom a:hover {
         right: 10px;
     }
 
+    .leaflet-notification {
+        width: calc(100vw - 40px) !important;
+    }
+
 }
 
 /* ================================================== */
