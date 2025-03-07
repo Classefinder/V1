@@ -440,3 +440,15 @@ body.dark-mode #geo-btn-start {
     background: url('./images/locate-icon-dark.svg') no-repeat center center;
     background-size: 60%;
 }
+
+/* ================================================== */
+/* CUSTOM NOTIFICATION ICON */
+/* ================================================== */
+
+.leaflet-notification .leaflet-notification-icon {
+    background: url('./images/warning-icon.svg') no-repeat center center;
+    background-size: contain;
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
