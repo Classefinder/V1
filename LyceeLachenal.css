@@ -375,8 +375,27 @@ body.dark-mode .leaflet-control-zoom a:hover {
         right: 10px;
     }
 
-    .leaflet-notification {
-        width: calc(100vw - 40px) !important;
+    /* Positionnement des notifications */
+    .leaflet-notification.leaflet-bottom {
+        width: 100% !important;
+        left: 0 !important;
+        right: auto !important;
+        bottom: 0 !important;
+        transform: none !important;
+        margin: 0 !important;
+        max-width: none !important;
+    }
+
+    .leaflet-notification .leaflet-control {
+        width: 100% !important;
+        border-radius: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    .leaflet-notification .leaflet-notification-container {
+        width: 100vw !important;
+        max-width: none !important;
     }
 
 }

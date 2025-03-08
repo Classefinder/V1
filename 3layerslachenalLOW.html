@@ -256,7 +256,7 @@ function toggleTheme() {
 
       var notification= L.control.notifications({
           timeout:  10000,
-          position:  "bottomright",
+          position:  "bottomleft",
           closable: true,
           dismissable: true,
           className: 'pastel',
@@ -951,12 +951,17 @@ function updateButtonsVisibility() {
     
     geoBtn.addEventListener("click", function() {
       if(!localStorage.getItem('geoFirstClick')) {
-        notification.alert("Attention!",
-      "L'app ne peut pas savoir à quel étage tu es, elle peut donc se tromper!", 
+        notification.warning("Attention!",
+        "L'app ne peut pas savoir à quel étage tu es, elle peut donc se tromper!", 
           { type: 'warning' }
         );
         localStorage.setItem('geoFirstClick', 'true');
       }
+
+      notification.warning("Attention!",
+        "L'app ne peut pas savoir à quel étage tu es, elle peut donc se tromper!", 
+          { type: 'warning' }
+        );
   if (navigator.geolocation) {
     navigator.permissions
       .query({ name: "geolocation" })
