@@ -1378,15 +1378,44 @@ function updateButtonsVisibility() {
       // Initialisation au chargement
       document.addEventListener("DOMContentLoaded", () => {
         const map = initializeBaseMap();
-        handleGeolocation(map);
+        // Remplacer la géolocalisation manuelle par leaflet-control-locate
+        var locateControl = L.control.locate({
+            position: "topright",
+            setView: false
+        }).addTo(map);
+        locateControl.start();
 
-        // Ajouter l'événement pour appliquer un ID aux cercles de localisation
+        // Gérer la localisation via le plugin
+        map.on("locationfound", function(e) {
+            const userCoords = [e.latlng.lat, e.latlng.lng];
+            const distance = calculateDistance(userCoords[0], userCoords[1], lyceeCoords[0], lyceeCoords[1]);
+            const userMarker = L.marker(userCoords).addTo(map).bindPopup("Vous êtes ici").openPopup();
+
+            if (distance <= proximityThreshold) {
+                map.eachLayer(layer => {
+                    if (layer instanceof L.TileLayer) {
+                        map.removeLayer(layer);
+                    }
+                });
+                initializeSchoolMap(map, userMarker, userCoords);
+            } else {
+                showProximityCircle(map);
+                alert("Vous êtes hors de la zone requise. Approchez-vous du lycée pour voir le plan.");
+            }
+        });
+
+        map.on("locationerror", function(e) {
+            alert("Impossible d'obtenir votre localisation. Veuillez autoriser la géolocalisation.");
+            showProximityCircle(map);
+        });
+
+        // Appliquer un ID aux cercles de localisation
         map.on('locationfound', function () {
-          setTimeout(() => {
-            document.querySelectorAll('.leaflet-control-locate-circle').forEach(el => {
-              el.id = 'nohover';
-            });
-          }, 100);
+            setTimeout(() => {
+                document.querySelectorAll('.leaflet-control-locate-circle').forEach(el => {
+                    el.id = 'nohover';
+                });
+            }, 100);
         });
       });
 
