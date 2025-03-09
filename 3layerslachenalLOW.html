@@ -953,44 +953,56 @@ function updateButtonsVisibility() {
             localStorage.setItem('geoFirstClick', 'true');
         }
         
+        var watchId;
         var maxAttempts = 2;
         var attempt = 0;
+        
+        function clearWatch() {
+            if (watchId !== undefined) {
+                navigator.geolocation.clearWatch(watchId);
+                watchId = undefined;
+            }
+        }
+
         function locateAndMark() {
-            map.locate({ 
-                setView: false, 
-                timeout: 40000,      // 40 seconds timeout
-                maximumAge: 60000, 
-                enableHighAccuracy: true 
-            });
-            map.once("locationfound", function(e) {
-                console.log("Location found in geo-btn-start (retry):", e);
-                var latlng = e.latlng;
-                var currentFloor = map.hasLayer(etage0) ? "0"
-                                    : map.hasLayer(etage1) ? "1"
-                                    : map.hasLayer(etage2) ? "2" : "0";
-                if (startPoint) {
-                    map.removeLayer(startPoint);
-                    startPoint = null;
+            clearWatch();
+            watchId = navigator.geolocation.watchPosition(
+                function(e) {
+                    console.log("Location found in geo-btn-start (watchPosition):", e);
+                    var latlng = { lat: e.coords.latitude, lng: e.coords.longitude };
+                    var currentFloor = map.hasLayer(etage0) ? "0"
+                                        : map.hasLayer(etage1) ? "1"
+                                        : map.hasLayer(etage2) ? "2" : "0";
+                    if (startPoint) {
+                        map.removeLayer(startPoint);
+                        startPoint = null;
+                    }
+                    startPoint = L.marker(latlng, { icon: StartIcon, floor: currentFloor })
+                        .addTo(map)
+                        .bindPopup("Point de départ (position actuelle)")
+                        .openPopup();
+                    map.setView(latlng, map.getZoom());
+                    updateMarkersVisibility();
+                    checkAndCalculateRoute();
+                    clearWatch(); // Stop watching once we have a valid location
+                },
+                function(e) {
+                    console.error("Location error in geo-btn-start (watchPosition):", e);
+                    if(e.code === 3 && attempt < maxAttempts) {
+                        attempt++;
+                        console.log("Retrying location acquisition, attempt " + attempt);
+                        setTimeout(locateAndMark, 2000); // wait 2 sec before retrying
+                    } else {
+                        alert("Erreur lors de la récupération de votre position: " + e.message);
+                        clearWatch();
+                    }
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 40000,      // 40 seconds timeout
+                    maximumAge: 60000
                 }
-                startPoint = L.marker(latlng, { icon: StartIcon, floor: currentFloor })
-                    .addTo(map)
-                    .bindPopup("Point de départ (position actuelle)")
-                    .openPopup();
-                map.setView(latlng, map.getZoom());
-                updateMarkersVisibility();
-                checkAndCalculateRoute();
-            });
-            map.once("locationerror", function(e) {
-                console.error("Location error in geo-btn-start (retry):", e);
-                // If timeout (code 3) and attempts available, retry:
-                if(e.code === 3 && attempt < maxAttempts) {
-                    attempt++;
-                    console.log("Retrying location acquisition, attempt " + attempt);
-                    setTimeout(locateAndMark, 2000); // wait 2 sec before retrying
-                } else {
-                    alert("Erreur lors de la récupération de votre position: " + e.message);
-                }
-            });
+            );
         }
         locateAndMark();
     });
@@ -1347,11 +1359,6 @@ function updateButtonsVisibility() {
           document.getElementById("map").innerHTML = "<div style='position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);background:rgba(255,255,255,0.9);padding:20px;border:1px solid #ccc;'>La géolocalisation est nécessaire pour charger le site.</div>";
         }
       );
-      
-            // --- Ajout du contrôle LocateControl ---
-            L.control.locate({
-              position: "topright",
-            }).addTo(map);
       }
 
       // Initialisation au chargement
@@ -1360,23 +1367,36 @@ function updateButtonsVisibility() {
     // ...existing code...
     // Remplacer la géolocalisation manuelle par leaflet-control-locate
     var locateControl = L.control.locate({
-        position: "topright",
-        setView: true, // Assurez-vous que la vue est centrée sur la position trouvée
-        keepCurrentZoomLevel: true, // Conserver le niveau de zoom actuel
-        showPopup: false, // Désactiver les popups automatiques
-        strings: {
-            title: "Afficher ma position",
-            popup: "Vous êtes ici",
-            outsideMapBoundsMsg: "Vous êtes hors des limites de la carte"
-        }
-    }).addTo(map);
+          position: "topright",
+          setView: true,
+          keepCurrentZoomLevel: true,
+          showPopup: false,
+          locateOptions: {
+              enableHighAccuracy: true,
+              timeout: 30000, // 30 secondes timeout
+              maximumAge: 0 // Pas de cache
+          },
+          strings: {
+              title: "Afficher ma position",
+              popup: "Vous êtes ici",
+              outsideMapBoundsMsg: "Vous êtes hors des limites de la carte"
+          }
+      }).addTo(map);
     locateControl.start();
 
     map.on("locationerror", function(e) {
-        console.error("Location error:", e);
-        alert("Impossible d'obtenir votre localisation. Veuillez autoriser la géolocalisation.");
-        showProximityCircle(map);
-    });
+          console.error("Erreur de localisation :", e);
+          if(e.code === 3) { // Timeout
+              notification.warning(
+                  "Temps écoulé", 
+                  "La localisation prend trop de temps. Vérifiez vos permissions et votre connexion.",
+                  {timeout: 10000}
+              );
+          } else {
+              alert("Erreur de géolocalisation : " + e.message);
+          }
+          showProximityCircle(map);
+      });
 
     // Appliquer un ID aux cercles de localisation
     map.on('locationfound', function () {
@@ -1409,7 +1429,6 @@ function updateButtonsVisibility() {
             alert("Vous êtes hors de la zone requise. Approchez-vous du lycée pour voir le plan.");
         }
     });
-    // ...existing code...
 });
     </script>
     <style>
