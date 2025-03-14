@@ -48,67 +48,62 @@
         return R * c; // Distance en kilomètres
       }
 
-        // MODIFIER initializeBaseMap()
-        function initializeBaseMap() {
-          const map = L.map('map', {
-            center: lyceeCoords,
-            zoom: 16,
-            maxBoundsViscosity: 1.0
-          });
+      // Initialiser la carte avec un fond OSM
+      function initializeBaseMap() {
+        const map = L.map('map', {
+          center: lyceeCoords,
+          zoom: 16,
+          maxBoundsViscosity: 1.0 // Définir maxBoundsViscosity ici
+        });
 
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-          }).addTo(map);
+        // Ajouter un fond de carte OSM
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
-          return map; // Retourne seulement la carte
+        return map;
+      }
+
+      // Gérer la géolocalisation
+      function handleGeolocation(map) {
+        if (!navigator.geolocation) {
+          alert("La géolocalisation n'est pas prise en charge par votre navigateur.");
+          showProximityCircle(map);
+          return;
         }
 
-        // MODIFIER LE DOMContentLoaded
-        document.addEventListener("DOMContentLoaded", () => {
-          const map = initializeBaseMap();
-          
-          // Ajouter le contrôle de localisation
-          const lc = L.control.locate({
-            position: "topright",
-            locateOptions: {
-              enableHighAccuracy: true, // Correction de la casse
-              maxZoom: 18,
-              setView: 'untilPanOrZoom'
-            },
-            autoStart: true,
-            keepCurrentZoomLevel: true,
-            showPopup: false
-          }).addTo(map);
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            const userCoords = [position.coords.latitude, position.coords.longitude];
+            const distance = calculateDistance(
+              userCoords[0], userCoords[1],
+              lyceeCoords[0], lyceeCoords[1]
+            );
 
-          // Variable pour suivre l'initialisation
-          let schoolMapInitialized = false;
+            // Ajouter un marqueur pour la position de l'utilisateur
+            const userMarker = L.marker(userCoords).addTo(map).bindPopup("Vous êtes ici").openPopup();
 
-          // Un seul écouteur locationfound consolidé
-          map.on('locationfound', function(e) {
-            // Calcul de distance
-            const distance = calculateDistance(e.latlng.lat, e.latlng.lng, lyceeCoords[0], lyceeCoords[1]);
-            
-            // Logique de proximité
-            if (distance <= proximityThreshold && !schoolMapInitialized) {
-              initializeSchoolMap(map, null, e.latlng);
-              schoolMapInitialized = true;
-              
-              // Ajouter le marqueur personnalisé UNE SEULE FOIS
-              L.marker(e.latlng, {
-                icon: L.divIcon({
-                  className: 'location-marker',
-                  html: '<div class="pulsing-circle"></div>'
-                })
-              }).addTo(map);
-            } else if (distance > proximityThreshold) {
+            if (distance <= proximityThreshold) {
+              // Utilisateur dans la zone, afficher le plan
+              map.eachLayer(layer => {
+                if (layer instanceof L.TileLayer) {
+                  map.removeLayer(layer);
+                }
+              });
+              initializeSchoolMap(map, userMarker, userCoords);
+            } else {
+              // Ajouter un cercle pour montrer la zone requise
               showProximityCircle(map);
-              alert("Approchez-vous du lycée");
+              alert("Vous êtes hors de la zone requise. Approchez-vous du lycée pour voir le plan.");
             }
-          });
-
-          lc.start();
-        });
-          
+          },
+          error => {
+            console.error("Erreur de géolocalisation :", error);
+            alert("Impossible d'obtenir votre localisation. Veuillez autoriser la géolocalisation.");
+            showProximityCircle(map);
+          }
+        );
+      }
 
       // Afficher le cercle de proximité
       function showProximityCircle(map) {
@@ -934,11 +929,6 @@ function updateButtonsVisibility() {
       });
       
 <!-- ------ Mise à jour du bouton géo pour intervertir l'ordre ------ -->
-
-var currentFloor = map.hasLayer(etage0) ? "0" :
-                 map.hasLayer(etage1) ? "1" :
-                 map.hasLayer(etage2) ? "2" : "0";
-
 (function() {
     var scContainer = searchControlStart.getContainer();
     var geoBtn = document.createElement("button");
@@ -960,21 +950,18 @@ var currentFloor = map.hasLayer(etage0) ? "0" :
     }
     
     geoBtn.addEventListener("click", function() {
-  if(!localStorage.getItem('geoFirstClick')) {
-    notification.warning("Attention!",
-    "L'app ne peut pas savoir à quel étage tu es, elle peut donc se tromper!", 
-      { type: 'warning' }
-    );
-    localStorage.setItem('geoFirstClick', 'true');
-  }
+      if(!localStorage.getItem('geoFirstClick')) {
+        notification.warning("Attention!",
+        "L'app ne peut pas savoir à quel étage tu es, elle peut donc se tromper!", 
+          { type: 'warning' }
+        );
+        localStorage.setItem('geoFirstClick', 'true');
+      }
 
-  // Supprimer TOUS les marqueurs de localisation existants
-  map.eachLayer(layer => {
-    if (layer instanceof L.Marker && layer.options.alt === "Position actuelle") {
-      map.removeLayer(layer);
-    }
-  });
-
+      notification.warning("Attention!",
+        "L'app ne peut pas savoir à quel étage tu es, elle peut donc se tromper!", 
+          { type: 'warning' }
+        );
   if (navigator.geolocation) {
     navigator.permissions
       .query({ name: "geolocation" })
@@ -983,49 +970,51 @@ var currentFloor = map.hasLayer(etage0) ? "0" :
           navigator.geolocation.getCurrentPosition(
             function(position) {
               var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
-              var userCoords = [position.coords.latitude, position.coords.longitude];
-              var distance = calculateDistance(userCoords[0], userCoords[1], lyceeCoords[0], lyceeCoords[1]);
               
-              if (distance <= proximityThreshold) {
-                // Supprimer le fond de carte OSM si nécessaire
-                map.eachLayer(function(layer) {
-                  if (layer instanceof L.TileLayer) {
-                    map.removeLayer(layer);
-                  }
-                });
-
-                // Mettre à jour le marqueur existant au lieu d'en créer un nouveau
-                if (startPoint) {
-                  startPoint.setLatLng(latlng);
-                } else {
-                  startPoint = L.marker(latlng, { 
-                    icon: StartIcon, 
-                    floor: currentFloor,
-                    alt: "Position actuelle" // Identifier clairement
-                  })
-                  .addTo(map)
-                  .bindPopup("Point de départ (position actuelle)")
-                  .openPopup();
-                }
-
-                // Forcer le rafraîchissement
-                map.setView(latlng, map.getZoom());
-                updateMarkersVisibility();
-                checkAndCalculateRoute();
-
+              // Déterminer l'étage actif
+              var currentFloor;
+              if (map.hasLayer(etage0)) {
+                currentFloor = "0";
+              } else if (map.hasLayer(etage1)) {
+                currentFloor = "1";
+              } else if (map.hasLayer(etage2)) {
+                currentFloor = "2";
               } else {
-                showProximityCircle(map);
-                alert("Vous êtes hors de la zone requise.");
+                currentFloor = "0"; // Par défaut
               }
+
+              if (startPoint) {
+                map.removeLayer(startPoint);
+                startPoint = null;
+              }
+              startPoint = L.marker(latlng, { 
+                icon: StartIcon, 
+                floor: currentFloor // Utiliser l'étage détecté
+              })
+              .addTo(map)
+              .bindPopup("Point de départ (position actuelle)")
+              .openPopup();
+              
+              map.setView(latlng, map.getZoom());
+              updateMarkersVisibility();
+              checkAndCalculateRoute();
             },
             function(error) {
-              alert("Erreur de géolocalisation");
+              alert("Erreur lors de la récupération de votre position.");
             }
           );
-        }
-      });
-  }
-});
+        // ... le reste du code reste inchangé ...
+            } else {
+              alert("La localisation n'est pas autorisée.");
+            }
+          })
+          .catch(function() {
+            alert("Impossible de vérifier les permissions de géolocalisation.");
+          });
+      } else {
+        alert("La géolocalisation n'est pas disponible sur votre navigateur.");
+      }
+    });
 })();
 
       searchControlStart.on("search:locationfound", function (e) {
@@ -1380,7 +1369,26 @@ var currentFloor = map.hasLayer(etage0) ? "0" :
         }
       );
       
+            // --- Ajout du contrôle LocateControl ---
+            L.control.locate({
+              position: "topright",
+            }).addTo(map);
       }
+
+      // Initialisation au chargement
+      document.addEventListener("DOMContentLoaded", () => {
+        const map = initializeBaseMap();
+        handleGeolocation(map);
+
+        // Ajouter l'événement pour appliquer un ID aux cercles de localisation
+        map.on('locationfound', function () {
+          setTimeout(() => {
+            document.querySelectorAll('.leaflet-control-locate-circle').forEach(el => {
+              el.id = 'nohover';
+            });
+          }, 100);
+        });
+      });
 
     </script>
     <style>
