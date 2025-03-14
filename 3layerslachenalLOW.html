@@ -48,73 +48,67 @@
         return R * c; // Distance en kilomètres
       }
 
-      // Initialiser la carte avec un fond OSM
-      function initializeBaseMap() {
-        const map = L.map('map', {
-          center: lyceeCoords,
-          zoom: 16,
-          maxBoundsViscosity: 1.0
-        });
+        // MODIFIER initializeBaseMap()
+        function initializeBaseMap() {
+          const map = L.map('map', {
+            center: lyceeCoords,
+            zoom: 16,
+            maxBoundsViscosity: 1.0
+          });
 
-        // Ajouter un fond de carte OSM
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+          }).addTo(map);
 
-        // Ajouter et activer automatiquement le contrôle de localisation
-        L.control.locate({
-          position: "topright",
-          locateOptions: {
-            enableHighAccuracy: true,
-            maxZoom: 18,
-            setView: 'untilPanOrZoom'
-          },
-          autoStart: true // Ajout de cette option pour démarrer automatiquement
-        }).addTo(map);
-
-        return map;
-      }
-
-      // Gérer la géolocalisation
-      function handleGeolocation(map) {
-        if (!navigator.geolocation) {
-          alert("La géolocalisation n'est pas prise en charge par votre navigateur.");
-          showProximityCircle(map);
-          return;
+          return map; // Retourne seulement la carte
         }
 
-        navigator.geolocation.getCurrentPosition(
-          position => {
-            const userCoords = [position.coords.latitude, position.coords.longitude];
-            const distance = calculateDistance(
-              userCoords[0], userCoords[1],
-              lyceeCoords[0], lyceeCoords[1]
-            );
+        // MODIFIER LE DOMContentLoaded
+        document.addEventListener("DOMContentLoaded", () => {
+          const map = initializeBaseMap();
+          
+          // Ajouter le contrôle de localisation
+          const lc = L.control.locate({
+            position: "topright",
+            locateOptions: {
+              enableHighAccuracy: true, // Correction de la casse
+              maxZoom: 18,
+              setView: 'untilPanOrZoom'
+            },
+            autoStart: true,
+            keepCurrentZoomLevel: true,
+            showPopup: false
+          }).addTo(map);
 
-            // Ajouter un marqueur pour la position de l'utilisateur
-            const userMarker = L.marker(userCoords).addTo(map).bindPopup("Vous êtes ici").openPopup();
+          // Variable pour suivre l'initialisation
+          let schoolMapInitialized = false;
 
-            if (distance <= proximityThreshold) {
-              // Utilisateur dans la zone, afficher le plan
-              map.eachLayer(layer => {
-                if (layer instanceof L.TileLayer) {
-                  map.removeLayer(layer);
-                }
-              });
-              initializeSchoolMap(map, userMarker, userCoords);
-            } else {
-              // Ajouter un cercle pour montrer la zone requise
+          // Un seul écouteur locationfound consolidé
+          map.on('locationfound', function(e) {
+            // Calcul de distance
+            const distance = calculateDistance(e.latlng.lat, e.latlng.lng, lyceeCoords[0], lyceeCoords[1]);
+            
+            // Logique de proximité
+            if (distance <= proximityThreshold && !schoolMapInitialized) {
+              initializeSchoolMap(map, null, e.latlng);
+              schoolMapInitialized = true;
+              
+              // Ajouter le marqueur personnalisé UNE SEULE FOIS
+              L.marker(e.latlng, {
+                icon: L.divIcon({
+                  className: 'location-marker',
+                  html: '<div class="pulsing-circle"></div>'
+                })
+              }).addTo(map);
+            } else if (distance > proximityThreshold) {
               showProximityCircle(map);
-              alert("Vous êtes hors de la zone requise. Approchez-vous du lycée pour voir le plan.");
+              alert("Approchez-vous du lycée");
             }
-          },
-          error => {
-            console.error("Erreur de géolocalisation :", error);
-            alert("Impossible d'obtenir votre localisation. Veuillez autoriser la géolocalisation.");
-            showProximityCircle(map);
-          }
-        );
-      }
+          });
+
+          lc.start();
+        });
+          
 
       // Afficher le cercle de proximité
       function showProximityCircle(map) {
@@ -1395,21 +1389,6 @@ function updateButtonsVisibility() {
       );
       
       }
-
-      // Initialisation au chargement
-      document.addEventListener("DOMContentLoaded", () => {
-        const map = initializeBaseMap();
-        handleGeolocation(map);
-
-        // Ajouter l'événement pour appliquer un ID aux cercles de localisation
-        map.on('locationfound', function () {
-          setTimeout(() => {
-            document.querySelectorAll('.leaflet-control-locate-circle').forEach(el => {
-              el.id = 'nohover';
-            });
-          }, 100);
-        });
-      });
 
     </script>
     <style>
