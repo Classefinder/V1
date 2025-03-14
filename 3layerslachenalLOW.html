@@ -61,6 +61,11 @@
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
+        // --- Ajout du contrôle LocateControl déplacé ici ---
+        L.control.locate({
+          position: "topright",
+        }).addTo(map);
+
         return map;
       }
 
@@ -970,7 +975,21 @@ function updateButtonsVisibility() {
           navigator.geolocation.getCurrentPosition(
             function(position) {
               var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
-              
+              // Récupérer les coordonnées et vérifier la distance
+              var userCoords = [position.coords.latitude, position.coords.longitude];
+              var distance = calculateDistance(userCoords[0], userCoords[1], lyceeCoords[0], lyceeCoords[1]);
+              if (distance <= proximityThreshold) {
+                var userMarker = L.marker(userCoords).addTo(map).bindPopup("Vous êtes ici").openPopup();
+                map.eachLayer(function(layer) {
+                  if (layer instanceof L.TileLayer) {
+                    map.removeLayer(layer);
+                  }
+                });
+              } else {
+                showProximityCircle(map);
+                alert("Vous êtes hors de la zone requise. Approchez-vous du lycée pour voir le plan.");
+                return;
+              }
               // Déterminer l'étage actif
               var currentFloor;
               if (map.hasLayer(etage0)) {
@@ -1369,10 +1388,6 @@ function updateButtonsVisibility() {
         }
       );
       
-            // --- Ajout du contrôle LocateControl ---
-            L.control.locate({
-              position: "topright",
-            }).addTo(map);
       }
 
       // Initialisation au chargement
