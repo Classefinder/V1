@@ -53,17 +53,23 @@
         const map = L.map('map', {
           center: lyceeCoords,
           zoom: 16,
-          maxBoundsViscosity: 1.0 // Définir maxBoundsViscosity ici
+          maxBoundsViscosity: 1.0
         });
 
         // Ajouter un fond de carte OSM
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // --- Ajout du contrôle LocateControl déplacé ici ---
+        // Ajouter et activer automatiquement le contrôle de localisation
         L.control.locate({
           position: "topright",
+          locateOptions: {
+            enableHighAccuracy: true,
+            maxZoom: 18,
+            setView: 'untilPanOrZoom'
+          },
+          autoStart: true // Ajout de cette option pour démarrer automatiquement
         }).addTo(map);
 
         return map;
