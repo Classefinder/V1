@@ -934,77 +934,86 @@ function updateButtonsVisibility() {
     var geoBtn = document.createElement("button");
     geoBtn.id = "geo-btn-start";
     geoBtn.textContent = "";
+    // Assurez-vous que les dimensions soient identiques
     geoBtn.style.width = "40px";
     geoBtn.style.height = "40px";
+    // Remove extra margin if any
     geoBtn.style.margin = "0";
+    // Affecter un ordre inférieur à celui du bouton de recherche
     geoBtn.style.order = "1";
+    // Append the geo button
     scContainer.appendChild(geoBtn);
+    // Assigner un ordre supérieur au bouton de recherche présent dans le container
     var searchBtn = scContainer.querySelector('.search-button');
     if(searchBtn) {
         searchBtn.style.order = "2";
     }
     
     geoBtn.addEventListener("click", function() {
-        if(!localStorage.getItem('geoFirstClick')) {
-            notification.warning("Attention!",
-                "L'app ne peut pas savoir à quel étage tu es, elle peut donc se tromper!", 
-                { type: 'warning' }
-            );
-            localStorage.setItem('geoFirstClick', 'true');
-        }
-        
-        var watchId;
-        var maxAttempts = 2;
-        var attempt = 0;
-        
-        function clearWatch() {
-            if (watchId !== undefined) {
-                navigator.geolocation.clearWatch(watchId);
-                watchId = undefined;
-            }
-        }
+      if(!localStorage.getItem('geoFirstClick')) {
+        notification.warning("Attention!",
+        "L'app ne peut pas savoir à quel étage tu es, elle peut donc se tromper!", 
+          { type: 'warning' }
+        );
+        localStorage.setItem('geoFirstClick', 'true');
+      }
 
-        function locateAndMark() {
-            clearWatch();
-            watchId = navigator.geolocation.watchPosition(
-                function(e) {
-                    console.log("Location found in geo-btn-start (watchPosition):", e);
-                    var latlng = { lat: e.coords.latitude, lng: e.coords.longitude };
-                    var currentFloor = map.hasLayer(etage0) ? "0"
-                                        : map.hasLayer(etage1) ? "1"
-                                        : map.hasLayer(etage2) ? "2" : "0";
-                    if (startPoint) {
-                        map.removeLayer(startPoint);
-                        startPoint = null;
-                    }
-                    startPoint = L.marker(latlng, { icon: StartIcon, floor: currentFloor })
-                        .addTo(map)
-                        .bindPopup("Point de départ (position actuelle)")
-                        .openPopup();
-                    map.setView(latlng, map.getZoom());
-                    updateMarkersVisibility();
-                    checkAndCalculateRoute();
-                    clearWatch(); // Stop watching once we have a valid location
-                },
-                function(e) {
-                    console.error("Location error in geo-btn-start (watchPosition):", e);
-                    if(e.code === 3 && attempt < maxAttempts) {
-                        attempt++;
-                        console.log("Retrying location acquisition, attempt " + attempt);
-                        setTimeout(locateAndMark, 2000); // wait 2 sec before retrying
-                    } else {
-                        alert("Erreur lors de la récupération de votre position: " + e.message);
-                        clearWatch();
-                    }
-                },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 40000,      // 40 seconds timeout
-                    maximumAge: 60000
-                }
-            );
-        }
-        locateAndMark();
+      notification.warning("Attention!",
+        "L'app ne peut pas savoir à quel étage tu es, elle peut donc se tromper!", 
+          { type: 'warning' }
+        );
+  if (navigator.geolocation) {
+    navigator.permissions
+      .query({ name: "geolocation" })
+      .then(function(result) {
+        if (result.state === "granted" || result.state === "prompt") {
+          navigator.geolocation.getCurrentPosition(
+            function(position) {
+              var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
+              
+              // Déterminer l'étage actif
+              var currentFloor;
+              if (map.hasLayer(etage0)) {
+                currentFloor = "0";
+              } else if (map.hasLayer(etage1)) {
+                currentFloor = "1";
+              } else if (map.hasLayer(etage2)) {
+                currentFloor = "2";
+              } else {
+                currentFloor = "0"; // Par défaut
+              }
+
+              if (startPoint) {
+                map.removeLayer(startPoint);
+                startPoint = null;
+              }
+              startPoint = L.marker(latlng, { 
+                icon: StartIcon, 
+                floor: currentFloor // Utiliser l'étage détecté
+              })
+              .addTo(map)
+              .bindPopup("Point de départ (position actuelle)")
+              .openPopup();
+              
+              map.setView(latlng, map.getZoom());
+              updateMarkersVisibility();
+              checkAndCalculateRoute();
+            },
+            function(error) {
+              alert("Erreur lors de la récupération de votre position.");
+            }
+          );
+        // ... le reste du code reste inchangé ...
+            } else {
+              alert("La localisation n'est pas autorisée.");
+            }
+          })
+          .catch(function() {
+            alert("Impossible de vérifier les permissions de géolocalisation.");
+          });
+      } else {
+        alert("La géolocalisation n'est pas disponible sur votre navigateur.");
+      }
     });
 })();
 
@@ -1359,77 +1368,28 @@ function updateButtonsVisibility() {
           document.getElementById("map").innerHTML = "<div style='position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);background:rgba(255,255,255,0.9);padding:20px;border:1px solid #ccc;'>La géolocalisation est nécessaire pour charger le site.</div>";
         }
       );
+      
+            // --- Ajout du contrôle LocateControl ---
+            L.control.locate({
+              position: "topright",
+            }).addTo(map);
       }
 
       // Initialisation au chargement
       document.addEventListener("DOMContentLoaded", () => {
-    const map = initializeBaseMap();
-    // ...existing code...
-    // Remplacer la géolocalisation manuelle par leaflet-control-locate
-    var locateControl = L.control.locate({
-          position: "topright",
-          setView: true,
-          keepCurrentZoomLevel: true,
-          showPopup: false,
-          locateOptions: {
-              enableHighAccuracy: true,
-              timeout: 30000, // 30 secondes timeout
-              maximumAge: 0 // Pas de cache
-          },
-          strings: {
-              title: "Afficher ma position",
-              popup: "Vous êtes ici",
-              outsideMapBoundsMsg: "Vous êtes hors des limites de la carte"
-          }
-      }).addTo(map);
-    locateControl.start();
+        const map = initializeBaseMap();
+        handleGeolocation(map);
 
-    map.on("locationerror", function(e) {
-          console.error("Erreur de localisation :", e);
-          if(e.code === 3) { // Timeout
-              notification.warning(
-                  "Temps écoulé", 
-                  "La localisation prend trop de temps. Vérifiez vos permissions et votre connexion.",
-                  {timeout: 10000}
-              );
-          } else {
-              alert("Erreur de géolocalisation : " + e.message);
-          }
-          showProximityCircle(map);
+        // Ajouter l'événement pour appliquer un ID aux cercles de localisation
+        map.on('locationfound', function () {
+          setTimeout(() => {
+            document.querySelectorAll('.leaflet-control-locate-circle').forEach(el => {
+              el.id = 'nohover';
+            });
+          }, 100);
+        });
       });
 
-    // Appliquer un ID aux cercles de localisation
-    map.on('locationfound', function () {
-        setTimeout(() => {
-            document.querySelectorAll('.leaflet-control-locate-circle').forEach(el => {
-                el.id = 'nohover';
-            });
-        }, 100);
-    });
-
-    let schoolMapInitialized = false;
-
-    map.on("locationfound", function(e) {
-        console.log("Location found:", e);
-        const userCoords = [e.latlng.lat, e.latlng.lng];
-        const distance = calculateDistance(userCoords[0], userCoords[1], lyceeCoords[0], lyceeCoords[1]);
-
-        if (distance <= proximityThreshold) {
-            if (!schoolMapInitialized) {
-                map.eachLayer(layer => {
-                    if (layer instanceof L.TileLayer) {
-                        map.removeLayer(layer);
-                    }
-                });
-                initializeSchoolMap(map, null, userCoords);
-                schoolMapInitialized = true;
-            }
-        } else {
-            showProximityCircle(map);
-            alert("Vous êtes hors de la zone requise. Approchez-vous du lycée pour voir le plan.");
-        }
-    });
-});
     </script>
     <style>
       /* Désactiver l'effet de hover pour les éléments avec l'ID nohover */
