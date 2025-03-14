@@ -52,8 +52,9 @@
       function initializeBaseMap() {
         const map = L.map('map', {
           center: lyceeCoords,
+          zoomDelta: 0.25,
+          zoomSnap: 0,
           zoom: 16,
-          maxBoundsViscosity: 1.0 // Définir maxBoundsViscosity ici
         });
 
         // Ajouter un fond de carte OSM
