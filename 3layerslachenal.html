@@ -8,20 +8,20 @@
     />
     <title>Classefinder | Lycée Lachenal</title>
     <link href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.83.1/dist/L.Control.Locate.min.css" rel="stylesheet"> 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.css"/>
     <script src="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@maplibre/maplibre-gl-leaflet@0.0.22/leaflet-maplibre-gl.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet-search@4.0.0/dist/leaflet-search.min.css"/>
     <link rel="stylesheet" href="LyceeLachenal.css" />
     <script src="https://unpkg.com/leaflet-search@4.0.0/dist/leaflet-search.min.js"></script>
-    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-control-geocoder@3.1.0/dist/Control.Geocoder.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.83.1/dist/L.Control.Locate.min.js"></script>
-    <link href=" https://cdn.jsdelivr.net/npm/leaflet-notifications@1.0.7/css/leaflet-notifications.min.css " rel="stylesheet">
-    <script src=" https://cdn.jsdelivr.net/npm/leaflet-notifications@1.0.7/js/leaflet-notifications.min.js "></script>
+    <link href="https://cdn.jsdelivr.net/npm/leaflet-notifications@1.0.7/css/leaflet-notifications.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-notifications@1.0.7/js/leaflet-notifications.min.js"></script>
    
   </head>
   <body>
@@ -52,9 +52,9 @@
       function initializeBaseMap() {
         const map = L.map('map', {
           center: lyceeCoords,
-          zoom: 16,
           zoomDelta: 0.25,
-          zoomSnap: 0
+          zoomSnap: 0,
+          zoom: 16,
         });
 
         // Ajouter un fond de carte OSM
@@ -161,7 +161,6 @@
 
         // --- 4. Ajout du fond clair par défaut ---
         lightMap.addTo(map);
-
 
     // --- 2. Données GeoJSON pour les salles et les chemins ---
     var salleEtage0 = {
