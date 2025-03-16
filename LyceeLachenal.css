@@ -471,3 +471,69 @@ body.dark-mode #geo-btn-start {
     height: 24px;
     margin-right: 10px;
 }
+
+.search-location-button {
+    background: none;
+    border: none !important;
+    padding: 0 8px;
+    cursor: pointer;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    position: absolute;
+    right: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.search-location-button:hover {
+    opacity: 1;
+    background-color: #d9d9d9;
+}
+
+.search-location-button img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Ajuster l'espacement pour le bouton de recherche */
+.leaflet-control-search .search-input {
+    padding-right: 85px !important;
+}
+
+/* Ajuster en mode sombre */
+body.dark-mode .search-location-button img {
+    filter: invert(1);
+}
+
+.search-location-button {
+    background: none;
+    border: none;
+    padding: 0 8px;
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.search-location-button:hover {
+    opacity: 1;
+}
+
+.search-location-button img {
+    width: 18px;
+    height: 18px;
+}
+
+/* Assurez-vous que le conteneur de recherche peut accueillir le bouton */
+.leaflet-control-search .search-input {
+    padding-right: 30px;
+    /* Espace pour le bouton */
+}

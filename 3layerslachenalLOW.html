@@ -941,10 +941,69 @@
           },
           position: "topleft",
           textPlaceholder: "Point de départ",
+          // Modifier la configuration du bouton personnalisé
+          customButton: true
         });
+
         map.addControl(searchControlStart);
-        // Ajout de l'id au container du contrôle start
         searchControlStart.getContainer().id = "search-control-start";
+
+        // Ajouter le bouton manuellement après l'initialisation du contrôle
+        const searchInput = searchControlStart.getContainer().querySelector('.search-input');
+        const locationButton = document.createElement('button');
+        locationButton.className = 'search-location-button';
+        locationButton.title = 'Utiliser ma position';
+        locationButton.innerHTML = '<img src="images/location-icon.svg" alt="Location">';
+        searchInput.parentNode.insertBefore(locationButton, searchInput.nextSibling);
+
+        // Ajouter l'événement click sur le bouton de localisation
+        setTimeout(() => {
+          const locationButton = searchControlStart.getContainer().querySelector('.search-location-button');
+          if (locationButton) {
+              locationButton.addEventListener('click', function() {
+                  // Utiliser le plugin leaflet-locatecontrol pour obtenir la position
+                  map.locate({
+                      setView: false,
+                      enableHighAccuracy: true
+                  });
+
+                  map.once('locationfound', function(e) {
+                      // Supprimer l'ancien point de départ s'il existe
+                      if (startPoint) {
+                          map.removeLayer(startPoint);
+                          startPoint = null;
+                      }
+
+                      // Déterminer l'étage actif
+                      let activeFloor = "0";
+                      if (map.hasLayer(etage1)) {
+                          activeFloor = "1";
+                      } else if (map.hasLayer(etage2)) {
+                          activeFloor = "2";
+                      }
+
+                      // Créer le nouveau point de départ
+                      startPoint = L.marker([e.latitude, e.longitude], {
+                          icon: StartIcon,
+                          floor: activeFloor
+                      })
+                      .addTo(map)
+                      .bindPopup("Point de départ à ma position", {
+                          autoPan: false
+                      })
+                      .openPopup();
+
+                      updateMarkersVisibility();
+                      checkAndCalculateRoute();
+                  });
+
+                  map.once('locationerror', function(e) {
+                      notification.error("Erreur", "Impossible d'obtenir votre position");
+                  });
+              });
+          }
+      }, 100);
+
         // Lorsqu'une recherche est ouverte, ajouter un id au tooltip
         searchControlStart.on("search:expanded", function () {
           if (this._tooltip) {
