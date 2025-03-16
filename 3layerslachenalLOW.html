@@ -958,16 +958,11 @@
       var geoBtn = document.createElement("button");
       geoBtn.id = "geo-btn-start";
       geoBtn.textContent = "";
-      // Assurez-vous que les dimensions soient identiques
       geoBtn.style.width = "40px";
       geoBtn.style.height = "40px";
-      // Remove extra margin if any
       geoBtn.style.margin = "0";
-      // Affecter un ordre inférieur à celui du bouton de recherche
       geoBtn.style.order = "1";
-      // Append the geo button
       scContainer.appendChild(geoBtn);
-      // Assigner un ordre supérieur au bouton de recherche présent dans le container
       var searchBtn = scContainer.querySelector('.search-button');
       if(searchBtn) {
           searchBtn.style.order = "2";
@@ -982,62 +977,41 @@
           localStorage.setItem('geoFirstClick', 'true');
         }
 
-        notification.warning("Attention!",
-          "L'app ne peut pas savoir à quel étage tu es, elle peut donc se tromper!", 
-            { type: 'warning' }
-          );
-    if (navigator.geolocation) {
-      navigator.permissions
-        .query({ name: "geolocation" })
-        .then(function(result) {
-          if (result.state === "granted" || result.state === "prompt") {
-            navigator.geolocation.getCurrentPosition(
-              function(position) {
-                var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
-                
-                // Déterminer l'étage actif
-                var currentFloor;
-                if (map.hasLayer(etage0)) {
-                  currentFloor = "0";
-                } else if (map.hasLayer(etage1)) {
-                  currentFloor = "1";
-                } else if (map.hasLayer(etage2)) {
-                  currentFloor = "2";
-                } else {
-                  currentFloor = "0"; // Par défaut
-                }
+        // Utiliser l'événement locationfound de la carte
+        map.on('locationfound', function onLocationFound(e) {
+          // Supprimer l'ancien marqueur de départ s'il existe
+          if (startPoint) {
+            map.removeLayer(startPoint);
+            startPoint = null;
+          }
 
-                if (startPoint) {
-                  map.removeLayer(startPoint);
-                  startPoint = null;
-                }
-                startPoint = L.marker(latlng, { 
-                  icon: StartIcon, 
-                  floor: currentFloor // Utiliser l'étage détecté
-                })
-                .addTo(map)
-                .bindPopup("Point de départ (position actuelle)")
-                .openPopup();
-                
-                map.setView(latlng, map.getZoom());
-                updateMarkersVisibility();
-                checkAndCalculateRoute();
-              },
-              function(error) {
-                alert("Erreur lors de la récupération de votre position.");
-              }
-            );
-          // ... le reste du code reste inchangé ...
-              } else {
-                alert("La localisation n'est pas autorisée.");
-              }
-            })
-            .catch(function() {
-              alert("Impossible de vérifier les permissions de géolocalisation.");
-            });
-        } else {
-          alert("La géolocalisation n'est pas disponible sur votre navigateur.");
-        }
+          // Déterminer l'étage actif
+          var currentFloor = "0";
+          if (map.hasLayer(etage1)) {
+            currentFloor = "1";
+          } else if (map.hasLayer(etage2)) {
+            currentFloor = "2";
+          }
+
+          // Créer le nouveau marqueur de départ
+          startPoint = L.marker([e.latitude, e.longitude], {
+            icon: StartIcon,
+            floor: currentFloor
+          })
+          .addTo(map)
+          .bindPopup("Point de départ (position actuelle)")
+          .openPopup();
+
+          // Mettre à jour l'affichage et le routage
+          updateMarkersVisibility();
+          checkAndCalculateRoute();
+
+          // Retirer l'écouteur d'événement après utilisation
+          map.off('locationfound', onLocationFound);
+        });
+
+        // Déclencher une mise à jour de la localisation
+        map.locate({setView: true});
       });
   })();
 
@@ -1277,7 +1251,7 @@
                           color: "white",
                           weight: 3,
                           fill: false,
-                          fillOpacity: 1
+                          fillOpacity: 0.1
                         }
                       })
                     },
@@ -1292,7 +1266,7 @@
                           color: "white",
                           weight: 3,
                           fill: false,
-                          fillOpacity: 1
+                          fillOpacity: 0.1
                         }
                       })
                     }
