@@ -31,7 +31,7 @@
     <script>
       // Coordonnées du lycée (centre du plan)
       const lyceeCoords = [45.9368, 6.1322];
-      const proximityThreshold = 500; // Distance en kilomètres (500m)
+      const proximityThreshold = 0.5; // Distance en kilomètres (500m)
 
       // Fonction pour calculer la distance entre deux coordonnées
       function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -1412,38 +1412,39 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   const map = initializeBaseMap();
+  let schoolMapInitialized = false;  // Flag pour suivre l'initialisation
   
-  // Démarrer la géolocalisation après un léger délai pour laisser la carte s'initialiser
   setTimeout(() => {
-    // Créer le contrôle de localisation
     const locateControl = L.control.locate({
       position: "topright",
       setView: true,
+      watch: true,  // Garder la localisation active
       locateOptions: {
         enableHighAccuracy: true,
-        maxZoom: 18
+        maxZoom: 18,
+        watch: true  // Suivre la position en continu
       }
     }).addTo(map);
 
-    // Démarrer automatiquement la localisation
-    locateControl.start();
-
     // Gérer les événements de localisation
     map.on('locationfound', (e) => {
+      // Ne pas retourner si déjà initialisé, juste vérifier la distance
       const distance = calculateDistance(
         e.latitude, e.longitude,
         lyceeCoords[0], lyceeCoords[1]
       );
 
-      if (distance <= proximityThreshold) {
+      if (distance <= proximityThreshold && !schoolMapInitialized) {
         // Supprimer les couches de base existantes
         map.eachLayer(layer => layer instanceof L.TileLayer && map.removeLayer(layer));
         
-        // Initialiser la carte de l'école
-        if (!initializeSchoolMap(map, null, [e.latitude, e.longitude])) {
+        // Initialiser la carte de l'école une seule fois
+        if (initializeSchoolMap(map, null, [e.latitude, e.longitude])) {
+          schoolMapInitialized = true;  // Marquer comme initialisé
+        } else {
           showProximityCircle(map);
         }
-      } else {
+      } else if (!schoolMapInitialized) {
         showProximityCircle(map);
       }
     });
@@ -1453,7 +1454,8 @@ document.addEventListener("DOMContentLoaded", () => {
       showProximityCircle(map);
     });
 
-  }, 500); // Petit délai pour la stabilisation de la carte
+    locateControl.start();
+  }, 500);
 });
 
       </script>
