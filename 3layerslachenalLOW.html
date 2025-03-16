@@ -7,10 +7,10 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>Classefinder | Lycée Lachenal</title>
-    <link href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.83.1/dist/L.Control.Locate.min.css" rel="stylesheet"> 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.css"/>
+    <link href="libs/leaflet-locatecontrol/L.Control.Locate.min.css" rel="stylesheet"> 
+    <link rel="stylesheet" href="libs/leaflet/leaflet.css" />
+    <script src="libs/leaflet/leaflet.js"></script>
+    <link rel="stylesheet" href="libs/maplibre-gl/maplibre-gl.css"/>
     <script src="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@maplibre/maplibre-gl-leaflet@0.0.22/leaflet-maplibre-gl.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet-search@4.0.0/dist/leaflet-search.min.css"/>
@@ -31,7 +31,7 @@
     <script>
       // Coordonnées du lycée (centre du plan)
       const lyceeCoords = [45.9368, 6.1322];
-      const proximityThreshold = 1000; // Distance en kilomètres (500m)
+      const proximityThreshold = 500; // Distance en kilomètres (500m)
 
       // Fonction pour calculer la distance entre deux coordonnées
       function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -87,29 +87,33 @@
           onLocationFound: (e) => {
             console.log("Position trouvée:", e);
             const distance = calculateDistance(
-              e.latitude, e.longitude,
-              lyceeCoords[0], lyceeCoords[1]
+              e.latlng.lat, e.latlng.lng, lyceeCoords[0], lyceeCoords[1]
             );
+
 
             console.log("Distance jusqu'au lycée:", distance, "km");
 
-            // Forcer l'initialisation en ignorant la distance pour le développement
-            console.log("Dans la zone - Initialisation de la carte du lycée");
-            
-            // Supprimer uniquement la couche OSM de base
-            map.eachLayer(layer => {
-              if (layer instanceof L.TileLayer) {
-                map.removeLayer(layer);
-              }
-            });
+            if (distance <= proximityThreshold) {
+              console.log("Dans la zone - Initialisation de la carte du lycée");
+              
+              // Supprimer uniquement la couche OSM de base
+              map.eachLayer(layer => {
+                if (layer instanceof L.TileLayer) {
+                  map.removeLayer(layer);
+                }
+              });
 
-            // Appel direct à initializeSchoolMap
-            console.log("Appel de initializeSchoolMap");
-            const success = initializeSchoolMap(map, null, [e.latitude, e.longitude]);
-            if (success) {
-              console.log("Carte du lycée initialisée avec succès");
+              // Appel direct à initializeSchoolMap
+              console.log("Appel de initializeSchoolMap");
+              const success = initializeSchoolMap(map, null, [e.latitude, e.longitude]);
+              if (success) {
+                console.log("Carte du lycée initialisée avec succès");
+              } else {
+                console.error("Échec de l'initialisation de la carte du lycée");
+                showProximityCircle(map);
+              }
             } else {
-              console.error("Échec de l'initialisation de la carte du lycée");
+              console.log("Hors de la zone - Affichage du cercle de proximité");
               showProximityCircle(map);
             }
           }
@@ -133,6 +137,10 @@
 
       // Initialiser la carte du lycée (avec les fonctionnalités spécifiques)
       function initializeSchoolMap(map, userMarker, userCoords) {
+        if (!map || !map.getCenter()) { // Vérification que la carte est prête
+    console.error("La carte n'est pas initialisée correctement");
+    return false;
+  }
         try {
           console.log("Début de initializeSchoolMap");
           // --- 1. Initialisation des limites ---
@@ -1402,20 +1410,51 @@
         }
       } // Fermeture de initializeSchoolMap
 
-      // Supprimer l'ancien event listener et garder uniquement celui-ci
-      document.addEventListener("DOMContentLoaded", () => {
-        const map = initializeBaseMap();
-        handleGeolocation(map);
+document.addEventListener("DOMContentLoaded", () => {
+  const map = initializeBaseMap();
+  
+  // Démarrer la géolocalisation après un léger délai pour laisser la carte s'initialiser
+  setTimeout(() => {
+    // Créer le contrôle de localisation
+    const locateControl = L.control.locate({
+      position: "topright",
+      setView: true,
+      locateOptions: {
+        enableHighAccuracy: true,
+        maxZoom: 18
+      }
+    }).addTo(map);
 
-        // Ajouter l'événement pour appliquer un ID aux cercles de localisation
-        map.on('locationfound', function () {
-          setTimeout(() => {
-            document.querySelectorAll('.leaflet-control-locate-circle').forEach(el => {
-              el.id = 'nohover';
-            });
-          }, 100);
-        });
-      });
+    // Démarrer automatiquement la localisation
+    locateControl.start();
+
+    // Gérer les événements de localisation
+    map.on('locationfound', (e) => {
+      const distance = calculateDistance(
+        e.latitude, e.longitude,
+        lyceeCoords[0], lyceeCoords[1]
+      );
+
+      if (distance <= proximityThreshold) {
+        // Supprimer les couches de base existantes
+        map.eachLayer(layer => layer instanceof L.TileLayer && map.removeLayer(layer));
+        
+        // Initialiser la carte de l'école
+        if (!initializeSchoolMap(map, null, [e.latitude, e.longitude])) {
+          showProximityCircle(map);
+        }
+      } else {
+        showProximityCircle(map);
+      }
+    });
+
+    map.on('locationerror', (err) => {
+      console.error("Erreur de géolocalisation:", err.message);
+      showProximityCircle(map);
+    });
+
+  }, 500); // Petit délai pour la stabilisation de la carte
+});
 
       </script>
       <style>
