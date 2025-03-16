@@ -31,7 +31,7 @@
     <script>
       // Coordonnées du lycée (centre du plan)
       const lyceeCoords = [45.9368, 6.1322];
-      const proximityThreshold = 0.5; // Distance en kilomètres (500m)
+      const proximityThreshold = 1000; // Distance en kilomètres (500m)
 
       // Fonction pour calculer la distance entre deux coordonnées
       function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -1421,26 +1421,51 @@ document.addEventListener("DOMContentLoaded", () => {
       watch: true,  // Garder la localisation active
       locateOptions: {
         enableHighAccuracy: true,
-        maxZoom: 18,
-        watch: true  // Suivre la position en continu
+        maximumAge: 0,           // Ne pas utiliser de cache
+        timeout: 5000,          // Réduire le timeout à 10 secondes
+        watch: true
+      },
+      clickBehavior: {
+        inView: 'stop',          // Arrêter la localisation au clic
+        outOfView: 'setView'
+      },
+      showCompass: true,
+      returnToPrevBounds: true,
+      keepCurrentZoomLevel: true,
+      drawCircle: true,
+      drawMarker: false,
+      // Ajouter des gestionnaires d'erreurs spécifiques
+      onLocationError: function(err) {
+        console.warn("Erreur de localisation:", err);
+        // Forcer l'initialisation de la carte si la géolocalisation échoue
+        if (!schoolMapInitialized) {
+          schoolMapInitialized = true;
+          initializeSchoolMap(map, null, lyceeCoords);
+        }
+      },
+      onLocationOutsideMapBounds: function(context) {
+        // Gérer la position hors limites
+        showProximityCircle(map);
       }
     }).addTo(map);
 
-    // Gérer les événements de localisation
+    // Modifier le gestionnaire d'événements locationfound
     map.on('locationfound', (e) => {
-      // Ne pas retourner si déjà initialisé, juste vérifier la distance
+      if (!e.latlng) {
+        console.warn("Position invalide reçue");
+        return;
+      }
+
       const distance = calculateDistance(
-        e.latitude, e.longitude,
+        e.latlng.lat, e.latlng.lng,
         lyceeCoords[0], lyceeCoords[1]
       );
 
       if (distance <= proximityThreshold && !schoolMapInitialized) {
-        // Supprimer les couches de base existantes
         map.eachLayer(layer => layer instanceof L.TileLayer && map.removeLayer(layer));
         
-        // Initialiser la carte de l'école une seule fois
-        if (initializeSchoolMap(map, null, [e.latitude, e.longitude])) {
-          schoolMapInitialized = true;  // Marquer comme initialisé
+        if (initializeSchoolMap(map, null, [e.latlng.lat, e.latlng.lng])) {
+          schoolMapInitialized = true;
         } else {
           showProximityCircle(map);
         }
@@ -1449,13 +1474,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    map.on('locationerror', (err) => {
-      console.error("Erreur de géolocalisation:", err.message);
-      showProximityCircle(map);
-    });
-
-    locateControl.start();
-  }, 500);
+    // Démarrer la localisation avec un délai plus court
+    setTimeout(() => locateControl.start(), 100);
+  }, 250);
 });
 
       </script>
