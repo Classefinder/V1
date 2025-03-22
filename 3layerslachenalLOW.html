@@ -26,7 +26,6 @@
   </head>
   <body>
     <div id="map"></div>
-    <button id="getLocationBtn" title="Récupérer ma position">📍 Ma Position</button>
     <button id="dark-mode-toggle"></button>
 
     <script>
@@ -942,70 +941,78 @@
           },
           position: "topleft",
           textPlaceholder: "Point de départ",
-          // Modifier la configuration du bouton personnalisé
           customButton: true
         });
 
         map.addControl(searchControlStart);
         searchControlStart.getContainer().id = "search-control-start";
 
-        // Ajouter le bouton manuellement après l'initialisation du contrôle
-        const searchInput = searchControlStart.getContainer().querySelector('.search-input');
-        const locationButton = document.createElement('button');
-        locationButton.className = 'search-location-button';
-        locationButton.title = 'Utiliser ma position';
-        locationButton.innerHTML = '<img src="images/location-icon.svg" alt="Location">';
+        // Ajouter le bouton de géolocalisation dans le contrôle de recherche
+        var searchInput = searchControlStart.getContainer().querySelector('input');
+        var locationButton = document.createElement('button');
+        locationButton.id = 'getLocationBtn';
+        locationButton.title = 'Récupérer ma position';
+        locationButton.innerHTML = '📍';
+        locationButton.className = 'location-button';
         searchInput.parentNode.insertBefore(locationButton, searchInput.nextSibling);
 
-        // Ajouter l'événement click sur le bouton de localisation
-        setTimeout(() => {
-          const locationButton = searchControlStart.getContainer().querySelector('.search-location-button');
-          if (locationButton) {
-              locationButton.addEventListener('click', function() {
-                  // Utiliser le plugin leaflet-locatecontrol pour obtenir la position
-                  map.locate({
-                      setView: false,
-                      enableHighAccuracy: true
-                  });
+        // Mettre à jour le gestionnaire d'événements pour le nouveau bouton
+        locationButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log("Tentative de géolocalisation...");
+            
+            const options = {
+                enableHighAccuracy: false,
+                timeout: 15000,
+                maximumAge: 30000
+            };
 
-                  map.once('locationfound', function(e) {
-                      // Supprimer l'ancien point de départ s'il existe
-                      if (startPoint) {
-                          map.removeLayer(startPoint);
-                          startPoint = null;
-                      }
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    console.log("✅ Succès :");
+                    console.table({
+                        Latitude: position.coords.latitude,
+                        Longitude: position.coords.longitude,
+                        Précision: `${position.coords.accuracy}m`
+                    });
 
-                      // Déterminer l'étage actif
-                      let activeFloor = "0";
-                      if (map.hasLayer(etage1)) {
-                          activeFloor = "1";
-                      } else if (map.hasLayer(etage2)) {
-                          activeFloor = "2";
-                      }
+                    // Supprimer l'ancien point de départ s'il existe
+                    if (startPoint) {
+                        map.removeLayer(startPoint);
+                        startPoint = null;
+                    }
 
-                      // Créer le nouveau point de départ
-                      startPoint = L.marker([e.latitude, e.longitude], {
-                          icon: StartIcon,
-                          floor: activeFloor
-                      })
-                      .addTo(map)
-                      .bindPopup("Point de départ à ma position", {
-                          autoPan: false
-                      })
-                      .openPopup();
+                    // Déterminer l'étage actif
+                    let currentFloor = "0";
+                    if (map.hasLayer(etage1)) {
+                        currentFloor = "1";
+                    } else if (map.hasLayer(etage2)) {
+                        currentFloor = "2";
+                    }
 
-                      updateMarkersVisibility();
-                      checkAndCalculateRoute();
-                  });
+                    // Créer le nouveau point de départ
+                    startPoint = L.marker([position.coords.latitude, position.coords.longitude], {
+                        icon: StartIcon,
+                        floor: currentFloor
+                    })
+                    .addTo(map)
+                    .bindPopup("Point de départ (Ma position)", { autoPan: false })
+                    .openPopup();
 
-                  map.once('locationerror', function(e) {
-                      notification.error("Erreur", "Impossible d'obtenir votre position");
-                  });
-              });
-          }
-      }, 100);
+                    // Mettre à jour la visibilité des marqueurs
+                    updateMarkersVisibility();
 
-        // Lorsqu'une recherche est ouverte, ajouter un id au tooltip
+                    // Calculer l'itinéraire si un point d'arrivée existe
+                    checkAndCalculateRoute();
+                },
+                error => {
+                    console.error("❌ Erreur :", error.message);
+                    alert(`Erreur : ${getErrorString(error.code)}\n${getAdvice(error.code)}`);
+                },
+                options
+            );
+        });
+
         searchControlStart.on("search:expanded", function () {
           if (this._tooltip) {
             this._tooltip.id = "search-tooltip-start";
@@ -1080,7 +1087,6 @@
           textPlaceholder: "Point d'arrivée",
         });
         map.addControl(searchControlEnd);
-        // Ajout de l'id au container du contrôle end
         searchControlEnd.getContainer().id = "search-control-end";
         // Lorsqu'une recherche est ouverte, ajouter un id au tooltip
         searchControlEnd.on("search:expanded", function () {
@@ -1464,53 +1470,36 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 250);
 });
 
-document.getElementById('getLocationBtn').addEventListener('click', function() {
-  console.log("Tentative de géolocalisation...");
-  
-  const options = {
-    enableHighAccuracy: false, // ← Modifié (moins précis mais plus rapide)
-    timeout: 15000, // ← Augmenté à 15 secondes
-    maximumAge: 30000 // Utilise le cache pendant 30s
-  };
-
-  navigator.geolocation.getCurrentPosition(
-    position => {
-      console.log("✅ Succès :");
-      console.table({
-        Latitude: position.coords.latitude,
-        Longitude: position.coords.longitude,
-        Précision: `${position.coords.accuracy}m`
-      });
-    },
-    error => {
-      console.error("❌ Erreur :", error.message);
-      alert(`Erreur : ${this.getErrorString(error.code)}\n${this.getAdvice(error.code)}`);
-    },
-    options
-  );
-});
-
-// Nouveaux helpers
-function getErrorString(code) {
-  return {
-    1: "Permission refusée - Autorisez la géolocalisation dans les paramètres",
-    2: "Position indisponible - Activez le GPS/WiFi",
-    3: "Timeout - Vérifiez votre connexion"
-  }[code] || "Erreur inconnue";
-}
-
-function getAdvice(code) {
-  return code === 3 ? 
-    "Conseil : Ouvrez Google Maps pour forcer l'activation des capteurs GPS" : 
-    "Actualisez la page après avoir résolu le problème";
-}
-
       </script>
       <style>
         /* Désactiver l'effet de hover pour les éléments avec l'ID nohover */
         #nohover:hover {
           fill-opacity: 0.15 !important;
           stroke-opacity: 1 !important;
+        }
+
+        /* Ajouter ces styles pour le bouton de géolocalisation */
+        .location-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+            font-size: 16px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            background-color: #fff;
+            border-left: 1px solid #ccc;
+        }
+
+        .location-button:hover {
+            background-color: #f4f4f4;
+        }
+
+        /* Ajuster la largeur de l'input pour faire de la place pour le bouton */
+        .leaflet-control-search input {
+            padding-right: 40px;
         }
       </style>
     </body>
