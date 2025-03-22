@@ -26,14 +26,13 @@
   </head>
   <body>
     <div id="map"></div>
+    <button id="getLocationBtn" title="Récupérer ma position">📍 Ma Position</button>
     <button id="dark-mode-toggle"></button>
 
     <script>
       // Coordonnées du lycée (centre du plan)
       const lyceeCoords = [45.9368, 6.1322];
       const proximityThreshold = 1000; // Distance en kilomètres (500m)
-
-      let locateControl; // Déclaration globale
 
       // Fonction pour calculer la distance entre deux coordonnées
       function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -70,7 +69,7 @@
       // Gérer la géolocalisation
       function handleGeolocation(map) {
         console.log("Démarrage de handleGeolocation");
-        locateControl = L.control.locate({
+        const locateControl = L.control.locate({
           position: "topright",
           setView: true,
           drawCircle: true,
@@ -135,14 +134,6 @@
 
         // Ajouter un ID au cercle
         proximityCircle._path.id = 'nohover';
-      }
-
-      function clearMapLayers(map) {
-        map.eachLayer(layer => {
-          if (!(layer instanceof L.Control)) {
-            map.removeLayer(layer);
-          }
-        });
       }
 
       // Initialiser la carte du lycée (avec les fonctionnalités spécifiques)
@@ -970,18 +961,49 @@
         setTimeout(() => {
           const locationButton = searchControlStart.getContainer().querySelector('.search-location-button');
           if (locationButton) {
-            locationButton.addEventListener('click', function() {
-              // Utiliser le contrôle de localisation Leaflet
-              locateControl.start();
-              
-              // Supprimer l'ancien point de départ
-              if (startPoint) {
-                map.removeLayer(startPoint);
-                startPoint = null;
-              }
-            });
+              locationButton.addEventListener('click', function() {
+                  // Utiliser le plugin leaflet-locatecontrol pour obtenir la position
+                  map.locate({
+                      setView: false,
+                      enableHighAccuracy: true
+                  });
+
+                  map.once('locationfound', function(e) {
+                      // Supprimer l'ancien point de départ s'il existe
+                      if (startPoint) {
+                          map.removeLayer(startPoint);
+                          startPoint = null;
+                      }
+
+                      // Déterminer l'étage actif
+                      let activeFloor = "0";
+                      if (map.hasLayer(etage1)) {
+                          activeFloor = "1";
+                      } else if (map.hasLayer(etage2)) {
+                          activeFloor = "2";
+                      }
+
+                      // Créer le nouveau point de départ
+                      startPoint = L.marker([e.latitude, e.longitude], {
+                          icon: StartIcon,
+                          floor: activeFloor
+                      })
+                      .addTo(map)
+                      .bindPopup("Point de départ à ma position", {
+                          autoPan: false
+                      })
+                      .openPopup();
+
+                      updateMarkersVisibility();
+                      checkAndCalculateRoute();
+                  });
+
+                  map.once('locationerror', function(e) {
+                      notification.error("Erreur", "Impossible d'obtenir votre position");
+                  });
+              });
           }
-        }, 100);
+      }, 100);
 
         // Lorsqu'une recherche est ouverte, ajouter un id au tooltip
         searchControlStart.on("search:expanded", function () {
@@ -1348,6 +1370,18 @@
           }, 1);
         }
 
+        // ----- Appeler la fonction lors du chargement du site -----
+        // Remplacer l'appel immédiat par une demande de géolocalisation
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            // Géolocalisation autorisée : on affiche le reste du site
+            cycleLayers();
+          },
+          function(error) {
+            // Géolocalisation refusée ou indisponible : afficher un message d'erreur
+            document.getElementById("map").innerHTML = "<div style='position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);background:rgba(255,255,255,0.9);padding:20px;border:1px solid #ccc;'>La géolocalisation est nécessaire pour charger le site.</div>";
+          }
+        );
           updateTooltipsVisibility();
           updateMarkersVisibility();
           updateArrowsVisibility();
@@ -1361,80 +1395,115 @@
         }
       } // Fermeture de initializeSchoolMap
 
-      document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
   const map = initializeBaseMap();
-  let schoolMapInitialized = false;
+  let schoolMapInitialized = false;  // Flag pour suivre l'initialisation
+  
+  setTimeout(() => {
+    const locateControl = L.control.locate({
+      position: "topright",
+      setView: true,
+      watch: true,  // Garder la localisation active
+      locateOptions: {
+        enableHighAccuracy: true,
+        maximumAge: 0,           // Ne pas utiliser de cache
+        timeout: 5000,          // Réduire le timeout à 10 secondes
+        watch: true
+      },
+      clickBehavior: {
+        inView: 'stop',          // Arrêter la localisation au clic
+        outOfView: 'setView'
+      },
+      showCompass: true,
+      returnToPrevBounds: true,
+      keepCurrentZoomLevel: true,
+      drawCircle: true,
+      drawMarker: false,
+      // Ajouter des gestionnaires d'erreurs spécifiques
+      onLocationError: function(err) {
+        console.warn("Erreur de localisation:", err);
+        // Forcer l'initialisation de la carte si la géolocalisation échoue
+        if (!schoolMapInitialized) {
+          schoolMapInitialized = true;
+          initializeSchoolMap(map, null, lyceeCoords);
+        }
+      },
+      onLocationOutsideMapBounds: function(context) {
+        // Gérer la position hors limites
+        showProximityCircle(map);
+      }
+    }).addTo(map);
 
-  // Initialiser le contrôle de localisation une seule fois
-  locateControl = L.control.locate({
-    position: "topright",
-    setView: true,
-    watch: true,
-    locateOptions: {
-      enableHighAccuracy: true,
-      maximumAge: 0,
-      timeout: 10000
+    // Modifier le gestionnaire d'événements locationfound
+    map.on('locationfound', (e) => {
+      if (!e.latlng) {
+        console.warn("Position invalide reçue");
+        return;
+      }
+
+      const distance = calculateDistance(
+        e.latlng.lat, e.latlng.lng,
+        lyceeCoords[0], lyceeCoords[1]
+      );
+
+      if (distance <= proximityThreshold && !schoolMapInitialized) {
+        map.eachLayer(layer => layer instanceof L.TileLayer && map.removeLayer(layer));
+        
+        if (initializeSchoolMap(map, null, [e.latlng.lat, e.latlng.lng])) {
+          schoolMapInitialized = true;
+        } else {
+          showProximityCircle(map);
+        }
+      } else if (!schoolMapInitialized) {
+        showProximityCircle(map);
+      }
+    });
+
+    // Démarrer la localisation avec un délai plus court
+    setTimeout(() => locateControl.start(), 100);
+  }, 250);
+});
+
+document.getElementById('getLocationBtn').addEventListener('click', function() {
+  console.log("Tentative de géolocalisation...");
+  
+  const options = {
+    enableHighAccuracy: false, // ← Modifié (moins précis mais plus rapide)
+    timeout: 15000, // ← Augmenté à 15 secondes
+    maximumAge: 30000 // Utilise le cache pendant 30s
+  };
+
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      console.log("✅ Succès :");
+      console.table({
+        Latitude: position.coords.latitude,
+        Longitude: position.coords.longitude,
+        Précision: `${position.coords.accuracy}m`
+      });
     },
-    strings: {
-      title: "Ma position"
-    }
-  }).addTo(map);
-
-  // Gestionnaire d'événement de localisation
-  map.on('locationfound', function(e) {
-    const distance = calculateDistance(
-      e.latlng.lat, e.latlng.lng, 
-      lyceeCoords[0], lyceeCoords[1]
-    );
-
-    if (distance <= proximityThreshold) {
-      if (!schoolMapInitialized) {
-        map.eachLayer(layer => {
-          if (layer instanceof L.TileLayer) map.removeLayer(layer);
-        });
-        schoolMapInitialized = initializeSchoolMap(map, null, e.latlng);
-      }
-    } else {
-      showProximityCircle(map);
-      if (schoolMapInitialized) {
-        map.eachLayer(layer => layer.remove());
-        initializeBaseMap();
-        schoolMapInitialized = false;
-      }
-    }
-  });
-
-  map.on('locationfound', function(e) {
-  // Déterminer l'étage actif
-  let activeFloor = "0";
-  if (map.hasLayer(etage1)) activeFloor = "1";
-  else if (map.hasLayer(etage2)) activeFloor = "2";
-
-  // Créer le marqueur de départ
-  startPoint = L.marker([e.latitude, e.longitude], {
-    icon: StartIcon,
-    floor: activeFloor
-  })
-  .addTo(map)
-  .bindPopup("Départ : Votre position actuelle", { autoPan: false })
-  .openPopup();
-
-  // Mettre à jour l'affichage et calculer l'itinéraire
-  updateMarkersVisibility();
-  checkAndCalculateRoute();
+    error => {
+      console.error("❌ Erreur :", error.message);
+      alert(`Erreur : ${this.getErrorString(error.code)}\n${this.getAdvice(error.code)}`);
+    },
+    options
+  );
 });
 
-  map.on('locationerror', function(e) {
-    notification.error("Erreur", "Accès à la géolocalisation refusé");
-    if (!schoolMapInitialized) {
-      initializeSchoolMap(map, null, lyceeCoords);
-      schoolMapInitialized = true;
-    }
-  });
+// Nouveaux helpers
+function getErrorString(code) {
+  return {
+    1: "Permission refusée - Autorisez la géolocalisation dans les paramètres",
+    2: "Position indisponible - Activez le GPS/WiFi",
+    3: "Timeout - Vérifiez votre connexion"
+  }[code] || "Erreur inconnue";
+}
 
-  // Démarrer la localisation au chargement
-  locateControl.start();
-});
+function getAdvice(code) {
+  return code === 3 ? 
+    "Conseil : Ouvrez Google Maps pour forcer l'activation des capteurs GPS" : 
+    "Actualisez la page après avoir résolu le problème";
+}
 
       </script>
       <style>

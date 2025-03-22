@@ -543,3 +543,17 @@ body.dark-mode .search-location-button img {
 #nohover {
     pointer-events: none !important;
 }
+
+
+#getLocationBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    padding: 8px 12px;
+    background: white;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: Arial;
+}
