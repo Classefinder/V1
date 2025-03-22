@@ -30,11 +30,15 @@ body {
     color: #000000 !important;
 }
 
+#getLocationBtn {
+    background-color: #ffffff !important;
+}
+
 .leaflet-control-search .search-button:hover,
 .leaflet-control-search .search-cancel:hover,
 .leaflet-control-search .search-tooltip li:hover,
 .custom-geojson-button:hover,
-#geo-btn-start:hover,
+#getLocationBtn:hover,
 .leaflet-control-zoom a:hover {
     background-color: #d9d9d9 !important;
 }
@@ -57,16 +61,17 @@ body.dark-mode .leaflet-control-zoom .leaflet-control-zoom-in {
     color: #ffffff !important;
 }
 
-body.dark-mode .leaflet-control-search input {
-    background-color: #1e1e1e;
-    color: #ffffff;
+body.dark-mode .leaflet-control-search input,
+body.dark-mode #getLocationBtn {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
 }
 
 body.dark-mode .leaflet-control-search .search-button:hover,
 body.dark-mode .leaflet-control-search .search-cancel:hover,
 body.dark-mode .leaflet-control-search .search-tooltip li:hover,
 body.dark-mode .custom-geojson-button:hover,
-body.dark-mode #geo-btn-start:hover,
+body.dark-mode #getLocationBtn:hover,
 body.dark-mode .leaflet-control-zoom a:hover {
     background-color: #444444 !important;
 }
@@ -316,20 +321,16 @@ body.dark-mode .leaflet-control-zoom a:hover {
 
 /* fin du bouton de localisation*/
 
-#geo-btn-start {
-    right: 0;
-    margin: 0;
-    margin-left: auto;
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
-    background: url('./images/locate-icon.svg') no-repeat center center;
-    background-size: 60%;
+#getLocationBtn {
+    position: relative;
     border-radius: 50%;
-    cursor: pointer;
-    padding: 0;
-    outline: none;
+    width: 50px;
+    aspect-ratio: 1 / 1;
     border: none;
+    background: url('./images/locate-icon.svg') no-repeat center center;
+    background-size: 65%;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 /* ================================================== */
@@ -455,9 +456,9 @@ body.dark-mode .leaflet-control-search .search-button {
     background-size: 60%;
 }
 
-body.dark-mode #geo-btn-start {
+body.dark-mode #getLocationBtn {
     background: url('./images/locate-icon-dark.svg') no-repeat center center;
-    background-size: 60%;
+    background-size: 65%;
 }
 
 /* ================================================== */
@@ -532,24 +533,10 @@ body.dark-mode .search-location-button img {
     height: 18px;
 }
 
-/* Assurez-vous que le conteneur de recherche peut accueillir le bouton */
 .leaflet-control-search .search-input {
     padding-right: 30px;
-    /* Espace pour le bouton */
 }
-
-
 
 #nohover {
     pointer-events: none !important;
-}
-
-
-#getLocationBtn {
-    position: relative;
-    z-index: 1000;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: Arial;
 }
