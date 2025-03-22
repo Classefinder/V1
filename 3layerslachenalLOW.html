@@ -949,12 +949,14 @@
 
         // Ajouter le bouton de géolocalisation dans le contrôle de recherche
         var searchInput = searchControlStart.getContainer().querySelector('input');
+        var searchButton = searchControlStart.getContainer().querySelector('.search-button'); // Bouton de recherche existant
         var locationButton = document.createElement('button');
         locationButton.id = 'getLocationBtn';
         locationButton.title = 'Récupérer ma position';
         locationButton.innerHTML = '📍';
         locationButton.className = 'location-button';
-        searchInput.parentNode.insertBefore(locationButton, searchInput.nextSibling);
+        // Insérer le bouton de géolocalisation avant le bouton de recherche
+        searchButton.parentNode.insertBefore(locationButton, searchButton);
 
         // Mettre à jour le gestionnaire d'événements pour le nouveau bouton
         locationButton.addEventListener('click', function(e) {
@@ -1500,6 +1502,31 @@ document.addEventListener("DOMContentLoaded", () => {
         /* Ajuster la largeur de l'input pour faire de la place pour le bouton */
         .leaflet-control-search input {
             padding-right: 40px;
+        }
+
+        /* Modifier les styles du bouton de géolocalisation */
+        .location-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+            font-size: 16px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            background-color: #fff;
+            border-left: 1px solid #ccc;
+        }
+
+        /* Ajuster la position du bouton de recherche */
+        .leaflet-control-search .search-button {
+            right: 30px !important; /* Décaler le bouton de recherche pour faire de la place */
+        }
+
+        /* Ajuster la largeur de l'input */
+        .leaflet-control-search input {
+            padding-right: 70px; /* Augmenter pour accommoder les deux boutons */
         }
       </style>
     </body>
