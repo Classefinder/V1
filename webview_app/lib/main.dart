@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter WebView',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: WebViewScreen(),
+      home: const WebViewScreen(),
     );
   }
 }
@@ -29,29 +29,79 @@ class WebViewScreen extends StatefulWidget {
 
 class _WebViewScreenState extends State<WebViewScreen> {
   late WebViewController _controller;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _requestLocationPermission();
-    _controller =
-        WebViewController()
-          ..setJavaScriptMode(JavaScriptMode.unrestricted)
-          ..loadRequest(Uri.parse('https://classefinder.duckdns.org'));
+    _initializeWebViewController();
   }
 
   Future<void> _requestLocationPermission() async {
     if (Platform.isAndroid) {
-      final status = await Permission.location.request();
-      print('Location permission status: $status');
+      await Permission.location.request();
     }
+  }
+
+  void _initializeWebViewController() {
+    _controller =
+        WebViewController()
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..setNavigationDelegate(
+            NavigationDelegate(
+              onProgress: (int progress) {
+                print('Loading: $progress%');
+              },
+              onPageStarted: (String url) {
+                setState(() {
+                  _isLoading = true;
+                });
+              },
+              onPageFinished: (String url) {
+                setState(() {
+                  _isLoading = false;
+                });
+              },
+              onWebResourceError: (WebResourceError error) {
+                print('''
+            Error code: ${error.errorCode}
+            Description: ${error.description}
+            Error type: ${error.errorType}
+            ''');
+              },
+              onNavigationRequest: (NavigationRequest request) {
+                // Autoriser toutes les navigations
+                return NavigationDecision.navigate;
+              },
+            ),
+          )
+          ..setBackgroundColor(Colors.white)
+          ..enableZoom(false)
+          ..loadRequest(
+            Uri.parse('https://classefinder.duckdns.org'),
+            headers: {'Cache-Control': 'no-cache'},
+          );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('WebView Flutter')),
-      body: WebViewWidget(controller: _controller),
+      appBar: AppBar(
+        title: const Text('WebView Flutter'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.replay),
+            onPressed: () => _controller.reload(),
+          ),
+        ],
+      ),
+      body: Stack(
+        children: [
+          WebViewWidget(controller: _controller),
+          if (_isLoading) const Center(child: CircularProgressIndicator()),
+        ],
+      ),
     );
   }
 }

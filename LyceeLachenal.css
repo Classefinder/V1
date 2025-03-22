@@ -537,3 +537,9 @@ body.dark-mode .search-location-button img {
     padding-right: 30px;
     /* Espace pour le bouton */
 }
+
+
+
+#nohover {
+    pointer-events: none !important;
+}
