@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Animation CSS au changement de calque</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map { height: 500px; }
+
+    /* Assurer le zoom depuis le centre */
+    .leaflet-interactive {
+      transform-origin: 50vw 50%;
+    }
+
+    /* Définition de l'animation CSS */
+    .animate {
+      animation: zoomBlur 1s forwards ease-out;
+    }
+
+    @keyframes zoomBlur {
+      from {
+        transform: scale(0.5);
+        filter: blur(4px);
+      }
+      to {
+        transform: scale(1);
+        filter: blur(0);
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="map"></div>
+
+<!-- Inclusion de Leaflet -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  // Initialisation de la carte
+  var map = L.map('map').setView([48.8566, 2.3522], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Premier calque GeoJSON : un point
+  var geojsonLayer1 = L.geoJSON({
+    "type": "Feature",
+    "properties": { "name": "Paris" },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [2.3522, 48.8566]
+    }
+  }, {
+    pointToLayer: function(feature, latlng) {
+      return L.circleMarker(latlng, {
+        radius: 10,
+        fillColor: "#ff7800",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+      });
+    }
+  });
+
+  // Deuxième calque GeoJSON : un polygone
+  var geojsonLayer2 = L.geoJSON({
+    "type": "Feature",
+    "properties": { "name": "Zone Paris" },
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [[[2.35,48.85], [2.36,48.85], [2.36,48.86], [2.35,48.86], [2.35,48.85]]]
+    }
+  });
+
+  // Gestionnaire de calques de Leaflet
+  var baseLayers = {
+    "test": geojsonLayer1,
+    "Zone": geojsonLayer2
+  };
+
+  // Affichage du premier calque par défaut
+  geojsonLayer1.addTo(map);
+  L.control.layers(baseLayers).addTo(map);
+
+  // Au changement de calque, ajouter la classe d'animation aux éléments du nouveau calque
+  map.on('baselayerchange', function(e) {
+    // Délai minimum pour être sûr que les éléments sont ajoutés au DOM
+    setTimeout(function() {
+      e.layer.eachLayer(function(layer) {
+        var el = layer.getElement();
+        if (el) {
+          // On retire la classe (pour forcer le reflow)
+          el.classList.remove('animate');
+          // Forcer un reflow
+          void el.offsetWidth;
+          // Puis on ajoute la classe pour déclencher l'animation
+          el.classList.add('animate');
+        }
+      });
+    }, 0);
+  });
+</script>
+</body>
+</html>
