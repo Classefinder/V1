@@ -342,12 +342,12 @@ body.dark-mode .leaflet-control-zoom a:hover {
 
     .leaflet-control-layers {
         position: relative;
-        top: 130px;
+        top: 70px;
     }
 
     .leaflet-control-locate {
         position: relative;
-        top: 190px;
+        top: 285px;
     }
 
     .leaflet-control-search {
@@ -420,12 +420,12 @@ body.dark-mode .leaflet-control-zoom a:hover {
 
     .leaflet-control-layers {
         position: relative;
-        top: 0px;
+        top: -60px;
     }
 
     .leaflet-control-locate {
         position: relative;
-        top: 60px;
+        top: 155px;
     }
 
     #dark-mode-toggle {
@@ -539,4 +539,6 @@ body.dark-mode .search-location-button img {
 
 #nohover {
     pointer-events: none !important;
+    fill-opacity: 0.15 !important;
+    stroke-opacity: 1 !important;
 }
