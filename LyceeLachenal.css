@@ -555,3 +555,8 @@ body.dark-mode .search-location-button img {
 #search-control-start .search-alert {
     right: 130px;
 }
+
+body.dark-mode .leaflet-control-search .search-alert {
+    color: rgb(255, 139, 139) !important;
+    background-color: #1e1e1e !important;
+}
