@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "com.pichillilorenzo.flutter_inappwebview_android-release-32:/animator/fragment_open_enter.xml",
+        "source": "com.pichillilorenzo.flutter_inappwebview_android-fragment-1.7.1-9:/animator/fragment_open_enter.xml"
+    },
+    {
+        "merged": "com.pichillilorenzo.flutter_inappwebview_android-release-32:/animator/fragment_fade_exit.xml",
+        "source": "com.pichillilorenzo.flutter_inappwebview_android-fragment-1.7.1-9:/animator/fragment_fade_exit.xml"
+    },
+    {
+        "merged": "com.pichillilorenzo.flutter_inappwebview_android-release-32:/animator/fragment_open_exit.xml",
+        "source": "com.pichillilorenzo.flutter_inappwebview_android-fragment-1.7.1-9:/animator/fragment_open_exit.xml"
+    },
+    {
+        "merged": "com.pichillilorenzo.flutter_inappwebview_android-release-32:/animator/fragment_close_enter.xml",
+        "source": "com.pichillilorenzo.flutter_inappwebview_android-fragment-1.7.1-9:/animator/fragment_close_enter.xml"
+    },
+    {
+        "merged": "com.pichillilorenzo.flutter_inappwebview_android-release-32:/animator/fragment_fade_enter.xml",
+        "source": "com.pichillilorenzo.flutter_inappwebview_android-fragment-1.7.1-9:/animator/fragment_fade_enter.xml"
+    },
+    {
+        "merged": "com.pichillilorenzo.flutter_inappwebview_android-release-32:/animator/fragment_close_exit.xml",
+        "source": "com.pichillilorenzo.flutter_inappwebview_android-fragment-1.7.1-9:/animator/fragment_close_exit.xml"
+    }
+]
