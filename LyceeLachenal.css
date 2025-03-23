@@ -560,3 +560,41 @@ body.dark-mode .leaflet-control-search .search-alert {
     color: rgb(255, 139, 139) !important;
     background-color: #1e1e1e !important;
 }
+
+/* Personnalisation de la scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    /* Largeur de la scrollbar */
+    height: 8px;
+    /* Hauteur de la scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+    /* Couleur de la barre */
+    border-radius: 10px;
+    /* Coins arrondis */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    /* Couleur au survol */
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+    /* Pas d'arrière-plan */
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+    /* Supprimer les flèches */
+}
+
+/* Pour les navigateurs qui ne supportent pas Webkit */
+.scrollbar {
+    scrollbar-width: thin;
+    /* Barre fine */
+    scrollbar-color: #888 transparent;
+    /* Couleur de la barre et arrière-plan transparent */
+}
