@@ -30,11 +30,15 @@ body {
     color: #000000 !important;
 }
 
+#getLocationBtn {
+    background-color: #ffffff !important;
+}
+
 .leaflet-control-search .search-button:hover,
 .leaflet-control-search .search-cancel:hover,
 .leaflet-control-search .search-tooltip li:hover,
 .custom-geojson-button:hover,
-#geo-btn-start:hover,
+#getLocationBtn:hover,
 .leaflet-control-zoom a:hover {
     background-color: #d9d9d9 !important;
 }
@@ -57,16 +61,17 @@ body.dark-mode .leaflet-control-zoom .leaflet-control-zoom-in {
     color: #ffffff !important;
 }
 
-body.dark-mode .leaflet-control-search input {
-    background-color: #1e1e1e;
-    color: #ffffff;
+body.dark-mode .leaflet-control-search input,
+body.dark-mode #getLocationBtn {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
 }
 
 body.dark-mode .leaflet-control-search .search-button:hover,
 body.dark-mode .leaflet-control-search .search-cancel:hover,
 body.dark-mode .leaflet-control-search .search-tooltip li:hover,
 body.dark-mode .custom-geojson-button:hover,
-body.dark-mode #geo-btn-start:hover,
+body.dark-mode #getLocationBtn:hover,
 body.dark-mode .leaflet-control-zoom a:hover {
     background-color: #444444 !important;
 }
@@ -316,20 +321,16 @@ body.dark-mode .leaflet-control-zoom a:hover {
 
 /* fin du bouton de localisation*/
 
-#geo-btn-start {
-    right: 0;
-    margin: 0;
-    margin-left: auto;
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
-    background: url('./images/locate-icon.svg') no-repeat center center;
-    background-size: 60%;
+#getLocationBtn {
+    position: relative;
     border-radius: 50%;
-    cursor: pointer;
-    padding: 0;
-    outline: none;
+    width: 50px;
+    aspect-ratio: 1 / 1;
     border: none;
+    background: url('./images/locate-icon.svg') no-repeat center center;
+    background-size: 65%;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 /* ================================================== */
@@ -341,12 +342,12 @@ body.dark-mode .leaflet-control-zoom a:hover {
 
     .leaflet-control-layers {
         position: relative;
-        top: 130px;
+        top: 70px;
     }
 
     .leaflet-control-locate {
         position: relative;
-        top: 190px;
+        top: 285px;
     }
 
     .leaflet-control-search {
@@ -419,12 +420,12 @@ body.dark-mode .leaflet-control-zoom a:hover {
 
     .leaflet-control-layers {
         position: relative;
-        top: 0px;
+        top: -60px;
     }
 
     .leaflet-control-locate {
         position: relative;
-        top: 60px;
+        top: 155px;
     }
 
     #dark-mode-toggle {
@@ -455,9 +456,9 @@ body.dark-mode .leaflet-control-search .search-button {
     background-size: 60%;
 }
 
-body.dark-mode #geo-btn-start {
+body.dark-mode #getLocationBtn {
     background: url('./images/locate-icon-dark.svg') no-repeat center center;
-    background-size: 60%;
+    background-size: 65%;
 }
 
 /* ================================================== */
@@ -470,4 +471,74 @@ body.dark-mode #geo-btn-start {
     width: 24px;
     height: 24px;
     margin-right: 10px;
+}
+
+.search-location-button {
+    background: none;
+    border: none !important;
+    padding: 0 8px;
+    cursor: pointer;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    position: absolute;
+    right: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.search-location-button:hover {
+    opacity: 1;
+    background-color: #d9d9d9;
+}
+
+.search-location-button img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Ajuster l'espacement pour le bouton de recherche */
+.leaflet-control-search .search-input {
+    padding-right: 85px !important;
+}
+
+/* Ajuster en mode sombre */
+body.dark-mode .search-location-button img {
+    filter: invert(1);
+}
+
+.search-location-button {
+    background: none;
+    border: none;
+    padding: 0 8px;
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.search-location-button:hover {
+    opacity: 1;
+}
+
+.search-location-button img {
+    width: 18px;
+    height: 18px;
+}
+
+.leaflet-control-search .search-input {
+    padding-right: 30px;
+}
+
+#nohover {
+    pointer-events: none !important;
+    fill-opacity: 0.15 !important;
+    stroke-opacity: 1 !important;
 }
