@@ -542,3 +542,16 @@ body.dark-mode .search-location-button img {
     fill-opacity: 0.15 !important;
     stroke-opacity: 1 !important;
 }
+
+.leaflet-control-search .search-alert {
+    color: red;
+    background-color: white;
+    font-size: 15px;
+    margin-top: 5px;
+    position: absolute;
+    right: 90px;
+}
+
+#search-control-start .search-alert {
+    right: 130px;
+}

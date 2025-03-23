@@ -71,7 +71,7 @@
           position: "topright",
           setView: true,
           drawCircle: true,
-          drawMarker: false, // On désactive le marqueur par défaut
+          drawMarker: true, // On désactive le marqueur par défaut
           showPopup: false,
           watch: true, // Ajouté pour suivre la position en continu
           strings: {
@@ -1420,10 +1420,10 @@ document.addEventListener("DOMContentLoaded", () => {
         outOfView: 'setView'
       },
       showCompass: true,
-      returnToPrevBounds: true,
-      keepCurrentZoomLevel: true,
+      keepCurrentZoomLevel: false,
+      flyTo: true,
       drawCircle: true,
-      drawMarker: false,
+      drawMarker: true,
       // Ajouter des gestionnaires d'erreurs spécifiques
       onLocationError: function(err) {
         console.warn("Erreur de localisation:", err);
@@ -1450,6 +1450,13 @@ document.addEventListener("DOMContentLoaded", () => {
         e.latlng.lat, e.latlng.lng,
         lyceeCoords[0], lyceeCoords[1]
       );
+
+      // Ajouter un ID au cercle de localisation
+      map.eachLayer((layer) => {
+        if (layer instanceof L.Circle && !layer._path.id) {
+          layer._path.id = 'nohover';
+        }
+      });
 
       if (distance <= proximityThreshold && !schoolMapInitialized) {
         map.eachLayer(layer => layer instanceof L.TileLayer && map.removeLayer(layer));
