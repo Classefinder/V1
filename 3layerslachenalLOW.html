@@ -55,7 +55,19 @@
           zoomSnap: 0,
           zoom: 16,
         });
+      // Initialiser la carte avec un fond OSM
+      function initializeBaseMap() {
+        const map = L.map('map', {
+          center: lyceeCoords,
+          zoomDelta: 0.25,
+          zoomSnap: 0,
+          zoom: 16,
+        });
 
+        // Ajouter un fond de carte OSM
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
         // Ajouter un fond de carte OSM
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
