@@ -598,3 +598,23 @@ body.dark-mode .leaflet-control-search .search-alert {
     scrollbar-color: #888 transparent;
     /* Couleur de la barre et arrière-plan transparent */
 }
+
+/* Animation pour les formes GeoJSON */
+@keyframes layerTransition {
+    from {
+        transform: scale(1.2);
+        filter: blur(1px);
+        opacity: 0.5;
+    }
+
+    to {
+        transform: scale(1);
+        filter: blur(0);
+        opacity: 1;
+    }
+}
+
+/* Classe d'animation appliquée via JavaScript */
+.animate-layer path {
+    animation: layerTransition 0.5s ease-out;
+}

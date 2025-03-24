@@ -322,7 +322,7 @@
 
         var salleLayer0 = L.geoJSON(salleEtage0, {
           style: function (feature) {
-            return { color: "#146414", weight: 2, fillOpacity: 0.9, className: 'no-hover' };
+            return { color: "#146414", weight: 2, fillOpacity: 0.9, className: 'salle-feature no-hover' };
           },
           onEachFeature: function (feature, layer) {
             onEachSalleFeature(feature, layer, "0");
@@ -331,7 +331,7 @@
 
         var salleLayer1 = L.geoJSON(salleEtage1, {
           style: function (feature) {
-            return { color: "#2B942B", weight: 2, fillOpacity: 0.9, className: 'no-hover' };
+            return { color: "#2B942B", weight: 2, fillOpacity: 0.9, className: 'salle-feature no-hover' };
           },
           onEachFeature: function (feature, layer) {
             onEachSalleFeature(feature, layer, "1");
@@ -340,7 +340,7 @@
 
         var salleLayer2 = L.geoJSON(salleEtage2, {
           style: function (feature) {
-            return { color: "#093209", weight: 2, fillOpacity: 0.9, className: 'no-hover' }; // modifiez la couleur au besoin
+            return { color: "#093209", weight: 2, fillOpacity: 0.9, className: 'salle-feature no-hover' }; // modifiez la couleur au besoin
           },
           onEachFeature: function (feature, layer) {
             onEachSalleFeature(feature, layer, "2");
@@ -745,22 +745,27 @@
 
         map.on("zoomend", updateTooltipsVisibility);
               // Listen for layer changes and update tooltips
-              map.on("baselayerchange", function (e) {
-          updateTooltipsVisibility();
-          updateMarkersVisibility();
-          updateArrowsVisibility();
-        });
-
         map.on("zoomend", function () {
           updateTooltipsVisibility();
           updateButtonsVisibility();
         });
 
+        // Dans la section où vous initialisez la carte
         map.on("baselayerchange", function (e) {
+          // Ajouter la classe d'animation au conteneur de la carte
+          const container = map.getContainer();
+          container.classList.add('animate-layer');
+          
+          // Retirer la classe après l'animation
+          setTimeout(() => {
+            container.classList.remove('animate-layer');
+          }, 500);
+
+          // Code existant...
           updateTooltipsVisibility();
           updateMarkersVisibility();
           updateArrowsVisibility();
-          updateButtonsVisibility(); // Add this line to update buttons visibility on layer change
+          updateButtonsVisibility();
         });
 
         // --- 9. Basculement automatique du calque en fonction de la salle recherchée ---
@@ -1304,13 +1309,6 @@
           "Étage -1": etage2,
         };
         L.control.layers(baseLayers, null, { collapsed: false }).addTo(map);
-
-        // Listen for layer changes and update tooltips
-        map.on("baselayerchange", function (e) {
-          updateTooltipsVisibility();
-          updateMarkersVisibility();
-          updateArrowsVisibility();
-        });
 
 
         map.removeLayer(etage1);
