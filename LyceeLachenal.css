@@ -601,10 +601,9 @@ body.dark-mode .leaflet-control-search .search-alert {
 
 @keyframes layerTransition {
     from {
-        transform: scale(1.5);
-        /* Augmentez ce facteur selon l'effet désiré */
-        filter: blur(10px);
-        opacity: 0;
+        transform: scale(1.2);
+        filter: blur(2px);
+        opacity: 0.8;
     }
 
     to {
@@ -615,8 +614,30 @@ body.dark-mode .leaflet-control-search .search-alert {
 }
 
 .animate-layer path {
-    animation: layerTransition 0.5s ease-out;
+    animation: layerTransition 0.5s cubic-bezier(0.1, 0.2, 0.6, 1);
     transform-origin: var(--origin-x) var(--origin-y);
     /* Dynamique via JS */
     transform-box: fill-box;
+}
+
+/* Animation des résultats de recherche */
+@keyframes searchResultAppear {
+    from {
+        opacity: 0;
+        filter: blur(8px);
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateX(0);
+    }
+}
+
+/* Appliquer l'animation aux éléments de liste */
+.leaflet-control-search .search-tooltip li {
+    animation: searchResultAppear 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    animation-fill-mode: backwards;
+    transition: all 0.2s;
 }
