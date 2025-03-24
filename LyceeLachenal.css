@@ -602,8 +602,8 @@ body.dark-mode .leaflet-control-search .search-alert {
 /* Animation pour les formes GeoJSON */
 @keyframes layerTransition {
     from {
-        transform: scale(1.2);
-        filter: blur(1px);
+        transform: scale(1.1);
+        filter: blur(10px);
         opacity: 0.5;
     }
 
