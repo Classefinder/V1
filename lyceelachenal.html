@@ -1549,7 +1549,7 @@
           }
         });
 
-        // Gestionnaire d'événement pour les résultats de recherche
+// Gestionnaire d'événement pour les résultats de recherche
 searchControlStart.on('search:show', function(e) {
   const tooltip = document.querySelector('.search-tooltip');
   
@@ -1570,7 +1570,6 @@ searchControlStart.on('search:show', function(e) {
 
 // Version pour la deuxième barre de recherche (si nécessaire)
 searchControlEnd.on('search:show', function(e) {
-  // Même code que ci-dessus...
   const tooltip = document.querySelector('.search-tooltip');
   
   // Réinitialiser l'animation à chaque nouvelle recherche
@@ -1586,6 +1585,7 @@ searchControlEnd.on('search:show', function(e) {
       item.style.transform = 'none'; // Réinitialise la transformation
     });
   });
+  // Même code que ci-dessus...
 });
 
         function getRouteAndPoints(start, end) {
