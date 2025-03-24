@@ -1178,6 +1178,44 @@
           }
         });
 
+// Gestionnaire d'événement pour les résultats de recherche
+searchControlStart.on('search:show', function(e) {
+  const tooltip = document.querySelector('.search-tooltip');
+  
+  // Réinitialiser l'animation à chaque nouvelle recherche
+  tooltip.style.animation = 'none';
+  void tooltip.offsetWidth; // Déclenche un reflow
+  tooltip.style.animation = 'searchResultAppear 0.3s ease-out';
+  
+  // Animation individuelle pour chaque résultat
+  const items = tooltip.querySelectorAll('li');
+  items.forEach((item, index) => {
+    item.style.animationDelay = `${index * 50}ms`;
+    item.addEventListener('animationend', () => {
+      item.style.transform = 'none'; // Réinitialise la transformation
+    });
+  });
+});
+
+// Version pour la deuxième barre de recherche (si nécessaire)
+searchControlEnd.on('search:show', function(e) {
+  const tooltip = document.querySelector('.search-tooltip');
+  
+  // Réinitialiser l'animation à chaque nouvelle recherche
+  tooltip.style.animation = 'none';
+  void tooltip.offsetWidth; // Déclenche un reflow
+  tooltip.style.animation = 'searchResultAppear 0.3s ease-out';
+  
+  // Animation individuelle pour chaque résultat
+  const items = tooltip.querySelectorAll('li');
+  items.forEach((item, index) => {
+    item.style.animationDelay = `${index * 50}ms`;
+    item.addEventListener('animationend', () => {
+      item.style.transform = 'none'; // Réinitialise la transformation
+    });
+  });
+  // Même code que ci-dessus...
+});
 
         function getRouteAndPoints(start, end) {
           if (!start || !end || !Array.isArray(start) || !Array.isArray(end) || start.length !== 2 || end.length !== 2) {
