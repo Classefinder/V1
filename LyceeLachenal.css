@@ -599,12 +599,12 @@ body.dark-mode .leaflet-control-search .search-alert {
     /* Couleur de la barre et arrière-plan transparent */
 }
 
-/* Animation pour les formes GeoJSON */
 @keyframes layerTransition {
     from {
-        transform: scale(1.1);
+        transform: scale(1.5);
+        /* Augmentez ce facteur selon l'effet désiré */
         filter: blur(10px);
-        opacity: 0.5;
+        opacity: 0;
     }
 
     to {
@@ -614,7 +614,9 @@ body.dark-mode .leaflet-control-search .search-alert {
     }
 }
 
-/* Classe d'animation appliquée via JavaScript */
 .animate-layer path {
     animation: layerTransition 0.5s ease-out;
+    transform-origin: var(--origin-x) var(--origin-y);
+    /* Dynamique via JS */
+    transform-box: fill-box;
 }
