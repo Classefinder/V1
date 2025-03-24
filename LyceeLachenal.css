@@ -620,22 +620,27 @@ body.dark-mode .leaflet-control-search .search-alert {
 
 /* Animation des résultats de recherche */
 @keyframes searchResultAppear {
-    from {
+    0% {
         opacity: 0;
-        filter: blur(8px);
-        transform: translateX(20px);
+        filter: blur(10px);
+        transform: translateY(-20px);
     }
 
-    to {
+    90% {
+        opacity: 1;
+        filter: blur(1px);
+    }
+
+    100% {
         opacity: 1;
         filter: blur(0);
-        transform: translateX(0);
+        transform: translateY(0);
     }
 }
 
 /* Appliquer l'animation aux éléments de liste */
 .leaflet-control-search .search-tooltip li {
-    animation: searchResultAppear 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    animation: searchResultAppear 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.10);
     animation-fill-mode: backwards;
     transition: all 0.2s;
 }
