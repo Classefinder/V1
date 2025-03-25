@@ -241,8 +241,8 @@ body.dark-mode .leaflet-control-search .search-tooltip li {
 #dark-mode-toggle {
     z-index: 1000;
     border-radius: 15px;
-    width: 50px;
-    height: 50px;
+    width: 46.5px;
+    height: 46.5px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -286,8 +286,8 @@ body.dark-mode .leaflet-control-search .search-tooltip li {
 .leaflet-control-locate a {
     cursor: pointer;
     border-radius: 15px !important;
-    width: 47px !important;
-    height: 47px !important;
+    width: 42.5px !important;
+    height: 42.5px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -295,8 +295,8 @@ body.dark-mode .leaflet-control-search .search-tooltip li {
 }
 
 .leaflet-control-locate a .leaflet-control-locate-location-arrow {
-    width: 50px;
-    height: 50px;
+    width: 46.5px !important;
+    height: 46.5px !important;
     background: url('./images/locate.svg') no-repeat center center !important;
     background-size: 85% !important;
     transition: transform 0.3s ease;
@@ -349,7 +349,8 @@ body.dark-mode .leaflet-control-search .search-tooltip li {
 
     .leaflet-control-locate {
         position: relative;
-        top: 285px;
+        top: 220px;
+        right: 56.5px;
     }
 
     .leaflet-control-search {
@@ -374,7 +375,7 @@ body.dark-mode .leaflet-control-search .search-tooltip li {
 
     #dark-mode-toggle {
         position: absolute;
-        top: 235px;
+        top: 230px;
         right: 10px;
     }
 
@@ -427,12 +428,13 @@ body.dark-mode .leaflet-control-search .search-tooltip li {
 
     .leaflet-control-locate {
         position: relative;
-        top: 155px;
+        top: 90px;
+        right: 56.5px;
     }
 
     #dark-mode-toggle {
         position: absolute;
-        top: 105px;
+        top: 100px;
         right: 10px;
     }
 
