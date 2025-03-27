@@ -1,13 +1,13 @@
 <libraries>
   <library
-      name="__local_aars__:/home/aurelien/Documents/flutter-test/test/build/app/intermediates/flutter/release/libs.jar:unspecified@jar"
-      jars="/home/aurelien/Documents/flutter-test/test/build/app/intermediates/flutter/release/libs.jar"
-      resolved="__local_aars__:/home/aurelien/Documents/flutter-test/test/build/app/intermediates/flutter/release/libs.jar:unspecified"/>
+      name="__local_aars__:/home/aurelien/Documents/GitHub/V1/App/build/app/intermediates/flutter/release/libs.jar:unspecified@jar"
+      jars="/home/aurelien/Documents/GitHub/V1/App/build/app/intermediates/flutter/release/libs.jar"
+      resolved="__local_aars__:/home/aurelien/Documents/GitHub/V1/App/build/app/intermediates/flutter/release/libs.jar:unspecified"/>
   <library
       name=":@@:shared_preferences_android::release"
       jars="/home/aurelien/.gradle/caches/8.10.2/transforms/f5216a547465213cb8b48f7f4143a023/transformed/out/jars/classes.jar:/home/aurelien/.gradle/caches/8.10.2/transforms/f5216a547465213cb8b48f7f4143a023/transformed/out/jars/libs/R.jar"
       resolved="io.flutter.plugins.sharedpreferences:shared_preferences_android:1.0-SNAPSHOT"
-      partialResultsDir="/home/aurelien/Documents/flutter-test/test/build/shared_preferences_android/intermediates/lint_vital_partial_results/release/lintVitalAnalyzeRelease/out"
+      partialResultsDir="/home/aurelien/Documents/GitHub/V1/App/build/shared_preferences_android/intermediates/lint_vital_partial_results/release/lintVitalAnalyzeRelease/out"
       folder="/home/aurelien/.gradle/caches/8.10.2/transforms/f5216a547465213cb8b48f7f4143a023/transformed/out"
       manifest="AndroidManifest.xml"
       resFolder="res"
@@ -21,7 +21,7 @@
       name=":@@:webview_flutter_android::release"
       jars="/home/aurelien/.gradle/caches/8.10.2/transforms/ccfcefc445a00dece804ecf9bae54f61/transformed/out/jars/classes.jar:/home/aurelien/.gradle/caches/8.10.2/transforms/ccfcefc445a00dece804ecf9bae54f61/transformed/out/jars/libs/R.jar"
       resolved="io.flutter.plugins.webviewflutter:webview_flutter_android:1.0-SNAPSHOT"
-      partialResultsDir="/home/aurelien/Documents/flutter-test/test/build/webview_flutter_android/intermediates/lint_vital_partial_results/release/lintVitalAnalyzeRelease/out"
+      partialResultsDir="/home/aurelien/Documents/GitHub/V1/App/build/webview_flutter_android/intermediates/lint_vital_partial_results/release/lintVitalAnalyzeRelease/out"
       folder="/home/aurelien/.gradle/caches/8.10.2/transforms/ccfcefc445a00dece804ecf9bae54f61/transformed/out"
       manifest="AndroidManifest.xml"
       resFolder="res"
@@ -39,7 +39,7 @@
       name=":@@:flutter_inappwebview_android::release"
       jars="/home/aurelien/.gradle/caches/8.10.2/transforms/7bc10f5055c23f454fe8b371dff202a8/transformed/out/jars/classes.jar:/home/aurelien/.gradle/caches/8.10.2/transforms/7bc10f5055c23f454fe8b371dff202a8/transformed/out/jars/libs/R.jar"
       resolved="com.pichillilorenzo.flutter_inappwebview_android:flutter_inappwebview_android:1.0-SNAPSHOT"
-      partialResultsDir="/home/aurelien/Documents/flutter-test/test/build/flutter_inappwebview_android/intermediates/lint_vital_partial_results/release/lintVitalAnalyzeRelease/out"
+      partialResultsDir="/home/aurelien/Documents/GitHub/V1/App/build/flutter_inappwebview_android/intermediates/lint_vital_partial_results/release/lintVitalAnalyzeRelease/out"
       folder="/home/aurelien/.gradle/caches/8.10.2/transforms/7bc10f5055c23f454fe8b371dff202a8/transformed/out"
       manifest="AndroidManifest.xml"
       resFolder="res"
@@ -53,7 +53,7 @@
       name=":@@:geolocator_android::release"
       jars="/home/aurelien/.gradle/caches/8.10.2/transforms/c490e3402d7389767dd2536f7d6fb41c/transformed/out/jars/classes.jar:/home/aurelien/.gradle/caches/8.10.2/transforms/c490e3402d7389767dd2536f7d6fb41c/transformed/out/jars/libs/R.jar"
       resolved="com.baseflow.geolocator:geolocator_android:1.0"
-      partialResultsDir="/home/aurelien/Documents/flutter-test/test/build/geolocator_android/intermediates/lint_vital_partial_results/release/lintVitalAnalyzeRelease/out"
+      partialResultsDir="/home/aurelien/Documents/GitHub/V1/App/build/geolocator_android/intermediates/lint_vital_partial_results/release/lintVitalAnalyzeRelease/out"
       folder="/home/aurelien/.gradle/caches/8.10.2/transforms/c490e3402d7389767dd2536f7d6fb41c/transformed/out"
       manifest="AndroidManifest.xml"
       resFolder="res"

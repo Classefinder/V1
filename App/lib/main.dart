@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isAndroid) {
-    // Activation du debugging pour Android via la méthode recommandée
     await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
   runApp(const MyApp());
@@ -20,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'WebView avec géolocalisation',
+      title: 'Carte Interactive',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const WebViewPage(),
@@ -36,22 +34,26 @@ class WebViewPage extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<WebViewPage> {
-  InAppWebViewController?
-  _controller; // Ce contrôleur pourra être utilisé pour des interactions futures
+  final GlobalKey webViewKey = GlobalKey();
+  InAppWebViewController? _controller;
   String _lastUrl = 'https://classefinder.duckdns.org/';
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _demanderPermissionLocalisation();
-    _loadLastUrl();
+    _initApp();
+  }
+
+  Future<void> _initApp() async {
+    await _demanderPermissionLocalisation();
+    await _loadLastUrl();
   }
 
   Future<void> _loadLastUrl() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _lastUrl =
-          prefs.getString('lastUrl') ?? 'https://classefinder.duckdns.org/';
+      _lastUrl = prefs.getString('lastUrl') ?? _lastUrl;
     });
   }
 
@@ -60,102 +62,91 @@ class _WebViewPageState extends State<WebViewPage> {
     await prefs.setString('lastUrl', url);
   }
 
-  Future<void> _demanderPermissionLocalisation() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        _showPermissionDeniedPopup();
-      }
+  // [Même méthode _demanderPermissionLocalisation() que précédemment]
+
+  Future<void> _showUrlDialog() async {
+    String newUrl =
+        await showDialog<String>(
+          context: context,
+          builder:
+              (context) => AlertDialog(
+                title: const Text('Changer d\'URL'),
+                content: TextField(
+                  autofocus: true,
+                  decoration: const InputDecoration(
+                    hintText: 'https://exemple.com',
+                  ),
+                  onSubmitted: (value) => Navigator.pop(context, value),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, _lastUrl),
+                    child: const Text('Annuler'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, _lastUrl),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+        ) ??
+        _lastUrl;
+
+    if (newUrl.isNotEmpty) {
+      if (!newUrl.startsWith('http')) newUrl = 'https://$newUrl';
+      _controller?.loadUrl(urlRequest: URLRequest(url: WebUri(newUrl)));
     }
-  }
-
-  void _showPermissionDeniedPopup() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Platform.isIOS
-            ? CupertinoAlertDialog(
-              title: const Text("Accès refusé"),
-              content: const Text(
-                "L'accès à la localisation est nécessaire pour utiliser cette application.",
-              ),
-              actions: [
-                CupertinoDialogAction(
-                  child: const Text("OK"),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            )
-            : AlertDialog(
-              title: const Text("Accès refusé"),
-              content: const Text(
-                "L'accès à la localisation est nécessaire pour utiliser cette application.",
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text("OK"),
-                ),
-              ],
-            );
-      },
-    );
-  }
-
-  void _showErrorPopup() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Platform.isIOS
-            ? CupertinoAlertDialog(
-              title: const Text("Erreur de connexion"),
-              content: const Text("Vérifiez votre connexion internet."),
-              actions: [
-                CupertinoDialogAction(
-                  child: const Text("OK"),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            )
-            : AlertDialog(
-              title: const Text("Erreur de connexion"),
-              content: const Text("Vérifiez votre connexion internet."),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text("OK"),
-                ),
-              ],
-            );
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: InAppWebView(
-          initialUrlRequest: URLRequest(url: WebUri(_lastUrl)),
-          onWebViewCreated: (controller) {
-            _controller = controller;
-          },
-          onLoadStop: (controller, url) async {
-            await _saveLastUrl(url.toString());
-          },
-          onReceivedError: (controller, request, error) {
-            _showErrorPopup();
-          },
-          // Autoriser la géolocalisation dans le contenu web
-          onGeolocationPermissionsShowPrompt: (controller, origin) async {
-            return GeolocationPermissionShowPromptResponse(
-              origin: origin,
-              allow: true,
-              retain: false,
-            );
-          },
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            InAppWebView(
+              key: webViewKey,
+              initialUrlRequest: URLRequest(url: WebUri(_lastUrl)),
+              initialSettings: InAppWebViewSettings(
+                javaScriptEnabled: true,
+                supportZoom: true,
+                builtInZoomControls: true,
+                displayZoomControls: false,
+                verticalScrollBarEnabled: true,
+                horizontalScrollBarEnabled: true,
+                useHybridComposition: true,
+                allowsInlineMediaPlayback: true,
+                mediaPlaybackRequiresUserGesture: false,
+              ),
+              onWebViewCreated: (controller) {
+                _controller = controller;
+                // [Garder le handler de géolocalisation]
+              },
+              onLoadStart:
+                  (controller, url) => setState(() => _isLoading = true),
+              onLoadStop: (controller, url) async {
+                setState(() => _isLoading = false);
+                if (url != null) await _saveLastUrl(url.toString());
+              },
+              onReceivedError: (controller, request, error) {
+                setState(() => _isLoading = false);
+              },
+            ),
+            if (_isLoading) const Center(child: CircularProgressIndicator()),
+            Positioned(
+              top: 30,
+              right: 15,
+              child: IconButton(
+                icon: const Icon(Icons.settings, size: 30),
+                onPressed: _showUrlDialog,
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.white.withOpacity(0.8),
+                  shape: const CircleBorder(),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,4 +1,4 @@
-# The proguard configuration file for the following section is /home/aurelien/Documents/flutter-test/test/build/app/intermediates/aapt_proguard_file/release/processReleaseResources/aapt_rules.txt
+# The proguard configuration file for the following section is /home/aurelien/Documents/GitHub/V1/App/build/app/intermediates/aapt_proguard_file/release/processReleaseResources/aapt_rules.txt
 -keep class android.app.Application { <init>(); }
 -keep class androidx.core.app.CoreComponentFactory { <init>(); }
 -keep class androidx.profileinstaller.ProfileInstallReceiver { <init>(); }
@@ -79,8 +79,8 @@
 -keepclassmembers class * { *** shareButtonClicked(android.view.MenuItem); }
 
 
-# End of content from /home/aurelien/Documents/flutter-test/test/build/app/intermediates/aapt_proguard_file/release/processReleaseResources/aapt_rules.txt
-# The proguard configuration file for the following section is /home/aurelien/Documents/flutter-test/test/build/app/intermediates/default_proguard_files/global/proguard-android-optimize.txt-8.7.0
+# End of content from /home/aurelien/Documents/GitHub/V1/App/build/app/intermediates/aapt_proguard_file/release/processReleaseResources/aapt_rules.txt
+# The proguard configuration file for the following section is /home/aurelien/Documents/GitHub/V1/App/build/app/intermediates/default_proguard_files/global/proguard-android-optimize.txt-8.7.0
 # This is a configuration file for ProGuard.
 # http://proguard.sourceforge.net/index.html#manual/usage.html
 #
@@ -171,7 +171,7 @@
 # These classes are duplicated between android.jar and core-lambda-stubs.jar.
 -dontnote java.lang.invoke.**
 
-# End of content from /home/aurelien/Documents/flutter-test/test/build/app/intermediates/default_proguard_files/global/proguard-android-optimize.txt-8.7.0
+# End of content from /home/aurelien/Documents/GitHub/V1/App/build/app/intermediates/default_proguard_files/global/proguard-android-optimize.txt-8.7.0
 # The proguard configuration file for the following section is /home/aurelien/flutter/packages/flutter_tools/gradle/flutter_proguard_rules.pro
 # Build the ephemeral app in a module project.
 # Prevents: Warning: library class <plugin-package> depends on program class io.flutter.plugin.**
@@ -189,7 +189,7 @@
 -keep,allowshrinking,allowobfuscation class <1>
 
 # End of content from /home/aurelien/flutter/packages/flutter_tools/gradle/flutter_proguard_rules.pro
-# The proguard configuration file for the following section is /home/aurelien/Documents/flutter-test/test/build/flutter_inappwebview_android/intermediates/consumer_proguard_dir/release/exportReleaseConsumerProguardFiles/lib0/proguard.txt
+# The proguard configuration file for the following section is /home/aurelien/Documents/GitHub/V1/App/build/flutter_inappwebview_android/intermediates/consumer_proguard_dir/release/exportReleaseConsumerProguardFiles/lib0/proguard.txt
 # WebView
 -keepattributes *JavascriptInterface*
 -keepclassmembers class * {
@@ -209,7 +209,7 @@
 -keep class com.pichillilorenzo.flutter_inappwebview_android.** { *; }
 
 -dontwarn android.window.BackEvent
-# End of content from /home/aurelien/Documents/flutter-test/test/build/flutter_inappwebview_android/intermediates/consumer_proguard_dir/release/exportReleaseConsumerProguardFiles/lib0/proguard.txt
+# End of content from /home/aurelien/Documents/GitHub/V1/App/build/flutter_inappwebview_android/intermediates/consumer_proguard_dir/release/exportReleaseConsumerProguardFiles/lib0/proguard.txt
 # The proguard configuration file for the following section is /home/aurelien/.gradle/caches/8.10.2/transforms/0098a6e93522fecc805d8900172003dc/transformed/preference-1.2.1/proguard.txt
 # Copyright (C) 2015 The Android Open Source Project
 #

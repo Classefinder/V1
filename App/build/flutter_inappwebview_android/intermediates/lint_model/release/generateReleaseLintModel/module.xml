@@ -5,7 +5,7 @@
     type="LIBRARY"
     maven="com.pichillilorenzo.flutter_inappwebview_android:flutter_inappwebview_android:1.0-SNAPSHOT"
     agpVersion="8.7.0"
-    buildFolder="/home/aurelien/Documents/flutter-test/test/build/flutter_inappwebview_android"
+    buildFolder="/home/aurelien/Documents/GitHub/V1/App/build/flutter_inappwebview_android"
     bootClassPath="/home/aurelien/Android/Sdk/platforms/android-34/android.jar:/home/aurelien/Android/Sdk/build-tools/34.0.0/core-lambda-stubs.jar"
     javaSourceLevel="1.8"
     compileTarget="android-34">

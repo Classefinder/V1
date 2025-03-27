@@ -5,7 +5,7 @@
     type="LIBRARY"
     maven="com.baseflow.geolocator:geolocator_android:1.0"
     agpVersion="8.7.0"
-    buildFolder="/home/aurelien/Documents/flutter-test/test/build/geolocator_android"
+    buildFolder="/home/aurelien/Documents/GitHub/V1/App/build/geolocator_android"
     bootClassPath="/home/aurelien/Android/Sdk/platforms/android-35/android.jar:/home/aurelien/Android/Sdk/build-tools/34.0.0/core-lambda-stubs.jar"
     javaSourceLevel="1.8"
     compileTarget="android-35"

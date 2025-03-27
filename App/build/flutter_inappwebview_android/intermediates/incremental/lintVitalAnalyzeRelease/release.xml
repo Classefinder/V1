@@ -5,10 +5,10 @@
     minSdkVersion="19"
     targetSdkVersion="19"
     shrinking="true"
-    mergedManifest="/home/aurelien/Documents/flutter-test/test/build/flutter_inappwebview_android/intermediates/merged_manifest/release/processReleaseManifest/AndroidManifest.xml"
-    proguardFiles="/home/aurelien/Documents/flutter-test/test/build/flutter_inappwebview_android/intermediates/default_proguard_files/global/proguard-android.txt-8.7.0:proguard-rules.pro"
+    mergedManifest="/home/aurelien/Documents/GitHub/V1/App/build/flutter_inappwebview_android/intermediates/merged_manifest/release/processReleaseManifest/AndroidManifest.xml"
+    proguardFiles="/home/aurelien/Documents/GitHub/V1/App/build/flutter_inappwebview_android/intermediates/default_proguard_files/global/proguard-android.txt-8.7.0:proguard-rules.pro"
     consumerProguardFiles="proguard-rules.pro"
-    partialResultsDir="/home/aurelien/Documents/flutter-test/test/build/flutter_inappwebview_android/intermediates/lint_vital_partial_results/release/lintVitalAnalyzeRelease/out"
+    partialResultsDir="/home/aurelien/Documents/GitHub/V1/App/build/flutter_inappwebview_android/intermediates/lint_vital_partial_results/release/lintVitalAnalyzeRelease/out"
     desugaredMethodsFiles="/home/aurelien/.gradle/caches/8.10.2/transforms/845d9227b0aa7afd95c9677206a478c7/transformed/D8BackportedDesugaredMethods.txt">
   <buildFeatures
       namespacing="REQUIRED"/>
@@ -24,11 +24,11 @@
   <testFixturesSourceProviders>
   </testFixturesSourceProviders>
   <artifact
-      classOutputs="/home/aurelien/Documents/flutter-test/test/build/flutter_inappwebview_android/intermediates/javac/release/compileReleaseJavaWithJavac/classes:/home/aurelien/Documents/flutter-test/test/build/flutter_inappwebview_android/intermediates/compile_r_class_jar/release/generateReleaseRFile/R.jar"
+      classOutputs="/home/aurelien/Documents/GitHub/V1/App/build/flutter_inappwebview_android/intermediates/javac/release/compileReleaseJavaWithJavac/classes:/home/aurelien/Documents/GitHub/V1/App/build/flutter_inappwebview_android/intermediates/compile_r_class_jar/release/generateReleaseRFile/R.jar"
       type="MAIN"
       applicationId="com.pichillilorenzo.flutter_inappwebview_android"
-      generatedSourceFolders="/home/aurelien/Documents/flutter-test/test/build/flutter_inappwebview_android/generated/ap_generated_sources/release/out"
-      generatedResourceFolders="/home/aurelien/Documents/flutter-test/test/build/flutter_inappwebview_android/generated/res/resValues/release"
+      generatedSourceFolders="/home/aurelien/Documents/GitHub/V1/App/build/flutter_inappwebview_android/generated/ap_generated_sources/release/out"
+      generatedResourceFolders="/home/aurelien/Documents/GitHub/V1/App/build/flutter_inappwebview_android/generated/res/resValues/release"
       desugaredMethodsFiles="/home/aurelien/.gradle/caches/8.10.2/transforms/845d9227b0aa7afd95c9677206a478c7/transformed/D8BackportedDesugaredMethods.txt">
   </artifact>
 </variant>
