@@ -27,9 +27,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:document-units="mm"
-     inkscape:zoom="0.7071068"
-     inkscape:cx="922.06722"
-     inkscape:cy="1096.0155"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="883.88347"
+     inkscape:cy="1169.5546"
      inkscape:window-width="1920"
      inkscape:window-height="1011"
      inkscape:window-x="0"
@@ -387,7 +387,10 @@
            r="2.5" /></g></g><g
        id="g15"
        inkscape:label="locate"><path
-         style="fill:none;stroke:#232fb8;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-         d="m 304.82113,273.32753 21.31359,6.48675 6.48674,21.31359 17.1035,-40.82722 c 0,-2.71821 -1.35911,-4.07733 -4.07732,-4.07733 z"
+         style="fill:none;stroke:#232fb8;stroke-width:5.00007;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+         d="m 315.00005,272.00028 22.00032,6.00009 6.00009,22.00032 17.00025,-45.00066 z"
          id="path8"
-         sodipodi:nodetypes="cccccc" /></g></g></svg>
+         sodipodi:nodetypes="ccccc"
+         inkscape:export-filename="locate-on.svg"
+         inkscape:export-xdpi="4.0069818"
+         inkscape:export-ydpi="4.0069818" /></g></g></svg>
