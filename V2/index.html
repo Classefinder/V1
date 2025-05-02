@@ -124,6 +124,9 @@
         function handleLocation(position) {
             const { latitude, longitude } = position.coords;
 
+            // Centre la carte sur la position de l'utilisateur
+            map.setView([latitude, longitude], 13);
+
             if (isWithinPerimeter(latitude, longitude)) {
                 // L'utilisateur est dans le périmètre
                 document.getElementById('map').style.display = 'block';
@@ -133,8 +136,9 @@
                 // L'utilisateur est hors du périmètre
                 document.getElementById('map').style.display = 'block';
                 document.getElementById('message').style.display = 'none';
+
+                // Ajout du cercle pour indiquer le périmètre
                 L.circle(center, { radius, color: 'red' }).addTo(map);
-                L.marker([latitude, longitude]).addTo(map).bindPopup("Vous êtes ici").openPopup();
             }
         }
 
@@ -144,20 +148,27 @@
             // Ajoutez ici le reste de votre site web
         }
 
+        // Ajout du contrôle de localisation
+        const locateControl = L.control.locate({
+            position: 'topright',
+            flyTo: true, // Centre la carte sur la position de l'utilisateur
+            strings: {
+                title: "Afficher ma position"
+            },
+            locateOptions: {
+                enableHighAccuracy: true
+            }
+        }).addTo(map);
+
+        // Forcer la localisation dès le chargement
+        locateControl.start();
+
         // Demande de localisation
         navigator.geolocation.getCurrentPosition(
             handleLocation,
             handleLocationDenied,
             { enableHighAccuracy: true }
         );
-
-        // Ajout du contrôle de localisation
-        L.control.locate({
-            position: 'topright',
-            strings: {
-                title: "Afficher ma position"
-            }
-        }).addTo(map);
     </script>
 </body>
 </html>
