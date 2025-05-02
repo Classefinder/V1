@@ -83,7 +83,8 @@
                 map.removeLayer(maplibreLayer); // Supprime l'ancienne couche
             }
             maplibreLayer = L.maplibreGL({
-                style: getMapStyle()
+                style: getMapStyle(),
+                pane: 'overlayPane' // Assure un rendu vectoriel fluide
             }).addTo(map); // Ajoute la nouvelle couche
         }
 
@@ -169,6 +170,45 @@
             handleLocationDenied,
             { enableHighAccuracy: true }
         );
+
+        // Création des Layer Groups pour les étages
+        const floor0 = L.layerGroup();
+        const floor1 = L.layerGroup();
+        const floor2 = L.layerGroup();
+
+        // Exemple de contenu pour chaque étage (modifiable)
+        L.marker([48.8566, 2.3522]).bindPopup("Rez-de-chaussée").addTo(floor0);
+        L.marker([48.857, 2.353]).bindPopup("1er étage").addTo(floor1);
+        L.marker([48.858, 2.354]).bindPopup("2ème étage").addTo(floor2);
+
+        // Ajout des Layer Groups à la carte
+        const baseLayers = {}; // Pas de couches de base supplémentaires
+        const overlays = {
+            "Rez-de-chaussée": floor0,
+            "1er étage": floor1,
+            "2ème étage": floor2
+        };
+
+        // Contrôle des couches (Layer Control)
+        const layerControl = L.control.layers(baseLayers, overlays, { collapsed: false }).addTo(map);
+
+        // Activer un seul étage à la fois (avec optimisation)
+        let isHandlingOverlay = false; // Drapeau pour éviter les boucles infinies
+        map.on('overlayadd', function (event) {
+            if (isHandlingOverlay) return; // Évite les boucles
+            isHandlingOverlay = true;
+
+            for (const layerName in overlays) {
+                if (layerName !== event.name) {
+                    map.removeLayer(overlays[layerName]); // Supprime les autres couches
+                }
+            }
+
+            isHandlingOverlay = false;
+        });
+
+        // Initialisation avec le rez-de-chaussée actif
+        floor0.addTo(map);
     </script>
 </body>
 </html>
