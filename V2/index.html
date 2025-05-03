@@ -8,26 +8,59 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol@0.81.0/dist/L.Control.Locate.min.css" />
   <style>
     #map { height: 100vh; margin:0; padding:0; }
-    .theme-toggle {
+
+    .custom-controls-wrapper {
       position: absolute;
       top: 10px;
-      right: 10px;
+      left: 10px;
+      background: white;
+      border: 1px solid gray;
+      border-radius: 10px;
+      padding: 10px;
       z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .button-row > * {
+      flex: 1;
+    }
+
+    .theme-toggle {
       background: none;
       border: none;
       cursor: pointer;
     }
+
     .theme-toggle img {
-      width: 32px;
-      height: 32px;
+      width: 24px;
+      height: 24px;
+    }
+
+    .leaflet-control-container {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <button id="themeToggle" class="theme-toggle">
-    <img id="themeIcon" src="https://cdn-icons-png.flaticon.com/512/1164/1164954.png" alt="Toggle Theme" />
-  </button>
   <div id="map"></div>
+  <div class="custom-controls-wrapper">
+    <div id="leaflet-control-container"></div>
+    <div class="button-row">
+      <div id="locate-placeholder"></div>
+      <button id="themeToggle" class="theme-toggle">
+        <img id="themeIcon" src="https://cdn-icons-png.flaticon.com/512/1164/1164954.png" alt="Toggle Theme" />
+      </button>
+    </div>
+  </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet.locatecontrol@0.81.0/dist/L.Control.Locate.min.js"></script>
@@ -42,7 +75,6 @@
     let currentStyle = window.matchMedia('(prefers-color-scheme: dark)').matches ? darkStyle : lightStyle;
 
     const map = L.map('map').setView([48.8566, 2.3522], 13);
-
     let glLayer = L.maplibreGL({ style: currentStyle }).addTo(map);
 
     const perimeterCenter = L.latLng(48.8566, 2.3522);
@@ -85,10 +117,18 @@
         const marker = L.marker(latlng).bindPopup('Bienvenue !');
         const overlay = L.layerGroup([marker]);
 
-        L.control.layers(
+        const layerControl = L.control.layers(
           { 'Maplibre Basemap': glLayer },
           { 'Marqueur Accès': overlay }
-        ).addTo(map);
+        );
+        layerControl.addTo(map);
+
+        const leafletControl = document.querySelector('.leaflet-control-layers');
+        const controlContainer = document.getElementById('leaflet-control-container');
+        if (leafletControl && controlContainer) {
+          controlContainer.appendChild(leafletControl);
+          leafletControl.style.display = 'block';
+        }
 
         overlay.addTo(map);
       }
@@ -117,7 +157,15 @@
 
     locateControl.start();
 
-    // Bouton de bascule de thème
+    // Déplacer le bouton de localisation dans le conteneur personnalisé
+    const locateBtn = document.querySelector('.leaflet-control-locate');
+    const locatePlaceholder = document.getElementById('locate-placeholder');
+    if (locateBtn && locatePlaceholder) {
+      locatePlaceholder.appendChild(locateBtn);
+      locateBtn.style.display = 'block';
+      locateBtn.style.zIndex = 1001;
+    }
+
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
 
@@ -125,8 +173,8 @@
       const isDark = currentStyle === darkStyle;
       currentStyle = isDark ? lightStyle : darkStyle;
       themeIcon.src = isDark
-        ? 'https://cdn-icons-png.flaticon.com/512/1164/1164954.png' // Soleil
-        : 'https://cdn-icons-png.flaticon.com/512/1164/1164950.png'; // Lune
+        ? 'https://cdn-icons-png.flaticon.com/512/1164/1164954.png'
+        : 'https://cdn-icons-png.flaticon.com/512/1164/1164950.png';
 
       map.removeLayer(glLayer);
       glLayer = L.maplibreGL({ style: currentStyle });
