@@ -1,214 +1,103 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carte Leaflet avec MapLibre</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
-    <style>
-        /* Styles de base */
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-        }
-        #map {
-            height: 100%;
-            width: 100%;
-        }
-        .theme-toggle {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.8);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 1000;
-        }
-        .theme-toggle img {
-            width: 20px;
-            height: 20px;
-        }
-        #message {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            font-family: Arial, sans-serif;
-            z-index: 1000;
-        }
-    </style>
+  <title>Carte Leaflet Simple</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol@0.81.0/dist/L.Control.Locate.min.css" />
+
+  <style>
+    #map { height: 100vh; }
+  </style>
 </head>
 <body>
-    <div id="map"></div>
-    <div id="message">La localisation est nécessaire pour utiliser ce site.</div>
-    <button class="theme-toggle" id="themeToggle">
-        <img src="https://cdn-icons-png.flaticon.com/512/169/169367.png" alt="Toggle Theme">
-    </button>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
-    <script src="../libs/maplibre-gl-leaflet/maplibre-gl-leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
-    <script>
-        // Initialisation de la carte
-        const map = L.map('map').setView([48.8566, 2.3522], 13); // Coordonnées de Paris
+  <div id="map"></div>
 
-        // Détection du mode clair/sombre
-        const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
-        let isDarkMode = prefersDarkScheme.matches;
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.locatecontrol@0.81.0/dist/L.Control.Locate.min.js"></script>
 
-        // Fonction pour obtenir le style de la carte
-        function getMapStyle() {
-            return isDarkMode
-                ? "https://api.maptiler.com/maps/3b544fc3-420c-4a93-a594-a99b71d941bb/style.json?key=BiyHHi8FTQZ233ADqskZ"
-                : "https://api.maptiler.com/maps/04c03a5d-804b-4c6f-9736-b7103fdb530b/style.json?key=BiyHHi8FTQZ233ADqskZ";
-        }
+  <script>
+    // Fonds de carte
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' });
+    const carto = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '© CartoDB' });
 
-        // Fonction pour recréer la couche MapLibre avec le style approprié
-        function updateMapStyle() {
-            if (maplibreLayer) {
-                map.removeLayer(maplibreLayer); // Supprime l'ancienne couche
-            }
-            maplibreLayer = L.maplibreGL({
-                style: getMapStyle(),
-                pane: 'overlayPane' // Assure un rendu vectoriel fluide
-            }).addTo(map); // Ajoute la nouvelle couche
-        }
+    // Carte
+    const map = L.map('map', { center: [48.8566, 2.3522], zoom: 13, layers: [osm] });
 
-        // Basculer entre les modes clair et sombre
-        function toggleTheme() {
-            isDarkMode = !isDarkMode;
-            updateMapStyle(); // Met à jour le style de la carte
-            document.body.style.backgroundColor = isDarkMode ? "#121212" : "#ffffff";
-        }
+    // Périmètre
+    const perimeterCenter = L.latLng(48.8566, 2.3522);
+    const perimeterRadius = 10000; // en mètres
+    const perimeterCircle = L.circle(perimeterCenter, { radius: perimeterRadius, color: 'red', fillOpacity: 0.1 });
 
-        // Initialisation de la couche MapLibre
-        let maplibreLayer;
-        updateMapStyle(); // Crée la couche initiale
+    // Flags pour éviter les appels répétés
+    let processed = false;
 
-        // Écouteur pour le bouton de bascule
-        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    // Fonctions de gestion
+    function onlyBaseMapWithNotice(message) {
+      perimeterCircle.addTo(map);
+      map.setView(perimeterCenter, 13);
+      L.popup({ closeOnClick: false, autoClose: false })
+        .setLatLng(perimeterCenter)
+        .setContent(message)
+        .openOn(map);
+    }
 
-        // Mise à jour initiale en fonction du système
-        document.body.style.backgroundColor = isDarkMode ? "#121212" : "#ffffff";
+    function onOutOfZone(latlng) {
+      if (processed) return;
+      processed = true;
+      perimeterCircle.addTo(map);
+      const bounds = L.latLngBounds([latlng, perimeterCenter]);
+      map.fitBounds(bounds.pad(0.25));
+      L.popup()
+        .setLatLng(latlng)
+        .setContent('Vous êtes hors de la zone autorisée.')
+        .openOn(map);
+    }
 
-        // Paramètres du périmètre
-        const center = [48.8566, 2.3522]; // Coordonnées du centre (modifiable)
-        const radius = 5000; // Rayon en mètres (modifiable)
+    function onAuthorizedZoneAccess() {
+      if (processed) return;
+      processed = true;
+      console.log('Accès autorisé : utilisateur dans la zone.');
+      const marker = L.marker(perimeterCenter).bindPopup('Paris');
+      const overlay = L.layerGroup([marker]);
+      L.control.layers({ 'OSM': osm, 'Carto Light': carto }, { 'Marqueur Paris': overlay }).addTo(map);
+      overlay.addTo(map);
+    }
 
-        // Fonction pour afficher un message si la localisation est refusée
-        function handleLocationDenied() {
-            document.getElementById('map').style.display = 'none';
-            document.getElementById('message').style.display = 'block';
-        }
+    // Contrôle de localisation
+    const locateControl = L.control.locate({
+      drawCircle: false,
+      showPopup: false,
+      keepCurrentZoomLevel: true,
+      flyTo: true,
+      cacheLocation: true,
+      watch: true,
+      locateOptions: { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
+    }).addTo(map);
 
-        // Fonction pour vérifier si l'utilisateur est dans le périmètre
-        function isWithinPerimeter(lat, lng) {
-            const distance = map.distance([lat, lng], center);
-            return distance <= radius;
-        }
+    // Événements
+    map.on('locationerror', function() {
+      if (processed) return;
+      processed = true;
+      onlyBaseMapWithNotice('Localisation requise pour accéder au contenu complet.');
+    });
 
-        // Fonction principale pour gérer la localisation
-        function handleLocation(position) {
-            const { latitude, longitude } = position.coords;
+    map.on('locationfound', function(e) {
+      if (processed) return;
+      const userLatLng = e.latlng;
+      const distance = userLatLng.distanceTo(perimeterCenter);
+      if (distance <= perimeterRadius) {
+        if (map.hasLayer(perimeterCircle)) map.removeLayer(perimeterCircle);
+        onAuthorizedZoneAccess();
+      } else {
+        onOutOfZone(userLatLng);
+      }
+    });
 
-            // Centre la carte sur la position de l'utilisateur
-            map.setView([latitude, longitude], 13);
-
-            if (isWithinPerimeter(latitude, longitude)) {
-                // L'utilisateur est dans le périmètre
-                document.getElementById('map').style.display = 'block';
-                document.getElementById('message').style.display = 'none';
-                onUserInPerimeter(); // Exécute le contenu personnalisé
-            } else {
-                // L'utilisateur est hors du périmètre
-                document.getElementById('map').style.display = 'block';
-                document.getElementById('message').style.display = 'none';
-
-                // Ajout du cercle pour indiquer le périmètre
-                L.circle(center, { radius, color: 'red' }).addTo(map);
-            }
-        }
-
-        // Fonction personnalisée à exécuter si l'utilisateur est dans le périmètre
-        function onUserInPerimeter() {
-            console.log("L'utilisateur est dans le périmètre. Ajoutez votre contenu ici.");
-            // Ajoutez ici le reste de votre site web
-        }
-
-        // Ajout du contrôle de localisation
-        const locateControl = L.control.locate({
-            position: 'topright',
-            flyTo: true, // Centre la carte sur la position de l'utilisateur
-            strings: {
-                title: "Afficher ma position"
-            },
-            locateOptions: {
-                enableHighAccuracy: true
-            }
-        }).addTo(map);
-
-        // Forcer la localisation dès le chargement
-        locateControl.start();
-
-        // Demande de localisation
-        navigator.geolocation.getCurrentPosition(
-            handleLocation,
-            handleLocationDenied,
-            { enableHighAccuracy: true }
-        );
-
-        // Création des Layer Groups pour les étages
-        const floor0 = L.layerGroup();
-        const floor1 = L.layerGroup();
-        const floor2 = L.layerGroup();
-
-        // Exemple de contenu pour chaque étage (modifiable)
-        L.marker([48.8566, 2.3522]).bindPopup("Rez-de-chaussée").addTo(floor0);
-        L.marker([48.857, 2.353]).bindPopup("1er étage").addTo(floor1);
-        L.marker([48.858, 2.354]).bindPopup("2ème étage").addTo(floor2);
-
-        // Ajout des Layer Groups à la carte
-        const baseLayers = {}; // Pas de couches de base supplémentaires
-        const overlays = {
-            "Rez-de-chaussée": floor0,
-            "1er étage": floor1,
-            "2ème étage": floor2
-        };
-
-        // Contrôle des couches (Layer Control)
-        const layerControl = L.control.layers(baseLayers, overlays, { collapsed: false }).addTo(map);
-
-        // Activer un seul étage à la fois (avec optimisation)
-        let isHandlingOverlay = false; // Drapeau pour éviter les boucles infinies
-        map.on('overlayadd', function (event) {
-            if (isHandlingOverlay) return; // Évite les boucles
-            isHandlingOverlay = true;
-
-            for (const layerName in overlays) {
-                if (layerName !== event.name) {
-                    map.removeLayer(overlays[layerName]); // Supprime les autres couches
-                }
-            }
-
-            isHandlingOverlay = false;
-        });
-
-        // Initialisation avec le rez-de-chaussée actif
-        floor0.addTo(map);
-    </script>
+    // Démarrage : déclenche la géolocalisation via le plugin (une seule fois)
+    locateControl.start();
+  </script>
 </body>
 </html>
