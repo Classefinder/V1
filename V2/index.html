@@ -7,7 +7,8 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol@0.81.0/dist/L.Control.Locate.min.css" />
   <style>
-    #map { height: 100vh; margin:0; padding:0; }
+    body { margin: 0; }
+    #map { height: 100vh; width: 100%; display: block; }
 
     .custom-controls-wrapper {
       position: absolute;
@@ -18,16 +19,33 @@
       border-radius: 10px;
       padding: 10px;
       z-index: 1000;
+      width: 150px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
+    }
+
+    /* Remove default backgrounds/borders */
+    .leaflet-control-locate a,
+    .leaflet-control-layers {
+      background: none !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Separators */
+    .separator {
+      height: 1px;
+      background: gray;
+      width: 100%;
+      margin: 4px 0;
     }
 
     .button-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 4px;
     }
 
     .button-row > * {
@@ -38,24 +56,24 @@
       background: none;
       border: none;
       cursor: pointer;
+      padding: 0;
     }
 
-    .theme-toggle img {
-      width: 24px;
-      height: 24px;
-    }
-
-    .leaflet-control-container {
-      display: none;
-    }
+    .theme-toggle img { width: 24px; height: 24px; }
   </style>
 </head>
 <body>
   <div id="map"></div>
+
   <div class="custom-controls-wrapper">
-    <div id="leaflet-control-container"></div>
+    <!-- Layer control -->
+    <div id="leaflet-control-container" class="leaflet-control-layers"></div>
+    <div class="separator"></div>
+
+    <!-- Bottom buttons -->
     <div class="button-row">
-      <div id="locate-placeholder"></div>
+      <div id="locate-placeholder" class="leaflet-control-locate"></div>
+      <div class="sep-vertical"></div>
       <button id="themeToggle" class="theme-toggle">
         <img id="themeIcon" src="https://cdn-icons-png.flaticon.com/512/1164/1164954.png" alt="Toggle Theme" />
       </button>
@@ -71,7 +89,6 @@
   <script>
     const lightStyle = 'https://api.maptiler.com/maps/3b544fc3-420c-4a93-a594-a99b71d941bb/style.json?key=BiyHHi8FTQZ233ADqskZ';
     const darkStyle = 'https://api.maptiler.com/maps/04c03a5d-804b-4c6f-9736-b7103fdb530b/style.json?key=BiyHHi8FTQZ233ADqskZ';
-
     let currentStyle = window.matchMedia('(prefers-color-scheme: dark)').matches ? darkStyle : lightStyle;
 
     const map = L.map('map').setView([48.8566, 2.3522], 13);
@@ -82,104 +99,20 @@
     const perimeterCircle = L.circle(perimeterCenter, { radius: perimeterRadius, color: 'red', fillOpacity: 0.1 });
 
     let processed = false;
+    function onlyBaseMapWithNotice(msg) { if (!processed) { processed=true; perimeterCircle.addTo(map); map.setView(perimeterCenter,13); L.popup({closeOnClick:false,autoClose:false}).setLatLng(perimeterCenter).setContent(msg).openOn(map);} }
+    function onOutOfZone(latlng) { if(!processed){processed=true; perimeterCircle.addTo(map); const bounds=L.latLngBounds([latlng,perimeterCenter]); map.fitBounds(bounds.pad(0.25)); L.popup().setLatLng(latlng).setContent('Vous êtes hors de la zone autorisée.').openOn(map);} }
+    function onAuthorizedZoneAccess(latlng){ if(!processed){processed=true; console.log('Accès autorisé : utilisateur dans la zone.'); if(map.hasLayer(perimeterCircle)) map.removeLayer(perimeterCircle); const marker=L.marker(latlng).bindPopup('Bienvenue !'); const overlay=L.layerGroup([marker]); const layerControl=L.control.layers({'Maplibre Basemap':glLayer},{'Marqueur Accès':overlay},{collapsed:false}); layerControl.addTo(map); const leafletControl=document.querySelector('.leaflet-control-layers'); const controlContainer=document.getElementById('leaflet-control-container'); if(leafletControl&&controlContainer){ controlContainer.appendChild(leafletControl); leafletControl.style.display='block';} overlay.addTo(map);} }
 
-    function onlyBaseMapWithNotice(msg) {
-      if (!processed) {
-        processed = true;
-        perimeterCircle.addTo(map);
-        map.setView(perimeterCenter, 13);
-        L.popup({ closeOnClick: false, autoClose: false })
-          .setLatLng(perimeterCenter)
-          .setContent(msg)
-          .openOn(map);
-      }
-    }
-
-    function onOutOfZone(latlng) {
-      if (!processed) {
-        processed = true;
-        perimeterCircle.addTo(map);
-        const bounds = L.latLngBounds([latlng, perimeterCenter]);
-        map.fitBounds(bounds.pad(0.25));
-        L.popup()
-          .setLatLng(latlng)
-          .setContent('Vous êtes hors de la zone autorisée.')
-          .openOn(map);
-      }
-    }
-
-    function onAuthorizedZoneAccess(latlng) {
-      if (!processed) {
-        processed = true;
-        console.log('Accès autorisé : utilisateur dans la zone.');
-        if (map.hasLayer(perimeterCircle)) map.removeLayer(perimeterCircle);
-
-        const marker = L.marker(latlng).bindPopup('Bienvenue !');
-        const overlay = L.layerGroup([marker]);
-
-        const layerControl = L.control.layers(
-          { 'Maplibre Basemap': glLayer },
-          { 'Marqueur Accès': overlay }
-        );
-        layerControl.addTo(map);
-
-        const leafletControl = document.querySelector('.leaflet-control-layers');
-        const controlContainer = document.getElementById('leaflet-control-container');
-        if (leafletControl && controlContainer) {
-          controlContainer.appendChild(leafletControl);
-          leafletControl.style.display = 'block';
-        }
-
-        overlay.addTo(map);
-      }
-    }
-
-    const locateControl = L.control.locate({
-      drawCircle: false,
-      showPopup: false,
-      keepCurrentZoomLevel: true,
-      flyTo: true,
-      cacheLocation: true,
-      watch: false,
-      locateOptions: { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
-    }).addTo(map);
-
-    map.on('locationerror', () => onlyBaseMapWithNotice('Localisation requise pour accéder au contenu complet.'));
-    map.on('locationfound', e => {
-      const latlng = e.latlng;
-      const distance = latlng.distanceTo(perimeterCenter);
-      if (distance <= perimeterRadius) {
-        onAuthorizedZoneAccess(latlng);
-      } else {
-        onOutOfZone(latlng);
-      }
-    });
-
+    const locateControl = L.control.locate({ drawCircle:true, showPopup:false, keepCurrentZoomLevel:true, flyTo:true, cacheLocation:true, watch:false, locateOptions:{enableHighAccuracy:true,maximumAge:0,timeout:10000} }).addTo(map);
+    map.on('locationerror',()=>onlyBaseMapWithNotice('Localisation requise pour accéder au contenu complet.'));
+    map.on('locationfound',e=>{ const latlng=e.latlng; const distance=latlng.distanceTo(perimeterCenter); if(distance<=perimeterRadius) onAuthorizedZoneAccess(latlng); else onOutOfZone(latlng); });
     locateControl.start();
 
-    // Déplacer le bouton de localisation dans le conteneur personnalisé
-    const locateBtn = document.querySelector('.leaflet-control-locate');
-    const locatePlaceholder = document.getElementById('locate-placeholder');
-    if (locateBtn && locatePlaceholder) {
-      locatePlaceholder.appendChild(locateBtn);
-      locateBtn.style.display = 'block';
-      locateBtn.style.zIndex = 1001;
-    }
+    // Déplacer le bouton de localisation
+    const locateBtn=document.querySelector('.leaflet-control-locate'); const locatePlaceholder=document.getElementById('locate-placeholder'); if(locateBtn&&locatePlaceholder){ locatePlaceholder.appendChild(locateBtn); locateBtn.style.display='block'; locateBtn.style.zIndex=1001; }
 
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-
-    themeToggle.addEventListener('click', () => {
-      const isDark = currentStyle === darkStyle;
-      currentStyle = isDark ? lightStyle : darkStyle;
-      themeIcon.src = isDark
-        ? 'https://cdn-icons-png.flaticon.com/512/1164/1164954.png'
-        : 'https://cdn-icons-png.flaticon.com/512/1164/1164950.png';
-
-      map.removeLayer(glLayer);
-      glLayer = L.maplibreGL({ style: currentStyle });
-      map.addLayer(glLayer);
-    });
+    const themeToggle=document.getElementById('themeToggle'); const themeIcon=document.getElementById('themeIcon');
+    themeToggle.addEventListener('click',()=>{ const isDark=currentStyle===darkStyle; currentStyle=isDark?lightStyle:darkStyle; themeIcon.src=isDark?'https://cdn-icons-png.flaticon.com/512/1164/1164954.png':'https://cdn-icons-png.flaticon.com/512/1164/1164950.png'; map.removeLayer(glLayer); glLayer=L.maplibreGL({style:currentStyle}); map.addLayer(glLayer); });
   </script>
 </body>
 </html>
