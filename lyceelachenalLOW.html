@@ -26,7 +26,11 @@
   </head>
   <body>
     <div id="map"></div>
-    <button id="dark-mode-toggle"></button>
+    <!-- New container div for controls -->
+    <div id="controls-container">
+      <button id="dark-mode-toggle"></button>
+      <!-- The leaflet locate control and controlLayer will be dynamically added here -->
+    </div>
     <script>
       // Coordonnées du lycée (centre du plan)
       const lyceeCoords = [45.9368, 6.1322];
@@ -1404,6 +1408,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const map = initializeBaseMap();
   let schoolMapInitialized = false;  // Flag pour suivre l'initialisation
   
+  // Move the dark mode toggle button into the controls container
+  const darkModeToggle = document.getElementById("dark-mode-toggle");
+  const controlsContainer = document.getElementById("controls-container");
+  controlsContainer.appendChild(darkModeToggle);
+
   setTimeout(() => {
     const locateControl = L.control.locate({
       position: "topright",
@@ -1438,6 +1447,15 @@ document.addEventListener("DOMContentLoaded", () => {
         showProximityCircle(map);
       }
     }).addTo(map);
+
+    // Move the locate control into the controls container
+    const locateControlElement = locateControl.getContainer();
+    controlsContainer.appendChild(locateControlElement);
+
+    // Add the controlLayer to the controls container
+    const controlLayer = L.control.layers(baseLayers, null, { collapsed: false }).addTo(map);
+    const controlLayerElement = controlLayer.getContainer();
+    controlsContainer.appendChild(controlLayerElement);
 
     // Modifier le gestionnaire d'événements locationfound
     map.on('locationfound', (e) => {
