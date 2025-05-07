@@ -31,12 +31,13 @@
         background: white;
         border: 1px solid gray;
         border-radius: 10px;
-        padding: 10px;
+        padding: 0px;
         z-index: 1000;
-        width: 150px;
+        width: 103px;
+        height: auto;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 0px;
       }
 
       /* Remove default backgrounds/borders */
@@ -52,7 +53,7 @@
         height: 1px;
         background: gray;
         width: 100%;
-        margin: 4px 0;
+        margin: 0px 0;
       }
       .sep-vertical {
         width: 1px;
@@ -65,7 +66,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 4px;
+        gap: 0px;
       }
 
       .button-row > * {
@@ -87,8 +88,19 @@
       }
 
       .theme-toggle img {
-        width: 24px;
-        height: 24px;
+        width: 32px; /* Adjust width */
+        height: 32px; /* Adjust height */
+      }
+
+      /* Font size for control layer */
+      .leaflet-control-layers {
+        font-size: 10px; /* Adjust font size as needed */
+      }
+
+      /* Adjustable size for locate control button */
+      .leaflet-control-locate {
+        width: 50px; /* Adjust width */
+        height: 38px; /* Adjust height */
       }
     </style>
   </head>
@@ -172,9 +184,13 @@
           if (map.hasLayer(perimeterCircle)) map.removeLayer(perimeterCircle);
           const marker = L.marker(latlng).bindPopup("Bienvenue !");
           const overlay = L.layerGroup([marker]);
+          const overlays = [
+            L.marker([48.857, 2.353]).bindPopup("Etage 1"),
+            L.marker([48.858, 2.354]).bindPopup("Etage 2"),
+          ];
           const layerControl = L.control.layers(
-            { "Maplibre Basemap": glLayer },
-            { "Marqueur Accès": overlay },
+            { "Etage 0": glLayer },
+            { "Etage 1": overlay },
             { collapsed: false }
           );
           layerControl.addTo(map);
