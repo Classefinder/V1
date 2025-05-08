@@ -31,12 +31,12 @@
         top: 10px;
         left: 10px;
         background: white;
-        border: 1px solid #ccc;
-        border-radius: 8px;
+        border: 2px solid #ccc;
+        border-radius: 15px;
         padding: 0;
         z-index: 1000;
-        width: auto;
-        min-width: 150px;
+        width: 110px;
+        height: 124px;
         box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
         display: flex;
         flex-direction: column;
@@ -45,35 +45,21 @@
 
       /* Contrôle des couches */
       #leaflet-control-container {
-        width: 100%;
         padding: 0px;
         box-sizing: border-box;
       }
 
       .leaflet-control-layers {
-        width: 100% !important;
-        margin: 0 !important;
-        background-color: none;
-        background: transparent !important;
         box-shadow: none !important;
-        border: none !important;
       }
 
       .leaflet-control-layers-expanded {
         width: 100% !important;
-        padding: 0 !important;
+        padding: 7px !important;
+        padding-right: 5px !important;
         box-shadow: none !important;
+        background: transparent !important;
         border: none !important;
-      }
-
-      .leaflet-control-layers-list {
-        width: 100%;
-        margin: 0;
-        padding: 0;
-      }
-
-      .leaflet-control-layers-base {
-        width: 100%;
       }
 
       .leaflet-control-layers label {
@@ -84,19 +70,19 @@
 
       /* Séparateurs */
       .separator {
-        height: 1px;
+        height: 2px;
         background: #e0e0e0;
         width: 100%;
         margin: 0;
       }
 
       .sep-vertical {
-        width: 1px !important;
+        width: 2px !important;
         background: #e0e0e0;
         height: 32px;
         margin: 0;
         padding: 0;
-        flex: 0 0 1px;
+        flex: 0 0 2px;
       }
 
       /* Ligne des boutons */
@@ -105,23 +91,14 @@
         justify-content: space-between;
         align-items: center;
         gap: 0;
-        padding: 6px 8px;
+        padding: 0px 0px;
         width: 100%;
         box-sizing: border-box;
       }
 
-      /* Bouton de localisation */
-      .leaflet-control-locate {
-        width: 32px;
-        height: 32px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
       .leaflet-control-locate a {
-        width: 32px;
-        height: 32px;
+        width: 51px;
+        height: 40px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -130,18 +107,28 @@
         box-shadow: none !important;
       }
 
+      .leaflet-control-locate {
+        background: none !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+
+      .leaflet-control-locate:hover {
+        background-color: #f0f0f0 !important;
+      }
+
       /* Bouton de thème */
       .theme-toggle {
         background: none;
         border: none;
         cursor: pointer;
         padding: 0;
-        width: 32px;
-        height: 32px;
+        width: 57px;
+        height: 40px;
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: 4px;
+        border-radius: 0px;
         transition: background-color 0.2s;
       }
 
