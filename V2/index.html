@@ -3,9 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      Carte Leaflet avec Maplibre GL Basemap, Géofencing et Mode Sombre
-    </title>
+    <title>Carte Leaflet avec GeoJSON et Mode Sombre</title>
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -17,90 +15,143 @@
     <style>
       body {
         margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
       }
+
       #map {
         height: 100vh;
         width: 100%;
         display: block;
       }
 
+      /* Conteneur principal des contrôles */
       .custom-controls-wrapper {
         position: absolute;
         top: 10px;
         left: 10px;
         background: white;
-        border: 1px solid gray;
-        border-radius: 10px;
-        padding: 0px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 0;
         z-index: 1000;
-        width: 103px;
-        height: auto;
+        width: auto;
+        min-width: 150px;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
         display: flex;
         flex-direction: column;
-        gap: 0px;
+        overflow: hidden;
       }
 
-      /* Remove default backgrounds/borders */
-      .leaflet-control-locate a,
+      /* Contrôle des couches */
+      #leaflet-control-container {
+        width: 100%;
+        padding: 0px;
+        box-sizing: border-box;
+      }
+
       .leaflet-control-layers {
+        width: 100% !important;
+        margin: 0 !important;
+        background-color: none;
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+
+      .leaflet-control-layers-expanded {
+        width: 100% !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+
+      .leaflet-control-layers-list {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .leaflet-control-layers-base {
+        width: 100%;
+      }
+
+      .leaflet-control-layers label {
+        margin: 2px 0;
+        display: block;
+        width: 100%;
+      }
+
+      /* Séparateurs */
+      .separator {
+        height: 1px;
+        background: #e0e0e0;
+        width: 100%;
+        margin: 0;
+      }
+
+      .sep-vertical {
+        width: 1px !important;
+        background: #e0e0e0;
+        height: 32px;
+        margin: 0;
+        padding: 0;
+        flex: 0 0 1px;
+      }
+
+      /* Ligne des boutons */
+      .button-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0;
+        padding: 6px 8px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      /* Bouton de localisation */
+      .leaflet-control-locate {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .leaflet-control-locate a {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         background: none !important;
         border: none !important;
         box-shadow: none !important;
       }
 
-      /* Separators */
-      .separator {
-        height: 1px;
-        background: gray;
-        width: 100%;
-        margin: 0px 0;
-      }
-      .sep-vertical {
-        width: 1px;
-        background: gray;
-        height: 24px;
-        align-self: center;
-      }
-
-      .button-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 0px;
-      }
-
-      .button-row > * {
-        flex: 1;
-      }
-      .sep-vertical {
-        flex: none;
-        width: 1px;
-        background: gray;
-        height: 24px;
-        align-self: center;
-      }
-
+      /* Bouton de thème */
       .theme-toggle {
         background: none;
         border: none;
         cursor: pointer;
         padding: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+      }
+
+      .theme-toggle:hover {
+        background-color: #f0f0f0;
       }
 
       .theme-toggle img {
-        width: 32px; /* Adjust width */
-        height: 32px; /* Adjust height */
-      }
-
-      /* Font size for control layer */
-      .leaflet-control-layers {
-        font-size: 10px; /* Adjust font size as needed */
-      }
-
-      /* Adjustable size for locate control button */
-      .leaflet-control-locate {
-        width: 50px; /* Adjust width */
-        height: 38px; /* Adjust height */
+        width: 24px;
+        height: 24px;
       }
     </style>
   </head>
@@ -108,11 +159,8 @@
     <div id="map"></div>
 
     <div class="custom-controls-wrapper">
-      <!-- Layer control -->
       <div id="leaflet-control-container" class="leaflet-control-layers"></div>
       <div class="separator"></div>
-
-      <!-- Bottom buttons -->
       <div class="button-row">
         <div id="locate-placeholder" class="leaflet-control-locate"></div>
         <div class="sep-vertical"></div>
@@ -133,6 +181,7 @@
     <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
 
     <script>
+      // Styles de base
       const lightStyle =
         "https://api.maptiler.com/maps/3b544fc3-420c-4a93-a594-a99b71d941bb/style.json?key=BiyHHi8FTQZ233ADqskZ";
       const darkStyle =
@@ -142,9 +191,17 @@
         ? darkStyle
         : lightStyle;
 
-      const map = L.map("map").setView([48.8566, 2.3522], 13);
-      let glLayer = L.maplibreGL({ style: currentStyle }).addTo(map);
+      // Initialisation de la carte
+      const map = L.map("map", {
+        preferCanvas: true,
+      }).setView([48.8566, 2.3522], 13);
 
+      let glLayer = L.maplibreGL({
+        style: currentStyle,
+        pane: "mapPane",
+      }).addTo(map);
+
+      // Variables pour la gestion de la zone
       const perimeterCenter = L.latLng(48.8566, 2.3522);
       const perimeterRadius = 10000000;
       const perimeterCircle = L.circle(perimeterCenter, {
@@ -152,6 +209,119 @@
         color: "red",
         fillOpacity: 0.1,
       });
+
+      // Fonction pour créer des couches GeoJSON (exemple avec des données inline)
+      function createGeoJSONLayers() {
+        // Exemple de données GeoJSON pour chaque étage
+        const etageMinus1 = {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              properties: {},
+              geometry: {
+                coordinates: [
+                  [
+                    [2.34, 48.84],
+                    [2.36, 48.84],
+                    [2.36, 48.86],
+                    [2.34, 48.86],
+                    [2.34, 48.84],
+                  ],
+                ],
+                type: "Polygon",
+              },
+            },
+          ],
+        };
+
+        const etage0 = {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              properties: {},
+              geometry: {
+                coordinates: [
+                  [
+                    [2.35, 48.85],
+                    [2.37, 48.85],
+                    [2.37, 48.87],
+                    [2.35, 48.87],
+                    [2.35, 48.85],
+                  ],
+                ],
+                type: "Polygon",
+              },
+            },
+          ],
+        };
+
+        const etage1 = {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              properties: {},
+              geometry: {
+                coordinates: [
+                  [
+                    [2.33, 48.83],
+                    [2.35, 48.83],
+                    [2.35, 48.85],
+                    [2.33, 48.85],
+                    [2.33, 48.83],
+                  ],
+                ],
+                type: "Polygon",
+              },
+            },
+          ],
+        };
+
+        // Création des couches Leaflet
+        const layerMinus1 = L.geoJSON(etageMinus1, {
+          style: {
+            fillColor: "blue",
+            weight: 2,
+            opacity: 1,
+            color: "white",
+            dashArray: "3",
+            fillOpacity: 0.7,
+          },
+          pane: "overlayPane",
+        });
+
+        const layer0 = L.geoJSON(etage0, {
+          style: {
+            fillColor: "green",
+            weight: 2,
+            opacity: 1,
+            color: "white",
+            dashArray: "3",
+            fillOpacity: 0.7,
+          },
+          pane: "overlayPane",
+        });
+
+        const layer1 = L.geoJSON(etage1, {
+          style: {
+            fillColor: "red",
+            weight: 2,
+            opacity: 1,
+            color: "white",
+            dashArray: "3",
+            fillOpacity: 0.7,
+          },
+          pane: "overlayPane",
+        });
+
+        return {
+          layerMinus1,
+          layer0,
+          layer1,
+        };
+      }
 
       let processed = false;
       function onlyBaseMapWithNotice(msg) {
@@ -165,6 +335,7 @@
             .openOn(map);
         }
       }
+
       function onOutOfZone(latlng) {
         if (!processed) {
           processed = true;
@@ -177,23 +348,37 @@
             .openOn(map);
         }
       }
+
       function onAuthorizedZoneAccess(latlng) {
         if (!processed) {
           processed = true;
           console.log("Accès autorisé : utilisateur dans la zone.");
           if (map.hasLayer(perimeterCircle)) map.removeLayer(perimeterCircle);
+
           const marker = L.marker(latlng).bindPopup("Bienvenue !");
-          const overlay = L.layerGroup([marker]);
-          const overlays = [
-            L.marker([48.857, 2.353]).bindPopup("Etage 1"),
-            L.marker([48.858, 2.354]).bindPopup("Etage 2"),
-          ];
+          marker.addTo(map);
+
+          // Création des couches GeoJSON
+          const { layerMinus1, layer0, layer1 } = createGeoJSONLayers();
+
+          // Ajout du contrôle des couches
           const layerControl = L.control.layers(
-            { "Etage 0": glLayer },
-            { "Etage 1": overlay },
-            { collapsed: false }
+            {
+              "Etage -1": layerMinus1,
+              "Etage 0": layer0,
+              "Etage 1": layer1,
+            },
+            null,
+            {
+              collapsed: false,
+              position: "topright",
+            }
           );
+
           layerControl.addTo(map);
+          layerMinus1.addTo(map); // Ajouter la première couche par défaut
+
+          // Déplacer le contrôle des couches dans notre conteneur personnalisé
           const leafletControl = document.querySelector(
             ".leaflet-control-layers"
           );
@@ -204,10 +389,10 @@
             controlContainer.appendChild(leafletControl);
             leafletControl.style.display = "block";
           }
-          overlay.addTo(map);
         }
       }
 
+      // Contrôle de localisation
       const locateControl = L.control
         .locate({
           drawCircle: true,
@@ -223,17 +408,20 @@
           },
         })
         .addTo(map);
+
       map.on("locationerror", () =>
         onlyBaseMapWithNotice(
           "Localisation requise pour accéder au contenu complet."
         )
       );
+
       map.on("locationfound", (e) => {
         const latlng = e.latlng;
         const distance = latlng.distanceTo(perimeterCenter);
         if (distance <= perimeterRadius) onAuthorizedZoneAccess(latlng);
         else onOutOfZone(latlng);
       });
+
       locateControl.start();
 
       // Déplacer le bouton de localisation
@@ -241,10 +429,10 @@
       const locatePlaceholder = document.getElementById("locate-placeholder");
       if (locateBtn && locatePlaceholder) {
         locatePlaceholder.appendChild(locateBtn);
-        locateBtn.style.display = "block";
-        locateBtn.style.zIndex = 1001;
+        locateBtn.style.display = "flex";
       }
 
+      // Gestion du thème
       const themeToggle = document.getElementById("themeToggle");
       const themeIcon = document.getElementById("themeIcon");
       themeToggle.addEventListener("click", () => {
@@ -254,7 +442,10 @@
           ? "https://cdn-icons-png.flaticon.com/512/1164/1164954.png"
           : "https://cdn-icons-png.flaticon.com/512/1164/1164950.png";
         map.removeLayer(glLayer);
-        glLayer = L.maplibreGL({ style: currentStyle });
+        glLayer = L.maplibreGL({
+          style: currentStyle,
+          pane: "mapPane",
+        });
         map.addLayer(glLayer);
       });
     </script>
