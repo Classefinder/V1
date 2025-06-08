@@ -76,6 +76,15 @@ body.dark-mode .leaflet-control-zoom a:hover {
     background-color: #444444 !important;
 }
 
+.leaflet-control-search .search-tooltip li {
+    background-color: #ffffff00;
+    color: #000000;
+}
+
+body.dark-mode .leaflet-control-search .search-tooltip li {
+    color: #ffffff;
+}
+
 /* ================================================== */
 /* COMPOSANT PRINCIPAL : BARRE DE RECHERCHE */
 /* ================================================== */
@@ -279,44 +288,37 @@ body.dark-mode .leaflet-control-zoom a:hover {
     border-radius: 15px !important;
     width: 47px !important;
     height: 47px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
 }
 
 .leaflet-control-locate a .leaflet-control-locate-location-arrow {
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    margin: 7px;
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
+    width: 50px;
+    height: 50px;
+    background: url('./images/locate.svg') no-repeat center center !important;
+    background-size: 85% !important;
+    transition: transform 0.3s ease;
 }
 
 .leaflet-control-locate a .leaflet-control-locate-spinner {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin: 7px;
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="black" d="M304 48a48 48 0 1 1-96 0 48 48 0 0 1 96 0zm-48 368a48 48 0 1 0 0 96 48 48 0 0 0 0-96zm208-208a48 48 0 1 0 0 96 48 48 0 0 0 0-96zM96 256a48 48 0 1 0-96 0 48 48 0 0 0 96 0zm13 99a48 48 0 1 0 0 96 48 48 0 0 0 0-96zm294 0a48 48 0 1 0 0 96 48 48 0 0 0 0-96zM109 61a48 48 0 1 0 0 96 48 48 0 0 0 0-96z"/></svg>');
-    animation: leaflet-control-locate-spin 2s linear infinite;
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    background: url('./images/locate.svg') no-repeat center center !important;
+    background-size: 65% !important;
 }
 
 .leaflet-control-locate.active a .leaflet-control-locate-location-arrow {
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="rgb(32, 116, 182)" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
+    background: url('./images/locate-on.svg') no-repeat center center !important;
+    background-size: 85% !important;
+    animation: pulse-location 1.5s ease infinite;
 }
 
 .leaflet-control-locate.following a .leaflet-control-locate-location-arrow {
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="rgb(252, 132, 40)" d="M445 4 29 195c-48 23-32 93 19 93h176v176c0 51 70 67 93 19L508 67c16-38-25-79-63-63z"/></svg>');
-}
-
-.leaflet-touch .leaflet-bar .leaflet-locate-text-active {
-    width: 100%;
-    max-width: 200px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    padding: 0 10px;
-}
-
-.leaflet-touch .leaflet-bar .leaflet-locate-text-active .leaflet-locate-icon {
-    padding: 0 5px 0 0;
+    background: url('./images/locate-active.svg') no-repeat center center !important;
+    background-size: contain !important;
 }
 
 /* fin du bouton de localisation*/
@@ -559,4 +561,90 @@ body.dark-mode .search-location-button img {
 body.dark-mode .leaflet-control-search .search-alert {
     color: rgb(255, 139, 139) !important;
     background-color: #1e1e1e !important;
+}
+
+/* Personnalisation de la scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    /* Largeur de la scrollbar */
+    height: 8px;
+    /* Hauteur de la scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+    /* Couleur de la barre */
+    border-radius: 10px;
+    /* Coins arrondis */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    /* Couleur au survol */
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+    /* Pas d'arrière-plan */
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+    /* Supprimer les flèches */
+}
+
+/* Pour les navigateurs qui ne supportent pas Webkit */
+.scrollbar {
+    scrollbar-width: thin;
+    /* Barre fine */
+    scrollbar-color: #888 transparent;
+    /* Couleur de la barre et arrière-plan transparent */
+}
+
+@keyframes layerTransition {
+    from {
+        transform: scale(1.2);
+        filter: blur(2px);
+        opacity: 0.8;
+    }
+
+    to {
+        transform: scale(1);
+        filter: blur(0);
+        opacity: 1;
+    }
+}
+
+.animate-layer path {
+    animation: layerTransition 0.5s cubic-bezier(0.1, 0.2, 0.6, 1);
+    transform-origin: var(--origin-x) var(--origin-y);
+    /* Dynamique via JS */
+    transform-box: fill-box;
+}
+
+/* Animation des résultats de recherche */
+@keyframes searchResultAppear {
+    0% {
+        opacity: 0;
+        filter: blur(10px);
+        transform: translateY(-20px);
+    }
+
+    90% {
+        opacity: 1;
+        filter: blur(1px);
+    }
+
+    100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+}
+
+/* Appliquer l'animation aux éléments de liste */
+.leaflet-control-search .search-tooltip li {
+    animation: searchResultAppear 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.10);
+    animation-fill-mode: backwards;
+    transition: all 0.2s;
 }
