@@ -1,0 +1,36 @@
+Salut,
+J'ai un projet que j'ai déjà coder mais que je veux que tu code avec des modules.
+-> mon but : avoir un site qui affiche un plan de mon lycée ainsi que chaque salle grâce au formes geojson et leaflet. Pouvoir faire de la recherche de salle et du calcul d'itinéraire.
+
+Pour que tu comprenne je pourrais te donner les fonctions que j'avais codé pour que tu les adaptes et que tu comprenne bien ma demande. Sache que mon code foncionne parfaitement donc si ça ne fonctionne pas, c'est que j'ai mal formulé ma demande.
+
+Je veux :
+1-une vue qui prend tous l'écran d'un plan leaflet
+2-la gestion de la localisation grâce au plugin lealfet control locate.
+3-une variable pour chaque étage de forme geojson. Chaque calque contient toutes les salles d'un étage. On a un autre calque chemin qui servira pour l'itinéraire à mettre le point de départ au bon endroit. Quand une recherche sera éffectué, on zoom sur la salle du calque salle et on place le marqueur de départ sur la forme géojson qui contient le meme nom mais du calque chemin correspondant.
+4-un gestionnaire de calque (on prend les layer group de base de lealfet) pour représenter les étages
+5-un code intelligent qui peux fonctionné avec 2-3-4-5-6-7 étages. En gros ce n'est pas : "si étage 1 sélectionné alors..., si étage 2 sélcetionné alors...  
+6-pour la confidentialité, on importe dans le code les données geojson grâce à fetch je crois??? (ce n'est pas dans mon projet et je ne me suis pas beaucoup renseigné)
+7-On défini un périmètre dans lequel doit être l'utilisateur pour charger le plan
+	-si l'utilisateur refuse la localisation, on montre le périmètre et le fond de carte basique
+	-si l'utilisateur autorise la localisation mais est en dehors de la zone, pareil qu'au dessus mais on met en plus la localisation de l'utilisateur
+	-si l'utilisateur est dans la zone requise, on charge tous le reste du site
+8-un gestionnaire de recherche (leafet search) une barre trouver les salles et zoom sur la salle qui a le bon nom, si la salle est sur un autre étage/calcque, on change automatiquement d'étage.
+9-un boutton pour basculer mode clair/sombre qui change le fond de carte mais aussi toutes les couleurs. Je ferais le css.
+10-le gestionnaire de calque permet d'affiché des "var" qui contiennent toutes les salles d'un étage. on peut donc changer d'étage comme cela. et quand on change, on affiche/cache les bons étage
+11-un boutton pour recentrer sur la position (déjà inclus avec le plugin)
+12-un bouton qui affiche deux barre de recherche (une pour le point de départ et l'autre pour celui de fin. ces points sont représenté par des marqueurs leaflet)
+13-en mode itinéraire, quand une recherche est faite et valide, on zoom sur la salle du calque salle et on place le marqueur de départ sur la forme géojson qui contient le meme nom mais du calque chemin correspondant.
+14-pour le calcul d'itinéraire j'ai un serveur osrm backend. le code est spécial pour avoir une vue par étage
+15-un bouton qui permet de mettre la position de départ de l'itinéraire sur la position de l'utilisateur acutel. Super bien, on a juste à récupéré la position vu qu'elle est obligatoire.
+
+Pour le moment, j'ai réussi à faire cela :
+rien
+
+Je veux que tu me code ces éléments en prennant tous en compte pour que tu me fasse le code le plus optimale :
+1, 2, 3, 4, 5, 6
+
+Je te laisse décidé du meilleur découpage en module du code.
+Si un élément n'est pas clair, dit le moi!
+
+Courage!
