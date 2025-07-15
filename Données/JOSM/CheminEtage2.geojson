@@ -1,0 +1,51 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "foot": "yes",
+                "name": "V1",
+                "highway": "footway",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13259,
+                        45.93777
+                    ],
+                    [
+                        6.13262,
+                        45.93777
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "foot": "yes",
+                "name": "V2",
+                "highway": "footway",
+                "layer": "-2",
+                "tunnel": "yes"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13272,
+                        45.9378
+                    ],
+                    [
+                        6.13268,
+                        45.93775
+                    ]
+                ]
+            }
+        }
+    ]
+}

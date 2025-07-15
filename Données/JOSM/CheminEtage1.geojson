@@ -1,0 +1,47 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "highway": "footway",
+                "foot": "yes",
+                "name": "115"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.1322,
+                        45.93681
+                    ],
+                    [
+                        6.1322,
+                        45.9368
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "highway": "footway",
+                "foot": "yes",
+                "name": "117"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        6.13242,
+                        45.93678
+                    ],
+                    [
+                        6.13242,
+                        45.9368
+                    ]
+                ]
+            }
+        }
+    ]
+}
