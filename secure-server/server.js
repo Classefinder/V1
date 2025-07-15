@@ -2,6 +2,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const cors = require('cors');
 const app = express();
 const PORT = 3001; // Port du serveur
 
@@ -13,6 +14,9 @@ app.use((req, res, next) => {
     // Exemple : autoriser tout le monde (à remplacer par une vraie auth si besoin)
     next();
 });
+
+// Support CORS pour autoriser les requêtes cross-origin depuis le navigateur
+app.use(cors());
 
 // Route pour servir un fichier GeoJSON spécifique
 app.get('/geojson/:filename', (req, res) => {
